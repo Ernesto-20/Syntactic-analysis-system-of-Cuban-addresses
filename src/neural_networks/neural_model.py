@@ -3,9 +3,10 @@ import re
 import keras.optimizers
 import tensorflow as tf
 import string
+from tensorflow import keras
 from tensorflow.python.client.session import Session
 from tensorflow.python.ops.ragged.ragged_string_ops import ngrams
-from keras.utils import pad_sequences
+from keras_preprocessing.sequence import pad_sequences
 from keras.layers.core import Activation, Dropout, Dense
 from tensorflow.python.ops.ragged.ragged_string_ops import string_bytes_split
 from sklearn.model_selection import train_test_split
