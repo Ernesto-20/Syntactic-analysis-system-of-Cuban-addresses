@@ -93,26 +93,29 @@ class PDModelTypeTwo(PreprocessingData):
                 loc_aux = ''
                 loc_zone = ''
                 if locality.lower().find('alamar') != -1:
-                    spl_loc =locality.split()
+                    spl_loc = locality.split()
                     if len(spl_loc) != 1:
                         loc_aux = 'Alamar'
                         for word in spl_loc:
-                            if word != 'alamar':
-                                loc_zone = word
-
+                            if word.lower() != 'alamar':
+                                loc_zone += word
+                        # Adding the zone
                         zone_form = self.__generate_type_reserved_word(RW_ZONE, components, 14)
                         locality_form = self.__generate_type_reserved_word(RW_LOCALITY, components, 14)
                         number_form = self.__generate_type_reserved_word(RW_NUMBER, components, 20)
                         components += [[item, 'locality'] for item in loc_zone.split()]
-                        zone = zone_form + '' + number_form +''+loc_zone
+                        if loc_zone.lower().find('micro') != -1:
+                            zone = zone_form + ' ' + loc_zone
+                        else:
+                            zone = zone_form + ' ' + number_form + ' ' + loc_zone
 
-                        if rm.randint(0,50)>25:
-                            component_3_str = locality_form + ' ' + locality + ' '+ zone
-                            components += [[item, 'locality'] for item in locality.split()]
+                        if rm.randint(0, 50) > 25:
+                            component_3_str = locality_form + ' ' + loc_aux + ' ' + zone
+                            components += [[item, 'locality'] for item in loc_aux.split()]
                             dictAddress[component_3_str] = components
                         else:
-                            component_3_str =zone + ' '+locality_form + ' ' + locality
-                            components += [[item, 'locality'] for item in locality.split()]
+                            component_3_str = zone + ' ' + locality_form + ' ' + loc_aux
+                            components += [[item, 'locality'] for item in loc_aux.split()]
                             dictAddress[component_3_str] = components
 
                     else:
