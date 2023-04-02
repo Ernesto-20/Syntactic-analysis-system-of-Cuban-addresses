@@ -21,7 +21,7 @@ class PDModelTypeOne(PreprocessingData):
             # 1048576 total de filas que permite ExcelWrite a llenar en una sola hoja de excel.
             # if len(words_list) > 1048576 - 50:
             #     break
-            if address_number == 1000:
+            if address_number == 15333:
                 break
 
             dictAddress = {}

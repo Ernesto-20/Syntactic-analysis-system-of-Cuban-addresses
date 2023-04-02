@@ -1,123 +1,85 @@
 import re
+import string
 
 import keras.optimizers
-import tensorflow as tf
-import string
-from tensorflow import keras
-from tensorflow.python.client.session import Session
-from tensorflow.python.ops.ragged.ragged_string_ops import ngrams
-from keras_preprocessing.sequence import pad_sequences
-from keras.layers.core import Activation, Dropout, Dense
-from tensorflow.python.ops.ragged.ragged_string_ops import string_bytes_split
-from sklearn.model_selection import train_test_split
-from keras.utils import to_categorical
-import pandas as pd
 import numpy as np
+import tensorflow as tf
+from keras import Sequential, Input
+from keras.layers import LSTM, Embedding, Dense, Bidirectional, Concatenate, Reshape, Flatten
 from keras.layers import TextVectorization
-from keras.utils import plot_model
-
-from keras import Sequential, Model, Input
-from keras.layers import LSTM, Embedding, Dense, TimeDistributed, Dropout, Bidirectional, Concatenate
-
-from numpy.random import seed
+from keras.utils.vis_utils import plot_model
+from tensorflow.python.ops.ragged.ragged_string_ops import ngrams
+from tensorflow.python.ops.ragged.ragged_string_ops import string_bytes_split
 
 from src.utils.data_set import DataSet
 
 
 class NeuralModel:
 
-    def create_model(self, data_set: DataSet, name_model='default_model'):
-        output_dim = 64
+    def create_model(self, data_set: DataSet):
+        output_dim = 100
         input_length = 25
 
-        tv_by_character = self.__create_layer_vectorization(name='TextVectorization_Character',
-                                                            max_len=data_set.get_max_len_character(),
-                                                            vocabulary=data_set.get_vocabulary(),
-                                                            split=string_bytes_split)
-        vocab_size_character = len(tv_by_character.get_layer('text_vectorization').get_vocabulary())
-
-        tv_by_trigram = self.__create_layer_vectorization(name='TextVectorization_Trigram',
-                                                          max_len=data_set.get_max_len_trigram(),
-                                                          vocabulary=data_set.get_vocabulary(), split=split_and_remove_spacewhite)
-        vocab_size_trigram = len(tv_by_trigram.get_layer('text_vectorization_1').get_vocabulary())
-        # print('VOCABULARY TRIGRAM:')
-        # print(tv_by_trigram.get_layer('text_vectorization_1').get_vocabulary())
-
-        tv_by_word = self.__create_layer_vectorization(name='TextVectorization_Word',
-                                                            max_len=data_set.get_max_len_character(),
-                                                            vocabulary=data_set.get_vocabulary(), )
-
-        BLSTM_Character = self.__create_layer_blsm_and_embedding(name='Bidirectional_LSMT_Character',
-                                                                 input_dim=(data_set.get_max_len_character(),),
-                                                                 vocab_size=vocab_size_character, output_dim=output_dim,
-                                                                 input_length=input_length)
-
-        BLSTM_Trigram = self.__create_layer_blsm_and_embedding(name='Bidirectional_LSMT_Trigram',
-                                                               input_dim=(data_set.get_max_len_trigram(),),
-                                                               vocab_size=vocab_size_trigram, output_dim=output_dim,
-                                                               input_length=input_length)
-
         inputs = keras.Input(shape=(1,), dtype="string")
-        outputs_branch_character = BLSTM_Character(tv_by_character(inputs))
-        outputs_branch_trigram = BLSTM_Trigram(tv_by_trigram(inputs))
-        print('Max_len_word: ', data_set.get_max_len_word())
-        embedding_word = self.__create_layer_embedding(name='Embedding_Word', input_dim=(data_set.get_max_len_character(),),
-                                                       vocab_size=len(data_set.get_vocabulary()), output_dim=output_dim,
-                                                       input_length=input_length)
-        outputs_embedding_word = embedding_word(tv_by_word(inputs))
 
-        concatenated_branch_trigram_with_character = Concatenate()([outputs_branch_character, outputs_branch_trigram])
-        BLSTM_Concatenated = Bidirectional(LSTM(units=output_dim, return_sequences=True, dropout=0.4, recurrent_dropout=0.4), merge_mode='sum')
-        outputs_BLSTM_Concatenated = BLSTM_Concatenated(concatenated_branch_trigram_with_character)
+        tv_by_character = self.__create_layer_vectorization(name='TextVectorization_Character', max_len=data_set.get_max_len_character(), vocabulary=data_set.get_vocabulary(), split=string_bytes_split)
+        vocab_size_character = len(tv_by_character.get_layer('text_vectorization').get_vocabulary())
+        layer_tv_character = tv_by_character(inputs)
 
-        print('BLSTM_Concatenated: input_shape: ', BLSTM_Concatenated.input_shape, '  output_shape: ', BLSTM_Concatenated.output_shape)
-        print('embedding_word: input_shape: ', embedding_word.input_shape, '  output_shape: ',embedding_word.output_shape)
+        tv_by_trigram = self.__create_layer_vectorization(name='TextVectorization_Trigram', max_len=data_set.get_max_len_trigram(), vocabulary=data_set.get_vocabulary(), split=split_and_remove_spacewhite)
+        vocab_size_trigram = len(tv_by_trigram.get_layer('text_vectorization_1').get_vocabulary())
+        layer_tv_by_trigram = tv_by_trigram(inputs)
 
-        concatenated_branch_concatenated1_with_word = Concatenate()([outputs_BLSTM_Concatenated, outputs_embedding_word])
-        BLSTM_Concatenated2 = Bidirectional(LSTM(units=output_dim), merge_mode='sum')(concatenated_branch_concatenated1_with_word)
+        tv_by_word = self.__create_layer_vectorization(name='TextVectorization_Word', max_len=data_set.get_max_len_word(), vocabulary=data_set.get_vocabulary(), )
+        vocab_size_word = len(tv_by_word.get_layer('text_vectorization_2').get_vocabulary())
+        layer_tv_by_word = tv_by_word(inputs)
 
-        output = BLSTM_Concatenated2
+        print('TV_W: max_len: ', data_set.get_max_len_word())
+
+        embedding_character = Embedding(vocab_size_character, 25, name='Embedding_Character')
+        layer_embedding_character = embedding_character(layer_tv_character)
+        blstm_character = Bidirectional(LSTM(units=25, return_sequences=True, dropout=0.6, recurrent_dropout=0.1), merge_mode='concat')
+        layer_blstm_character = blstm_character(layer_embedding_character)
+
+        embedding_trigram = Embedding(vocab_size_trigram, 25, name='Embedding_Trigram')
+        layer_embedding_trigram = embedding_trigram(layer_tv_by_trigram)
+        blstm_trigram = Bidirectional(LSTM(units=25, return_sequences=True, dropout=0.6, recurrent_dropout=0.1), merge_mode='concat')
+        layer_blstm_trigram = blstm_trigram(layer_embedding_trigram)
+
+        embedding_word = Embedding(vocab_size_word, output_dim, name='Embedding_Word')
+        layer_embedding_word = embedding_word(layer_tv_by_word)
+        concat = Concatenate()([layer_blstm_character, layer_blstm_trigram])
+        blstm_concat = Bidirectional(LSTM(units=output_dim, return_sequences=True, dropout=0.2, recurrent_dropout=0.1), merge_mode='concat')
+        layer_blstm_concat = blstm_concat(concat)
+
+        # ********* LAYER PROJECT ***************
+        projection = Flatten()(layer_blstm_concat)
+        projection = Dense(units=data_set.get_max_len_word()*100)(projection)
+        projection = Reshape(( data_set.get_max_len_word(), 100))(projection)
+        # ********* LAYER PROJECT ***************
+
+        concat_2 = Concatenate()([projection, layer_embedding_word])
+        blstm_concat_2 = Bidirectional(LSTM(units=data_set.get_n_tag(), return_sequences=True, dropout=0, recurrent_dropout=0), merge_mode='sum')
+        layer_blstm_concat_2 = blstm_concat_2(concat_2)
+
+        output = Dense(data_set.get_n_tag(), activation='softmax')(layer_blstm_concat_2)
         model = keras.Model(inputs, output, name='Model')
 
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        # opt = keras.optimizers.Adam(learning_rate=0.0005)
 
-    def __create_layer_embedding(self, name, input_dim, vocab_size, output_dim, input_length):
-        model = Sequential(name=name)
+        # Optimiser
+        opt = keras.optimizers.Adam(learning_rate=0.0005, beta_1=0.9, beta_2=0.999)
 
-        # Add Input layer
-        model.add(Input(shape=input_dim, dtype=tf.int32))
+        # metrics = [tf.metrics.Accuracy(), tf.metrics.Recall(), tf.metrics.Precision()]
+        metrics = [tf.metrics.Accuracy()]
+        # Accuracy tells you how many times the ML model was correct overall.
+        # Precision is how good the model is at predicting a specific category.
+        # Recall tells you how many times the model was able to detect a specific category.
 
-        # Add Embedding layer
-        model.add(Embedding(input_dim=vocab_size, output_dim=output_dim, input_length=input_length))
-
-        return model
-
-    def __create_layer_blsm_and_embedding(self, name, input_dim, vocab_size, output_dim, input_length):
-        model = Sequential(name=name)
-
-        # Add Input layer
-        model.add(Input(shape=input_dim, dtype=tf.int32))
-
-        # Add Embedding layer
-        model.add(Embedding(input_dim=vocab_size, output_dim=output_dim, input_length=input_length))
-
-        # Add bidirectional LSTM
-        model.add(Bidirectional(LSTM(units=output_dim, return_sequences=True, dropout=0.4, recurrent_dropout=0.4),
-                                merge_mode='sum'))
-
-        return model
-
-    def __create_layer_blsm(self, name, input_dim, output_dim):
-        model = Sequential(name=name)
-
-        # Add Input layer
-        model.add(Input(shape=input_dim, dtype=tf.int32))
-
-        # Add bidirectional LSTM
-        model.add(Bidirectional(LSTM(units=output_dim, return_sequences=True, dropout=0.4, recurrent_dropout=0.4),
-                                merge_mode='sum'))
-
-        return model
+        model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
+        model.summary()
+        self.model = model
+        # plot_model(model, 'DeepParse_Architecture.jpg')
 
     def __create_layer_vectorization(self, name, max_len, vocabulary, ngrams=None, split="whitespace"):
         vectorize_layer = TextVectorization(
@@ -136,6 +98,11 @@ class NeuralModel:
 
         return vectorize_layer_model
 
+    def fit_model(self, data_set, batch_size=1200, epochs=50):
+        x = np.asarray(data_set.get_x_train_sentence_values())
+        x_val = np.asarray(data_set.get_x_val_sentence_values())
+        self.model.fit(x, data_set.get_y_train_values(), batch_size=batch_size,
+                       verbose=1, epochs=epochs, validation_data=(x_val, data_set.get_y_val_values()))
 
 def split_and_remove_spacewhite(input_data):
     result = tf.strings.regex_replace(input_data, ' ', '')
