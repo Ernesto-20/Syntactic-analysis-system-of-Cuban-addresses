@@ -224,39 +224,25 @@ class PDModelTypeTwo(PreprocessingData):
         :return: string with write error
         """
         error_value = rm.randint(-2, 60)
-        wrong_word = ''
         if word != '' or word != ' ':
             # Character Omission
             if error_value in range(0, 20):
                 o_index = rm.randint(len(word))
-                i = 0
-                for char in word:
-                    if i == o_index:
-                        wrong_word = word[:i] + '' + word[i + 1:]
-                    i += 1
+                return word[:o_index] + '' + word[o_index + 1:]
             # Spelling Mistakes
             elif error_value in range(20, 45):
-                pass
+                return word
             # Addition of other characters
             elif error_value in range(45, 50):
-                char_list = string.printable
+                char_list = string.printable[10: 62] # This range corresponds only to alphabetic characters
                 random_char = rm.randint(len(char_list))
                 r_index = rm.randint(len(word))
                 char_added = char_list[random_char]
-                i = 0
-                for char in word:
-                    if i == r_index:
-                        wrong_word = word[:i] + '' + char_added + '' + word[i:]
-                    i += 1
+                return word[:r_index] + '' + char_added + '' + word[r_index:]
             # Character duplication
             elif error_value in range(50, 60):
                 r_index = rm.randint(len(word))
-                i = 0
-                for char in word:
-                    if i == r_index:
-                        wrong_word = word[:i] + '' + char + '' + word[i:]
-                    i += 1
-        return wrong_word
+                return word[:r_index] + '' + word[r_index] + '' + word[r_index:]
 
 
 

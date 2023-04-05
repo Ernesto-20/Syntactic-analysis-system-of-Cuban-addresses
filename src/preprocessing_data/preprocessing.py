@@ -11,7 +11,7 @@ class PreprocessingData(ABC):
     def generate_noise(self, data_set: DataFrame):
         pass
 
-    def create_DataSet_Word(self, data_set: DataFrame):
+    def adapt_data_set(self, data_set: DataFrame):
         print('create DS_W')
 
         data_set['Tag'] = data_set['Tag'].astype('category')

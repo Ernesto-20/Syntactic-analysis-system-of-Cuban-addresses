@@ -9,7 +9,7 @@ data = pd.read_excel('assets/default_corpus/model_type_one/corpus_1.xlsx')
 
 preprocessing = PDModelTypeOne()
 data_with_noise = preprocessing.generate_noise(data)
-data_set = preprocessing.create_DataSet_Word(data_with_noise)
+data_set = preprocessing.adapt_data_set(data_with_noise)
 
 # Example: save data_set
 # manage_ds = ManageDataSet()
