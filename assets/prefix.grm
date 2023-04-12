@@ -1,0 +1,246 @@
+﻿"Name"     = 'Modelo de direcciones cubanas'
+"Author"   = 'Eduardo Sánchez Ansola'
+"Version"  = '1.2'
+"About"    = 'Esta gramatica se ajusta al primer modelo de direcciones basado en calles y entrecalles, esqinas y edificios'
+!"Date"     = '22-01-2015 , 11:15 am'
+
+"Start Symbol" = <Address>
+
+Word   = {Letter}+ 
+
+Number = {Digit}+
+       
+NameAndNumber = {Letter}+{Digit}+
+                |{Digit}+ {Letter}+
+                |{Digit}+ {Letter}+ {Digit}+
+                
+SpecialCharacter = {Letter}+'ó'{Letter}+
+                 | {Letter}+'í'{Letter}+
+                 | {Letter}+'á'{Letter}+
+                 | {Letter}+'é'{Letter}+
+                 | {Letter}+'ú'{Letter}+
+                 | {Letter}+'ñ'{Letter}+
+                 | {Letter}+'Ñ'{Letter}+
+                 | {Letter}+'ü'{Letter}+
+                 | {Letter}+'Á'{Letter}+
+                 | {Letter}+'É'{Letter}+
+                 | {Letter}+'Í'{Letter}+
+                 | {Letter}+'Ó'{Letter}+
+                 | {Letter}+'Ú'{Letter}+
+                 | {Letter}+'Ü'{Letter}+
+                 
+BetweenPrefix = 'e/' | 'e/c' |'%' | entre | 'E\' | 'E/' | ent'.'| etr'.' | 'e\c' | '/' | '\'
+       
+Separator = ','
+
+StreetSuffix = calle | CALL
+             | ave | avenida | ave'.' | Ave | Ave'.' | AVE | AVE'.'
+             | carretera | ctra | Ctra'.' | Ctra | carr | Carr'.' | Carr| carret | Carret'.' | Carret | CARRET | CARRETE
+             | calzada |  czda | calz | Calzada | Czda | Calz |czda'.'| calz'.'| Czda'.' | Calz'.'
+             | pasaje | psje | Pasaje | psje'.'
+             | callejon |  cjon | Callejon |  cjon'.'|callej'.'
+             | callejuela |  callej | Callejuela
+             | acera | Acera
+             | terraplan | terr | Terraplen| terr'.'
+             | camino | cam | Camino |  cam'.'
+             
+CornerConector = esq | esquina
+             
+BuildingPrefix = ed | edif | edf | edificio | EDIFICIO | Edificio | EDIF'.' | ED | e'.' | EDF | E'.'
+               | Casa | casa | CASA | VIVIENDA 
+
+PropertyPrefix = '#' | no | NO | No | 'S/n' | 'S/N' | 's/N' | 's/n'
+               
+DistancePrefix = Km'.' | KM'.' | Km | KM | K'.' | k'.' | kilometro | Kilometro | KILOMETRO | 'K\M' | 'K/M' | 'k/m' | 'k\m'
+
+LocalityPrefix = pueblo | pue | Pueblo
+               | poblado | pob | Poblado
+               | caserio | cas | csrio | Caserio
+               | batey | bat 
+               !| ciudad | Ciudad | CIUDAD
+               
+               | reparto | rpto | rto | Reparto | rpto'.' | rto'.'| Rpto'.' | Rto'.'
+               | barrio | barr | bo | Barr | Bo | Barr'.' | Bo'.' | BRRI
+               | comunidad | com | Comunidad | Com | Com'.'
+               | distrito | dist  | Distrito | Dist | Dist'.'
+               
+               | finca | Finca
+               
+               | Zona | zona 
+               
+MunicipalityPrefix = Mun'.' | mun'.' | Mun | mun | Municipio | municipio | MUNICIPIO 
+                   
+ProvincePrefix = Prov'.' | prov'.' | PROV'.' | Prov | prov | Provincia | provicia | PROVINCIA | Pro'.' | PRO'.' | Pro | PRO | pro 
+                              
+BuildingSubdivisionPrefix = apto | bloque | blq | esc | escalera | piso | Apto | apartamento | Bloque | apto'.'| Apto'.' | apart | APTO | ESC
+                          
+Conjunction = y !| e
+            
+!Zone = Zona | zona 
+            
+!------------------------------------------------------------------------
+!No Terminales
+!------------------------------------------------------------------------ 
+                                  
+<Name> ::= Word | Word <Name> | Word SpecialCharacter 
+        
+<NameOrNumber> ::= <Name> | Number | NameAndNumber | NameAndNumber <NameOrNumber>
+                
+<ComplexName> ::= <NameOrNumber> | <NameOrNumber> <ComplexName>
+            
+<BuildingZone> ::= LocalityPrefix PropertyPrefix Number
+
+<Street> ::= StreetSuffix <ComplexName> | StreetSuffix StreetSuffix <ComplexName>
+          | <ComplexName> StreetSuffix | StreetSuffix <ComplexName> StreetSuffix
+          | <ComplexName> StreetSuffix StreetSuffix
+          | <ComplexName>
+          | <ComplexName> StreetSuffix <ComplexName>
+          | StreetSuffix !porque hay calles q se llaman CALZADA, CALLEJUELA, etc. en el interprete si no viene acompañada del nombre entonces el sufijo se toma como nombre
+          | StreetSuffix StreetSuffix !igual al anterior. NO ESTA IMPLEMENTADA EN LOS SERVICIOS
+                              
+<PreStreet> ::= <Street> 
+             
+<PostStreet> ::= <Street>
+
+<PrincipalStreet> ::= <Street>
+                   
+<StreetDistaceSection> ::=  DistancePrefix PropertyPrefix Number | DistancePrefix <ComplexName>
+           !| DistancePrefix PropertyPrefix Number BetweenPrefix Number | DistancePrefix Number BetweenPrefix Number
+           
+<StreetSection> ::= <PrincipalStreet>
+                 
+<BuildingHouseValue> ::= PropertyPrefix <ComplexName> | PropertyPrefix 
+                      | PropertyPrefix PropertyPrefix 
+                      | PropertyPrefix PropertyPrefix <ComplexName> ! hay un caso no se si es necesario AVE CENTRAL NO # 10
+           
+<BuildingSection> ::= <BuildingHouseValue> | BuildingPrefix <BuildingHouseValue> | BuildingPrefix <ComplexName>
+                   | <BuildingHouseValue> BuildingPrefix <ComplexName>
+                   | BuildingPrefix <ComplexName> <BuildingHouseValue>
+                   | BuildingPrefix !solo el prefijo de Edificio
+                   
+<HouseSection> ::= BuildingSubdivisionPrefix <BuildingHouseValue> | BuildingSubdivisionPrefix <ComplexName> 
+                | BuildingSubdivisionPrefix <ComplexName> <HouseSection> !para ESC APTO
+                | BuildingSubdivisionPrefix <BuildingHouseValue> <HouseSection> !para ESC APTO
+                
+<CornerSection> ::= <PreStreet> CornerConector <PostStreet> | <PreStreet> Conjunction <PostStreet>
+                ! | <PreStreet> <BuildingSection> <HouseSection> CornerConector <PostStreet> !para cuando el número o la casa este antes de la esquina. NO ESTA IMPLEMENTADA EN LOS SERVICIOS
+                ! | <PreStreet> <BuildingSection> CornerConector <PostStreet> !para cuando el número o la casa este antes de la esquina. NO ESTA IMPLEMENTADA EN LOS SERVICIOS
+                 
+<BetweenSection> ::= BetweenPrefix <PreStreet> Conjunction <PostStreet> 
+                  | BetweenPrefix <PreStreet> !solo con la primera entre calle
+                  
+<Locality> ::= LocalityPrefix <ComplexName> | <ComplexName> LocalityPrefix | LocalityPrefix LocalityPrefix <ComplexName> 
+            | <ComplexName> LocalityPrefix <ComplexName> ! algunas direcciones tienen localidad + sufijo + texto
+            
+<MunicipalityOrProvinceOrLocality> ::= Separator MunicipalityPrefix <ComplexName> | Separator ProvincePrefix <ComplexName> | Separator <Locality> | Separator <ComplexName>
+                                    | <Locality> !por si viene la localidad sin separador (,)
+                                    | MunicipalityPrefix <ComplexName> !por si viene solo en municipio sin separador (,). NO ESTA IMPLEMENTDA EN LOS SERVICIOS
+                
+<RegionSection> ::= <MunicipalityOrProvinceOrLocality> | <MunicipalityOrProvinceOrLocality> <RegionSection>
+              
+! -------------------------------------------------
+! Reglas 
+! -------------------------------------------------
+
+<Address> ::= <Address_StreetModel>  | <Address_BuildingModel>  | <Address_DistanceModel> | <Address_RegionModel> 
+           | <Address_StreetModel> ';' <Address> | <Address_BuildingModel> ';'<Address> | <Address_DistanceModel> ';'<Address> | <Address_RegionModel> ';'<Address>
+           
+<Address_StreetModel> ::= <StreetSection> <BetweenSection> <BuildingSection> <HouseSection> <RegionSection>
+                       | <StreetSection> <BuildingSection> <BetweenSection> <HouseSection> <RegionSection>
+                       | <StreetSection> <BuildingSection> <HouseSection> <BetweenSection> <RegionSection>
+                       | <StreetSection> <BetweenSection> <BuildingSection> <HouseSection>
+                       | <StreetSection> <BuildingSection> <BetweenSection> <HouseSection>
+                       | <StreetSection> <BuildingSection> <HouseSection> <BetweenSection>
+!con kilometros                       
+                       | <StreetSection> <StreetDistaceSection> <BetweenSection> <RegionSection>
+                       | <StreetSection> <StreetDistaceSection> <BetweenSection> 
+                       
+                       | <StreetSection> <BuildingSection> <HouseSection> <StreetDistaceSection> <BetweenSection> <RegionSection>
+                       | <StreetSection> <BuildingSection> <StreetDistaceSection> <HouseSection> <BetweenSection> <RegionSection>
+                       | <StreetSection> <BuildingSection> <StreetDistaceSection> <BetweenSection> <HouseSection> <RegionSection>
+                       | <StreetSection> <StreetDistaceSection> <BetweenSection> <BuildingSection> <HouseSection> <RegionSection>
+                       | <StreetSection> <BuildingSection> <HouseSection> <StreetDistaceSection> <BetweenSection>
+                       | <StreetSection> <BuildingSection> <StreetDistaceSection> <HouseSection> <BetweenSection>
+                       | <StreetSection> <BuildingSection> <StreetDistaceSection> <BetweenSection> <HouseSection>
+                       | <StreetSection> <StreetDistaceSection> <BetweenSection> <BuildingSection> <HouseSection>
+                       
+                       | <StreetSection> <BuildingSection> <StreetDistaceSection> <BetweenSection> <RegionSection>
+                       | <StreetSection> <StreetDistaceSection> <BuildingSection> <BetweenSection> <RegionSection>
+                       | <StreetSection> <BuildingSection> <StreetDistaceSection> <BetweenSection>
+                       | <StreetSection> <StreetDistaceSection> <BuildingSection> <BetweenSection> 
+!                      
+                       | <StreetSection> <BetweenSection> <BuildingSection> <RegionSection>
+                       | <StreetSection> <BuildingSection> <BetweenSection> <RegionSection>
+                       | <StreetSection> <BetweenSection> <BuildingSection>
+                       | <StreetSection> <BuildingSection> <BetweenSection>
+                       
+                       | <StreetSection> <BetweenSection> <HouseSection> <RegionSection>
+                       | <StreetSection> <HouseSection> <BetweenSection> <RegionSection>
+                       | <StreetSection> <BetweenSection> <HouseSection>
+                       | <StreetSection> <HouseSection> <BetweenSection>
+                       
+                       | <StreetSection> <BetweenSection> <RegionSection>
+                       | <StreetSection> <BetweenSection>
+!calle                       
+                       | <StreetSection> <BuildingSection> <HouseSection> <RegionSection>
+                       | <StreetSection> <HouseSection> <BuildingSection> <RegionSection>
+                       | <StreetSection> <BuildingSection> <HouseSection>
+                       | <StreetSection> <HouseSection> <BuildingSection>
+                       
+                       | <StreetSection> <BuildingSection> <RegionSection>
+                       | <StreetSection> <BuildingSection> 
+                       
+                       | <StreetSection> <HouseSection> <RegionSection>
+                       | <StreetSection> <HouseSection> 
+                       
+                       | <StreetSection> <RegionSection>
+                       | <StreetSection>
+!con kilometro                       
+                       | <StreetSection> <HouseSection> <StreetDistaceSection> <RegionSection>
+                       | <StreetSection> <HouseSection> <StreetDistaceSection>
+                       | <StreetSection> <BuildingSection> <HouseSection> <StreetDistaceSection> <RegionSection>
+                       | <StreetSection> <StreetDistaceSection> <BuildingSection> <HouseSection> <RegionSection>
+                       | <StreetSection> <BuildingSection> <StreetDistaceSection> <HouseSection> <RegionSection>
+                       | <StreetSection> <BuildingSection> <HouseSection> <StreetDistaceSection>
+                       | <StreetSection> <StreetDistaceSection> <BuildingSection> <HouseSection>
+                       | <StreetSection> <BuildingSection> <StreetDistaceSection> <HouseSection>
+                       
+!esquina                       
+                       | <CornerSection> <BuildingSection> <HouseSection> <RegionSection>
+                       | <CornerSection> <BuildingSection> <RegionSection>
+                       
+                       | <CornerSection> <BuildingSection> <HouseSection>
+                       | <CornerSection> <BuildingSection>
+                       
+                       | <CornerSection> <RegionSection>
+                       | <CornerSection> 
+                       
+<Address_BuildingModel> ::= <BuildingSection> <HouseSection> <BuildingZone> <RegionSection>
+                         | <BuildingSection> <BuildingZone> <HouseSection> <RegionSection>
+                         | <BuildingSection> <BuildingZone> <RegionSection>
+                         | <BuildingSection> <HouseSection> <RegionSection>
+                         | <BuildingSection> <RegionSection>
+                         
+!                         | <BuildingZone> <BuildingSection> <HouseSection> <RegionSection>
+!                         | <BuildingZone> <HouseSection> <BuildingSection> <RegionSection>
+!                         | <BuildingZone> <BuildingSection> <HouseSection>
+!                         | <BuildingZone> <HouseSection> <BuildingSection>
+                         
+                         | <BuildingSection> <HouseSection> Separator <BuildingZone> <RegionSection>
+                         | <BuildingSection> Separator <BuildingZone> <RegionSection>
+                         
+                         | <BuildingSection> <HouseSection> Separator <BuildingZone>
+                         | <BuildingSection> <BuildingZone> <HouseSection>
+                         | <BuildingSection> Separator <BuildingZone>
+!edificio con ewntre calles                         
+                         | <BuildingSection> <BetweenSection> <RegionSection> 
+                         | <BuildingSection> <HouseSection> <BetweenSection> <RegionSection>
+                         | <BuildingSection> <BetweenSection>
+                         | <BuildingSection> <HouseSection> <BetweenSection> 
+                         
+<Address_DistanceModel> ::= <StreetSection> <StreetDistaceSection> <RegionSection> 
+                         | <StreetSection> <BuildingSection> <StreetDistaceSection> <RegionSection>
+                         | <StreetSection> <StreetDistaceSection> <BuildingSection> <RegionSection>
+                         | <StreetDistaceSection> <RegionSection> !por si viene el kilometro y no la carretera
+                         
+<Address_RegionModel> ::= <RegionSection>

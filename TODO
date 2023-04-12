@@ -1,0 +1,12 @@
+TODO:
+    1- to implement evaluate functionality in DeepNeuralModel. OK
+    2- to implement and design correctly functionality save and load model. +-
+    3- to implement the shuffle examples in data_set.
+    4- to parametrize adapt function in AdaptDataSet.
+    5- to implement suffix in noise generation.
+    6- to implement plot_model functionality
+    7- to implement default AddressParser with a NeuralModel trained before.
+
+    Problems:
+    1- When load keras model the custom_standardization function cannot deserialize.
+    2- The custom_standardization function I dont know how remove characters not alphanumeric.
