@@ -25,9 +25,9 @@ class PDModelTypeTwo(NoiseGenerator):
             components = []
 
             building = str(data_set.iloc[line, 0])
-            locality = str(data_set.iloc[line, 2])
-            municipality = str(data_set.iloc[line, 4])
-            province = str(data_set.iloc[line, 6])
+            locality = str(data_set.iloc[line, 1])
+            municipality = str(data_set.iloc[line, 2])
+            province = str(data_set.iloc[line, 3])
 
             # For creating the first component we have to split itself in three sub-components, if the name of the building is alphanum
             # For example: Edif 456 o 34B

@@ -73,3 +73,5 @@ class AddressCleaner:
             stripped_spanish, '[%s]' % re.escape(string.punctuation), '')
 
         return output
+
+
