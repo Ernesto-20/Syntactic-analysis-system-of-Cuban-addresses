@@ -74,4 +74,15 @@ class AddressCleaner:
 
         return output
 
+    def custom_standardization_v2(texto):
+        # Transforma toda la cadena a minúsculas
+        texto = texto.lower()
+
+        # Reemplaza los caracteres y vocales especiales por espacios
+        texto = re.sub('[^a-zA-Z0-9 \n\.]', ' ', texto)
+
+        # Quita cualquier caracter que no sea número o letra por espacio
+        texto = re.sub('[^0-9a-zA-Z]+', ' ', texto)
+
+        return texto
 
