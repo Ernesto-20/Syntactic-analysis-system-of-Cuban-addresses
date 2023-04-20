@@ -92,13 +92,3 @@ def custom_standardization( input_string):
     return output
 
 
-sentence = "Edificio 15A @pto  7  %  11 C  y  11 D  Bahia, Habana del Este,LA HABANA DEL ESTE,La Habana"
-
-print("Funcion: custom_standardization ")
-print("Resultado:"+" "+custom_standardization(sentence))
-print()
-print()
-print()
-print()
-print("Funcion: custom_standardization_v2 ")
-print("Resultado:"+" "+custom_standardization_v2(sentence))
