@@ -3,11 +3,12 @@ from pandas import DataFrame
 import random as rm
 import itertools as itt
 
+from src.data_realism_converter.spelling_error_generator import Generator
 from src.tools.lookup import STREET_NAME_PREFIX, LOCALITY_PREFIX, MUNICIPALITY_PREFIX, PROVINCE_PREFIX, BETWEEN_PREFIX, \
     BUILDING_PREFIX, BUILDING_SUBDIVISION_PREFIX, CORNER_CONECTOR_PREFIX
 
 
-class NoiseGenerator:
+class NoiseGenerator(Generator):
     '''
         Caracterizacion del modelo 1: (Componentes para permutar)
 
@@ -55,11 +56,11 @@ class NoiseGenerator:
             # Determinar si es tipo 1 o 2:
             if not self.__is_empty(first_side_street) and not self.__is_empty(second_side_street):
                 #   Is type one
-                principal_street_prefix = self.__generate_prefix(STREET_NAME_PREFIX, 65)
-                first_side_street_prefix = self.__generate_prefix(STREET_NAME_PREFIX, 65)
-                second_side_street_prefix = self.__generate_prefix(STREET_NAME_PREFIX, 65)
+                principal_street_prefix = super().generate_prefix_randomly(STREET_NAME_PREFIX, 65)
+                first_side_street_prefix = super().generate_prefix_randomly(STREET_NAME_PREFIX, 65)
+                second_side_street_prefix = super().generate_prefix_randomly(STREET_NAME_PREFIX, 65)
 
-                between_prefix = self.__generate_prefix(BETWEEN_PREFIX, 100)
+                between_prefix = super().generate_prefix_randomly(BETWEEN_PREFIX, 100)
                 conjunction_prefix = [[
                     'e' if (len(second_side_street_prefix) == 0 and second_side_street[0]) == 'i' else 'y', 'rw']]
 
@@ -76,7 +77,7 @@ class NoiseGenerator:
                 if rm.randint(1, 100) <= 25:
                     # Contain building
                     identification_building = self.__generate_building_syntetic()
-                    identification_building_prefix = self.__generate_prefix(BUILDING_PREFIX, 90)
+                    identification_building_prefix = super().generate_prefix_randomly(BUILDING_PREFIX, 90)
                     if rm.randint(1, 100) <= 70:
                         components.append(
                             identification_building_prefix + [[item, 'building'] for item in
@@ -85,7 +86,7 @@ class NoiseGenerator:
                     else:
                         # Contain apartment
                         identification_apartment = self.__generate_apartment_syntetic()
-                        identification_apartment_prefix = self.__generate_prefix(BUILDING_SUBDIVISION_PREFIX, 100)
+                        identification_apartment_prefix = super().generate_prefix_randomly(BUILDING_SUBDIVISION_PREFIX, 100)
 
                         components.append(
                             identification_building_prefix + [[item, 'building'] for item in
@@ -97,19 +98,19 @@ class NoiseGenerator:
                 #   Is type 2
                 side_street = first_side_street + second_side_street
 
-                principal_street_prefix = self.__generate_prefix(self, STREET_NAME_PREFIX, 60)
-                side_street_prefix = self.__generate_prefix(self, STREET_NAME_PREFIX, 60)
+                principal_street_prefix = super().generate_prefix_randomly(STREET_NAME_PREFIX, 60)
+                side_street_prefix = super().generate_prefix_randomly(STREET_NAME_PREFIX, 60)
 
                 if rm.randint(1, 100) <= 50:
                     # Is type 2.1
-                    corner_prefix = self.__generate_prefix(CORNER_CONECTOR_PREFIX, 80)
+                    corner_prefix = super().generate_prefix_randomly(CORNER_CONECTOR_PREFIX, 80)
                     conjunction_prefix = [['e' if (len(side_street_prefix) == 0 and side_street[0]) == 'i' else 'y',
                                           'rw']]
 
                     if rm.randint(1, 100) <= 25:
                         # Contain Building
                         identification_building = self.__generate_building_syntetic()
-                        identification_building_prefix = self.__generate_prefix(BUILDING_PREFIX, 90)
+                        identification_building_prefix = super().generate_prefix_randomly(BUILDING_PREFIX, 90)
 
                         if rm.randint(1, 100) <= 50:
                             # Is type 2.1.1 left building
@@ -141,12 +142,12 @@ class NoiseGenerator:
                         )
                 else:
                     # Is type 2.2
-                    corner_prefix = self.__generate_prefix(CORNER_CONECTOR_PREFIX, 100)
+                    corner_prefix = super().generate_prefix_randomly(CORNER_CONECTOR_PREFIX, 100)
 
                     if rm.randint(1, 100) <= 25:
                         # Contain Building
                         identification_building = self.__generate_building_syntetic()
-                        identification_building_prefix = self.__generate_prefix(BUILDING_PREFIX, 90)
+                        identification_building_prefix = super().generate_prefix_randomly(BUILDING_PREFIX, 90)
 
                         if rm.randint(1, 100) <= 50:
                             # Is type 2.1.1 left building
@@ -176,23 +177,23 @@ class NoiseGenerator:
 
             # Components Basics
             if len(locality) != 0 or not self.__is_empty(locality):
-                locality_prefix = self.__generate_prefix(LOCALITY_PREFIX, 35)
+                locality_prefix = super().generate_prefix_randomly(LOCALITY_PREFIX, 35)
                 components.append(
                     locality_prefix + [[item, 'locality'] for item in locality.split()]
                 )
             if len(municipality) != 0 or not self.__is_empty(municipality):
-                municipality_prefix = self.__generate_prefix(MUNICIPALITY_PREFIX, 35)
+                municipality_prefix = super().generate_prefix_randomly(MUNICIPALITY_PREFIX, 35)
                 components.append(
                     municipality_prefix + [[item, 'municipality'] for item in municipality.split()]
                 )
             if len(province) != 0 or not self.__is_empty(province):
-                province_prefix = self.__generate_prefix(PROVINCE_PREFIX, 35)
+                province_prefix = super().generate_prefix_randomly(PROVINCE_PREFIX, 35)
                 components.append(
                     province_prefix + [[item, 'province'] for item in province.split()]
                 )
 
             #  Permutación entre componentes.
-            components = self.generate_non_standardization(components)
+            components = super().generate_non_standardization(components)
 
             address_number += 1
             self.__add_new_address(components, address_number, address_list, words_list, tags_list)
@@ -212,34 +213,25 @@ class NoiseGenerator:
         address_list.append('Sentence ' + str(address_number))
 
         # breaking down
-        list = []
+        georeferential_elements_list = []
         for element in components:
-            list += element
+            georeferential_elements_list += element
 
         count = 0
-        for compound_items in list:
+        var_aleatory = rm.randint(1, 6)
+        amount_errors = var_aleatory if rm.randint(0, 2) == 1 else 0
+        for compound_items in georeferential_elements_list:
             if compound_items[0] != 'nan':
-                words_list.append(str(compound_items[0]))
+                word = str(compound_items[0])
+                if amount_errors > 0 and rm.randint(1, 4) == 1:
+                    word = super().generate_spelling_errors(word)
+
+                words_list.append(word)
                 tags_list.append(str(compound_items[1]))
 
                 if count != 0 and len(words_list) == len(address_list) + 1:
                     address_list.append(None)
             count += 1
-
-    def generate_non_standardization(self, components):
-        permutations = list(itt.permutations(components))
-
-        amount_permutation = math.factorial(len(components)) - 1
-        reorder_components = permutations[rm.randint(0, amount_permutation)]
-
-        return reorder_components
-
-    def __generate_prefix(self, list_prefix, probability):
-        if rm.randint(1, 100) <= probability:
-            prefix = list_prefix[rm.randint(0, len(list_prefix) - 1)]
-            return [[item, 'rw'] for item in prefix.split()]
-        return []
-
     def __is_empty(self, entity):
         return len(entity.split()) == 0
 

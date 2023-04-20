@@ -6,7 +6,6 @@ from keras import Sequential
 from keras.layers import LSTM, Embedding, Dense, Bidirectional, Concatenate, Reshape, Flatten
 from keras.layers import TextVectorization
 from tensorflow.python.ops.ragged.ragged_string_ops import string_bytes_split
-
 from src.neural_networks.neural_parser import NeuralParser
 from src.tools.address_data_set import DataSet
 

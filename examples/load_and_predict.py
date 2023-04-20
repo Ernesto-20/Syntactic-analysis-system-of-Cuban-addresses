@@ -1,4 +1,4 @@
-from src.address_parser import AddressParser
+from src.address_parser.address_parser import AddressParser
 from src.tools.decoder import Decoder
 from src.tools.neural_parser_manage import NeuralParserManage
 from src.tools.export_to_xlsx import export_to_xlsx
