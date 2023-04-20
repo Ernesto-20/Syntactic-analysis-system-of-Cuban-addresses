@@ -9,7 +9,7 @@ class Decoder:
         self.cat_to_id = {v: k for k, v in id_to_cat.items()}
         self.cleaner_method = cleaner_method
 
-    def decoder_to_classified_address(self, matrix_probability, text_address_list):
+    def decoder_to_first_address_model(self, matrix_probability, text_address_list):
         list_address_classified = []
         index_address = 0
         for raw_address in matrix_probability:

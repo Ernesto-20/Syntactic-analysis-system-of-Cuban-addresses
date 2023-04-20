@@ -5,21 +5,17 @@ import tensorflow as tf
 from keras import Sequential
 from keras.layers import LSTM, Embedding, Dense, Bidirectional, Concatenate, Reshape, Flatten
 from keras.layers import TextVectorization
-from tensorflow.python.ops.ragged.ragged_string_ops import ngrams
 from tensorflow.python.ops.ragged.ragged_string_ops import string_bytes_split
 
 from src.neural_networks.neural_parser import NeuralParser
-from src.tools.address_cleaner import AddressCleaner
 from src.tools.address_data_set import DataSet
-from src.tools.decoder import Decoder
-import string
 
 
 class DeepParserModel(NeuralParser):
 
-    def __init__(self, data_set: DataSet, address_cleaner: AddressCleaner, model=None):
+    def __init__(self, data_set: DataSet, cleaner_method, model=None):
         self.data = data_set
-        self.address_cleaner = address_cleaner
+        self.cleaner_method = cleaner_method
         if model is None:
             output_dim = 100
             input_length = 25
@@ -91,17 +87,17 @@ class DeepParserModel(NeuralParser):
             # Recall tells you how many times the model was able to detect a specific category.
 
             model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
-            # model.summary()
+            model.summary()
             self.model = model
             # plot_model(model, 'DeepParse_Architecture.jpg')
-        elif type(model) is not keras.Model:
-            raise NotImplementedError('model variable could be Keras.Model instance')
+        elif type(model) is not keras.engine.functional.Functional:
+            raise NotImplementedError('Model variable could be Keras.Model instance')
         else:
             self.model = model
 
     def __create_layer_vectorization(self, name, max_len, ngrams=None, split="whitespace"):
         vectorize_layer = TextVectorization(
-            standardize=self.address_cleaner.custom_standardization,
+            standardize=self.cleaner_method,
             output_mode="int",
             output_sequence_length=max_len,
             ngrams=ngrams,
@@ -123,11 +119,7 @@ class DeepParserModel(NeuralParser):
                        verbose=1, epochs=epochs, validation_data=(x_val, self.data.get_y_val_values()))
 
     def predict(self, address_list: list):
-        address_list = preprocessing(address_list)
         result = self.model.predict(address_list)
-        # print('\n\n\n\n\n\n')
-        # print(np.round(result, decimals=2))
-        # print('\n\n\n\n\n\n')
         return np.round(result, decimals=2)
 
     def evaluate(self):
@@ -137,8 +129,8 @@ class DeepParserModel(NeuralParser):
 
         return loss, accuracy
 
-    def get_address_cleaner(self) -> AddressCleaner:
-        return self.address_cleaner
+    def get_cleaner_method(self):
+        return self.cleaner_method
 
     def get_data(self) -> DataSet:
         return self.data
@@ -146,20 +138,8 @@ class DeepParserModel(NeuralParser):
     def get_model(self) -> keras.Model:
         return self.model
 
-
-def split_and_remove_spacewhite(input_data):
-    # Puede que se elimine
-    result = tf.strings.regex_replace(input_data, ' ', '')
-    result = string_bytes_split(result)
-    return ngrams(result, ngram_width=3)
-
-
-def preprocessing(address):
-    temp = []
-    for sentence in address:
-        some_punctuations = ['á', 'ä', 'Á', 'Ä', 'é', 'ë', 'É', 'Ë', 'í', 'ï', 'Í', 'Ï', 'ó', 'ö', 'Ó', 'Ö', 'ú', 'ü',
-                             'Ú', 'Ü']
-        stripped_spanish = ''.join(ch for ch in sentence if ch in string.printable or ch in some_punctuations)
-        temp.append(stripped_spanish)
-
-    return temp
+    def set_data(self, data: DataSet) -> None:
+        if data.get_n_tag() == self.data.get_n_tag():
+            self.data = data
+        else:
+            raise NotImplementedError('The number of tags does not correspond to the trained network')

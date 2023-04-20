@@ -11,4 +11,4 @@ class AddressParser:
     def process_address(self, address_list: list):
         probability_matrix = self.model.predict(address_list)
 
-        return self.decoder.decoder_to_classified_address(probability_matrix, address_list)
+        return self.decoder.decoder_to_first_address_model(probability_matrix, address_list)

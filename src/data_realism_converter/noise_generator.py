@@ -1,9 +1,5 @@
 import math
-from abc import ABC, abstractmethod
 from pandas import DataFrame
-import pandas as pd
-from keras.utils import pad_sequences
-from keras.utils import to_categorical
 import random as rm
 import itertools as itt
 
@@ -36,9 +32,7 @@ class NoiseGenerator:
 
     '''
 
-    # NECESITO metodo que genere casa, edifico y apartamento.
-
-    def generate_noise(self, data_set: DataFrame, address_amount=15333):
+    def generate_noise(self, data_set: DataFrame, address_amount=None):
         print('Generate Noise II -- Type One')
         address_number = 0
         address_list = []
@@ -46,10 +40,8 @@ class NoiseGenerator:
         tags_list = []
 
         for i in data_set.index:
-            if address_number == address_amount:
+            if address_amount is not None and address_number == address_amount:
                 break
-
-            dictAddress = {}
             components = []
 
             principal_street = str(data_set.iloc[i, 0])
@@ -183,19 +175,21 @@ class NoiseGenerator:
                         )
 
             # Components Basics
-            locality_prefix = self.__generate_prefix(LOCALITY_PREFIX, 35)
-            municipality_prefix = self.__generate_prefix(MUNICIPALITY_PREFIX, 35)
-            province_prefix = self.__generate_prefix(PROVINCE_PREFIX, 35)
-
-            components.append(
-                locality_prefix + [[item, 'locality'] for item in locality.split()]
-            )
-            components.append(
-                municipality_prefix + [[item, 'municipality'] for item in municipality.split()]
-            )
-            components.append(
-                province_prefix + [[item, 'province'] for item in province.split()]
-            )
+            if len(locality) != 0 or not self.__is_empty(locality):
+                locality_prefix = self.__generate_prefix(LOCALITY_PREFIX, 35)
+                components.append(
+                    locality_prefix + [[item, 'locality'] for item in locality.split()]
+                )
+            if len(municipality) != 0 or not self.__is_empty(municipality):
+                municipality_prefix = self.__generate_prefix(MUNICIPALITY_PREFIX, 35)
+                components.append(
+                    municipality_prefix + [[item, 'municipality'] for item in municipality.split()]
+                )
+            if len(province) != 0 or not self.__is_empty(province):
+                province_prefix = self.__generate_prefix(PROVINCE_PREFIX, 35)
+                components.append(
+                    province_prefix + [[item, 'province'] for item in province.split()]
+                )
 
             #  Permutación entre componentes.
             components = self.generate_non_standardization(components)
