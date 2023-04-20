@@ -1,12 +1,9 @@
+from tensorflow.python.ops.ragged.ragged_string_ops import string_bytes_split
 from src.neural_networks.deep_parser_model import DeepParserModel
 from src.neural_networks.neural_parser import NeuralParser
-from src.tools.address_cleaner import AddressCleaner
 from src.tools.data_set_manage import DataSetManage
-from src.tools.address_data_set import DataSet
-import pickle
 import tensorflow as tf
-import re
-import string
+import dill
 
 
 class NeuralParserManage:
@@ -19,34 +16,29 @@ class NeuralParserManage:
         if type(name) is not str:
             raise NotImplementedError('name_model variable could be string instance')
         # save model
-        dir_model = ''
         route = NeuralParserManage.__reformat_and_validate_route(route)
         name = NeuralParserManage.__reformat_and_validate_name_model(name)
         dir_model = route + '/' + name + '/model'
         dir_data_set = route + '/' + name + '/data_set'
-        dir_address_cleaner = route + '/' + name + '/address_cleaner'
+        dir_cleaner_method = route + '/' + name + '/cleaner_method'
 
         neural_parser.get_model().save(dir_model, save_format="tf")
         DataSetManage.save(neural_parser.get_data(), route_and_name=dir_data_set)
-        # Save AddressCleaner Object
-        with open(dir_address_cleaner + '.pickle', "wb") as file:
-            pickle.dump(neural_parser.get_address_cleaner(), file)
+
+        # Save cleaner method with dill
+        dill.dump(neural_parser.get_cleaner_method(), open(dir_cleaner_method, 'wb'))
 
     @staticmethod
     def load_neural_parser(route='default', name='default') -> NeuralParser:
-        file_path = route+'/'+name
+        file_path = route + '/' + name
         # load data set
-        data = DataSetManage.load(file_path+'/data_set')
+        data = DataSetManage.load(file_path + '/data_set')
 
         # load address cleaner
-        address_cleaner = None
-        with open(file_path + '/address_cleaner.pickle', "rb") as file:
-            address_cleaner = pickle.load(file)
-
+        cleaner_method = dill.load(open(file_path + '/cleaner_method', 'rb'))
         # load keras model
-        model = tf.keras.models.load_model(file_path+'/model', custom_objects={"custom_standardization": address_cleaner.custom_standardization})
-
-        return DeepParserModel(data, address_cleaner, model=model)
+        model = tf.keras.models.load_model(file_path + '/model', custom_objects={cleaner_method.__name__: cleaner_method, 'string_bytes_split': string_bytes_split})
+        return DeepParserModel(data, cleaner_method=cleaner_method, model=model)
 
     @staticmethod
     def __reformat_and_validate_route(route: str):
@@ -77,5 +69,3 @@ class NeuralParserManage:
             raise NotImplementedError('name_model variable cannot be an text with only withe space')
 
         return name_model
-
-
