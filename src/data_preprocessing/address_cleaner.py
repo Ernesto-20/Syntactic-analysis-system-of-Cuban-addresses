@@ -9,6 +9,8 @@ class AddressCleaner:
     def cleaner_method(method='custom_standardization'):
         if method == 'custom_standardization':
             return AddressCleaner.__custom_standardization
+        elif method == 'custom_standardization_v2':
+            return AddressCleaner.__custom_standardization_v2
         else:
             raise NotImplementedError('There is no such cleaning method')
 
@@ -84,3 +86,19 @@ class AddressCleaner:
 
         return output
 
+    @staticmethod
+    @tf.keras.utils.register_keras_serializable()
+    def __custom_standardization_v2(input_string):
+        # Transforma toda la cadena a minúsculas
+        lower_str = input_string.lower()
+
+        # Quitar ½ y 1/2 en textos
+        spec_text = re.sub(r'½|1/2', ' ', lower_str)
+
+        # Reemplaza los caracteres y vocales especiales por espacios
+        char_spvow_off_str = re.sub('[^a-zA-Z0-9 \n\.]', ' ', spec_text)
+
+        # Quita cualquier caracter que no sea número o letra por espacio
+        clear_str = re.sub('[^0-9a-zA-Z]+', ' ', char_spvow_off_str)
+
+        return clear_str
