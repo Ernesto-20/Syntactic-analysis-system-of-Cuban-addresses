@@ -113,6 +113,7 @@ class LstmCnnModel(NeuralParser):
                 LSTM(units=output_dim, return_sequences=True, dropout=0.2, recurrent_dropout=0.1),
                 merge_mode='concat')
             layer_blstm_lstm_concat_word = blstm_lstm_concat_word(concatenate_layer)
+
             # CONCATENATE CHAR_TRIGRAM WORD PROCESS
             # ********* LAYER PROJECT ***************
             print(layer_blstm_character_trigram_concat)
@@ -131,19 +132,6 @@ class LstmCnnModel(NeuralParser):
             output = Dense(self.data.get_n_tag(), activation='softmax')(layer_blstm_concat_2)
             model_complex = keras.Model(inputs, output, name='Model')
 
-            # model = Sequential()
-            # model.add(Input(name='char_input',tensor=layer_tv_by_word))
-            # #model.add(Reshape((tv_by_character.output_shape[1],5)))
-            # model.add(TimeDistributed(Embedding(vocab_size_trigram, 25, name='Embedding_Character')))
-            # model.add(Dropout(0.68))
-            # model.add(TimeDistributed(Conv1D(kernel_size=3, filters=25, padding='same', activation='relu', strides=1)))
-            # model.add(TimeDistributed(MaxPooling1D(pool_size=3,strides=1)))
-            # model.add(TimeDistributed(Flatten()))
-            # model.add(Bidirectional(LSTM(units=25, return_sequences=True,dropout=0.6, recurrent_dropout=0.1),
-            # merge_mode='concat'))
-
-            # model.add(TimeDistributed(Dense(data_set.get_n_tag(), activation='softmax'))
-            # )
             opt = tf.keras.optimizers.adam_v2.Adam(learning_rate=0.0005, beta_1=0.9, beta_2=0.999)
             model_complex.compile(loss='categorical_crossentropy',
                                   optimizer=opt,
