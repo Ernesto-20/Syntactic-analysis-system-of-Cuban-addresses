@@ -10,13 +10,16 @@ BUILDING_PREFIX = ['ed', 'edif', 'edf', 'edificio', 'EDIFICIO', 'Edificio', 'EDI
 PROPERTY_PREFIX = ['#', 'no', 'S/n', 'S/N', 's/N', 's/n', 'nro.', 'nu', 'num', 'no.', 'num.', 'nu.', 'número', 'no','nro','']
 DISTANCE_PREFIX = ['Km.', 'KM.', 'Km', 'KM', 'K.', 'k.', 'kilometro', 'Kilometro', 'KILOMETRO', 'K\M', 'K/M', 'k/m',
                    'k\m','kmts','kmts.',]
+DISTANCE_SPECIFICATION_PREFIX =['½','¼','¾','1/4','1/2','3/4']
 LOCALITY_PREFIX = ['pueblo', 'pue', 'Pueblo', 'poblado', 'pob', 'Poblado', 'caserio', 'cas', 'csrio', 'Caserio',
-                   'batey', 'bat', 'ciudad',
                    'reparto', 'rpto', 'rto', 'Reparto', 'rpto.', 'rto.', 'Rpto.', 'Rto.', 'barrio', 'barr', 'bo',
                    'Barr', 'Barr.', 'Bo.',
                    'BRRI', 'comunidad', 'com', 'Comunidad', 'Com', 'Com.', 'distrito' 'dist', 'Distrito', 'Dist',
-                   'Dist.',
-                   'finca', 'Finca', 'Zona', 'zona']
+                   'Dist.',]
+OTHER_PREFIX = ['batey', 'bat', 'ciudad','finca', 'Finca']
+PLACE_PREFIX = ['Bar','Club','Restaurante','Hotel','Centro comercial','Supermercado','Tienda minorista',
+                'Tienda mayorista','Mercado agropecuario','Bazar','Feria','Parque',
+                'Piscina','Zonas de escalada','Finca','Clínica','Hospital','Laboratorios']
 ZONE_PREFIX = ['', 'Zn.', 'zn.', 'zon.', 'z.', 'zona', 'zna.', 'za', 'zo.', 'Zona']
 MUNICIPALITY_PREFIX = ['Mun.', 'mun.', 'Mun', 'mun', 'Municipio', 'municipio', 'MUNICIPIO''M.','m.','mcpio.','Mno.', ' ']
 PROVINCE_PREFIX = ['Prov.', 'prov.', 'PROV.', 'Prov', 'prov', 'Provincia', 'provicia', 'PROVINCIA', 'Pro.', 'PRO.',
