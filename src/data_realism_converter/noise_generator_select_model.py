@@ -1,9 +1,7 @@
-import math
-import string
 
 from pandas import DataFrame
 import random as rm
-import itertools as itt
+
 
 from src.data_realism_converter.noise_generator import NoiseGenerator
 
@@ -442,11 +440,13 @@ class PDModelTypeSelector(NoiseGenerator):
 
             # Optional Component
             # INTERESTING PLACE COMPONENT
-            if len(interesting_place_name) != 0 or not self.__is_empty(interesting_place_name):
-                components.append(
+            add_interesting_place_component = True if rm.randint(0, 100) > 75 else False
+            if add_interesting_place_component:
+                if len(interesting_place_name) != 0 or not self.__is_empty(interesting_place_name):
+                    components.append(
                     place_form + [[item, 'interesting_place'] for item in
-                                     interesting_place_name.split()]
-                )
+                              interesting_place_name.split()]
+                    )
 
 
             # Components Basics
