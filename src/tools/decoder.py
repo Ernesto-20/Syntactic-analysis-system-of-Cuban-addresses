@@ -1,6 +1,6 @@
 import numpy as np
 
-from src.structured_direction.classified_address import ClassifiedAddress
+from src.structured_direction.classified_address_one import ClassifiedAddressOne
 
 
 class Decoder:
@@ -53,9 +53,9 @@ class Decoder:
                     reserve_word = components[self.cat_to_id[cat]]
 
             list_address_classified.append(
-                ClassifiedAddress(principal_street=principal_street, first_side_street=first_side_street, second_side_street=second_side_street,
-                                  locality=locality, municipality=municipality, province=province,
-                                  building=building, apartment=apartment, reserve_word=reserve_word))
+                ClassifiedAddressOne(principal_street=principal_street, first_side_street=first_side_street, second_side_street=second_side_street,
+                                     locality=locality, municipality=municipality, province=province,
+                                     building=building, apartment=apartment, reserve_word=reserve_word))
             index_address += 1
 
         return list_address_classified

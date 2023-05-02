@@ -60,27 +60,30 @@ class AddressCleaner:
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
                                                     'Ü', 'u')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
-                                                    ',', ' ')
+                                                    ',', ' , ')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
-                                                    ';', ' ')
+                                                    ';', ' , ')
+        stripped_spanish = tf.strings.regex_replace(stripped_spanish,
+                                                    'ñ', 'n')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
                                                     'entre', 'entre ')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
-                                                    'e /', ' entre ')
+                                                    '#', ' # ')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
-                                                    'e/', ' entre ')
+                                                    '%', ' % ')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
-                                                    '#', ' num ')
+                                                    '&', ' y ')
+        stripped_spanish = tf.strings.regex_replace(stripped_spanish,
+                                                    '/', ' / ')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
                                                     'apt.', 'apt. ')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
-                                                    'apartamento', 'apartamento ')
+                                                    'apt', 'apt ')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
-                                                    '/', ' entre ')
-        stripped_spanish = tf.strings.regex_replace(stripped_spanish, '[^a-zA-Z0-9 -]', '')
+                                                    'apartamento', 'apartamento ')
+        stripped_spanish = tf.strings.regex_replace(stripped_spanish, '[^a-zA-Z0-9 -/]', '')
 
         output = tf.strings.regex_replace(
-            stripped_spanish, '[%s]' % re.escape(string.punctuation), '')
+            stripped_spanish, '[%s]' % re.escape(r"""!"$&'()*+-.;<=>?@[]^_`{|}~"""), '')
 
         return output
-

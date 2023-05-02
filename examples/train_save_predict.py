@@ -11,10 +11,12 @@ from src.tools.neural_parser_manage import NeuralParserManage
 
 
 def load_data_set_saved():
-    return DataSetManage.load('../assets/default_data_set/model_type_one/DefaultDataSet')
+    """Load a saved data set """
+    return DataSetManage.load('../assets/default_data_set/model_type_one/DefaultDataSetInstance1C')
 
 
 def create_new_data_set():
+    """Create a new data set with adding noise"""
     # load corpus
     data = pd.read_excel('../assets/default_corpus/model_type_one/corpus_short.xlsx')
 
@@ -23,33 +25,24 @@ def create_new_data_set():
     data_with_noise = generator.generate_noise(data)
 
     # create object DataSet with data generated
-    return DataSetAdapter.adapt(data_with_noise, training_percentage=0.7, testing_percentage=0.18,
-                                validation_percentage=0.12)
+    return DataSetAdapter.adapt(data_with_noise, training_percentage=0.8, testing_percentage=0.15,
+                                validation_percentage=0.05)
 
 
 print('Init')
+
 # load dataset saved
 data_set = load_data_set_saved()
-# create a new data set
-# data_set = create_new_data_set()
 
 # create model
 model = DeepParserModel(data_set, AddressCleaner.cleaner_method('custom_standardization'))
 
 # train
-model.train(batch_size=1000, epochs=1)
+model.train(batch_size=800, epochs=45)
 address_parser = AddressParser(model, Decoder(data_set.get_id_to_category(),
                                               AddressCleaner.cleaner_method('custom_standardization')))
 
-# Predict
-# result_list = address_parser.process_address(['calle parque entre av. carolina, san miguel del padron',
-#                                          'vista hermosa, San miguel del padro, e/ ave. carolina y cale garido.',
-#                                          'vista hermosa, San miguel del padro, e/ ave. carolina y cale garido reparto vista hermosa'])
-
-# print('\tRESULTS OF ADDRESS PARSER\n')
-# for result in result_list:
-#     print(result)
-
 # save
-NeuralParserManage.save_neural_parser(model, route='../assets/trained_models/model_type_one', name='default_model')
+NeuralParserManage.save_neural_parser(model, route='../assets/trained_models/model_type_one',
+                                      name='default_model_instance_1C')  # New instance C
 print('Finish')

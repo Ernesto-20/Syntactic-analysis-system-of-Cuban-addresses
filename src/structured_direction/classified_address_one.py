@@ -1,6 +1,6 @@
 
 
-class ClassifiedAddress:
+class ClassifiedAddressOne:
 
     def __init__(self, principal_street, first_side_street, second_side_street, locality, municipality,
                  province, building, apartment, reserve_word):
@@ -22,7 +22,7 @@ class ClassifiedAddress:
         'Apartamento: ' + ' '.join(self.apartment) + '\n'\
         'Localidad: ' + ' '.join(self.locality) + '\n' \
         'Municipio: ' + ' '.join(self.municipality) + '\n' \
-        'Provincie: ' + ' '.join(self.province) + '\n' \
+        'Provincia: ' + ' '.join(self.province) + '\n' \
         'Palabras reservadas: ' + ' '.join(self.reserve_word) + '\n'
 
         return address

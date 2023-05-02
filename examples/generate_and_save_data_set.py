@@ -6,13 +6,23 @@ from src.tools.data_set_manage import DataSetManage
 
 print('Init')
 # load corpus
-data = pd.read_excel('../assets/default_corpus/model_type_one/corpus_short.xlsx')
+data = pd.read_excel('../assets/default_corpus/model_type_one/corpus_short_only_havana.xlsx')
 
 # data realism convert
 generator = NoiseGenerator()
-data_with_noise = generator.generate_noise(data)
+data_with_noise = generator.generate_noise(data, address_amount=18000)
 
-data_set = DataSetAdapter().adapt(data_with_noise, 0.70, 0.10, 0.20)
+data_set = DataSetAdapter().adapt(data_with_noise, 0.80, 0.05, 0.15)
+count = 0
 
-DataSetManage.save(data_set, '../assets/default_data_set/model_type_one/DefaultDataSet')
+# Uncomment to see addresses with noise
+# for address in data_set.get_x_test_sentence_values():
+#     print(address)
+#     count += 1
+#     if count == 200:
+#         break
+
+DataSetManage.save(data_set, '../assets/default_data_set/model_type_one/DefaultDataSetInstance1C')
 print('End')
+
+

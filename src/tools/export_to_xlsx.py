@@ -1,8 +1,6 @@
-from src.structured_direction.classified_address import ClassifiedAddress
+from src.structured_direction.classified_address_one import ClassifiedAddressOne
 import pandas as pd
 from pandas import DataFrame
-
-
 def export_to_xlsx(list_address: list, name_file='Results'):
     principal_street_list = []
     first_side_street_list = []
@@ -40,3 +38,5 @@ def export_to_xlsx(list_address: list, name_file='Results'):
     writer = pd.ExcelWriter(name_file+'.xlsx', engine='xlsxwriter')
     df.to_excel(writer, index=False, sheet_name='Results')
     writer.save()
+
+

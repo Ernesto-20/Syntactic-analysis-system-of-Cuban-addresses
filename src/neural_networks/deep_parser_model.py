@@ -78,14 +78,13 @@ class DeepParserModel(NeuralParser):
 
             # Optimiser
             opt = keras.optimizers.Adam(learning_rate=0.0005, beta_1=0.9, beta_2=0.999)
-
-            # metrics = [tf.metrics.Accuracy(), tf.metrics.Recall(), tf.metrics.Precision()]
-            metrics = [tf.metrics.Accuracy()]
+            metrics = [tf.metrics.CategoricalAccuracy(), tf.metrics.Precision(), tf.metrics.Recall()]
+            # metrics = [tf.metrics.Accuracy()]
             # Accuracy tells you how many times the ML model was correct overall.
             # Precision is how good the model is at predicting a specific category.
             # Recall tells you how many times the model was able to detect a specific category.
 
-            model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
+            model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=metrics)
             model.summary()
             self.model = model
             # plot_model(model, 'DeepParse_Architecture.jpg')
@@ -118,15 +117,19 @@ class DeepParserModel(NeuralParser):
                        verbose=1, epochs=epochs, validation_data=(x_val, self.data.get_y_val_values()))
 
     def predict(self, address_list: list):
+        print(self.data.get_id_to_category())
         result = self.model.predict(address_list)
+        # print('**********************************************')
+        # print('**********************************************')
+        # print(np.round(result, decimals=2))
+        # print('**********************************************')
+        # print('**********************************************')
         return np.round(result, decimals=2)
 
     def evaluate(self):
-        loss, accuracy, recall, precision = self.model.evaluate(
-            np.asarray(self.__data_Set.get_x_test_sentence_values()),
-            self.__data_Set.get_y_test_values())
-
-        return loss, accuracy
+        self.model.evaluate(
+            np.asarray(self.data.get_x_test_sentence_values()),
+            self.data.get_y_test_values())
 
     def get_cleaner_method(self):
         return self.cleaner_method
