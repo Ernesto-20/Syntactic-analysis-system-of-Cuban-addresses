@@ -1,6 +1,6 @@
 
 
-class ClassifiedAddressOne:
+class ClassifiedAddress:
 
     def __init__(self, principal_street, first_side_street, second_side_street, locality, municipality,
                  province, building, apartment, reserve_word):

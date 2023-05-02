@@ -9,6 +9,9 @@ from tensorflow.python.ops.ragged.ragged_string_ops import string_bytes_split
 from src.neural_networks.neural_parser import NeuralParser
 from src.tools.address_data_set import DataSet
 
+import psutil
+import time
+import csv
 
 class DeepParserModel(NeuralParser):
 
@@ -145,3 +148,24 @@ class DeepParserModel(NeuralParser):
             self.data = data
         else:
             raise NotImplementedError('The number of tags does not correspond to the trained network')
+
+    def train_and_log(self, epochs, batch_size, log_file):
+        x = np.asarray(self.data.get_x_train_sentence_values())
+        x_val = np.asarray(self.data.get_x_val_sentence_values())
+
+        with open(log_file, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Iteration', 'RAM (MB)', 'CPU (%)', 'Time (s)'])
+
+
+            for epoch in range(epochs):
+                start_time = time.time()
+                self.model.fit(x, self.data.get_y_train_values(), batch_size=batch_size,
+                       verbose=1, epochs=epochs, validation_data=(x_val, self.data.get_y_val_values()))
+                end_time = time.time()
+
+                ram_usage = psutil.virtual_memory().used / 1024 / 1024
+                cpu_usage = psutil.cpu_percent()
+                elapsed_time = end_time - start_time
+
+                writer.writerow([epoch + 1, ram_usage, cpu_usage, elapsed_time])

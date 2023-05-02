@@ -3,7 +3,7 @@ from pandas import DataFrame
 import random as rm
 import itertools as itt
 
-from src.data_realism_converter.spelling_error_generator import Generator
+from src.data_realism_converter.generator import Generator
 from src.tools.lookup import STREET_NAME_PREFIX, LOCALITY_PREFIX, MUNICIPALITY_PREFIX, PROVINCE_PREFIX, BETWEEN_PREFIX, \
     BUILDING_PREFIX, BUILDING_SUBDIVISION_PREFIX, CORNER_CONNECTOR_PREFIX
 

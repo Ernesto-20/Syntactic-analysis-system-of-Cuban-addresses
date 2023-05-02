@@ -74,7 +74,7 @@ class AddressCleaner:
 
         return output
 
-    def custom_standardization_v2(texto):
+    def custom_standardization_v2(self,texto):
         # Transforma toda la cadena a minúsculas
         texto = texto.lower()
 
@@ -84,5 +84,6 @@ class AddressCleaner:
         # Quita cualquier caracter que no sea número o letra por espacio
         texto = re.sub('[^0-9a-zA-Z]+', ' ', texto)
 
-        return texto
+        nuevo_texto = re.sub(r"1/2|½", " ", texto)
+        return nuevo_texto
 
