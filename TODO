@@ -1,18 +1,5 @@
 TODO:
-    1- to implement evaluate functionality in DeepNeuralModel. (OK)
-    2- to implement and design correctly functionality save and load model. (Created but not tested correctly)
-    3- to implement the shuffle examples in data_set. (OK)
-    4- to parametrize adapt function in AdaptDataSet. (OK)
-    5- to implement suffix in noise generation. (OK)
-    6- to implement plot_model functionality.
-    7- to implement default AddressParser with a NeuralModel trained before.
-    **********************************************************************
-    8- 
-
-    Problems:
-    1- << Solved >>   When load keras model the custom_standardization function cannot deserialize.
-    2- << Solved >>   The custom_standardization function I dont know how remove characters not alphanumeric.
-
-
-
-
+    1- Implement Bert -- BETO
+    2- Fix noise generator
+    3- Re-train
+    4- Create automated test

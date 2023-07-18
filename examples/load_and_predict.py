@@ -1,11 +1,10 @@
 from src.address_parser.address_parser import AddressParser
 from src.tools.decoder import Decoder
 from src.tools.neural_parser_manage import NeuralParserManage
-from src.tools.export_to_xlsx import export_to_xlsx
 import pandas as pd
 
 print('Init')
-neural_parser = NeuralParserManage.load_neural_parser(route='../assets/trained_models/model_type_one', name='default_model_instance_1C')
+neural_parser = NeuralParserManage.load_neural_parser(route='../assets/trained_models/model_type_one', name='model_with_bert')
 neural_parser.evaluate()
 
 address_parser = AddressParser(neural_parser, Decoder(neural_parser.get_data().get_id_to_category(), neural_parser.get_cleaner_method()))
@@ -21,7 +20,7 @@ for result in result_list:
     print(result)
     count += 1
 
-AddressParser.to_xlsx(result_list, name_file='NewResults')
+# AddressParser.to_xlsx(result_list, name_file='NewResults')
 
 print('Finish')
 

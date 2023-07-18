@@ -5,7 +5,7 @@ import itertools as itt
 
 from src.data_realism_converter.generator import Generator
 from src.tools.lookup import STREET_NAME_PREFIX, LOCALITY_PREFIX, MUNICIPALITY_PREFIX, PROVINCE_PREFIX, BETWEEN_PREFIX, \
-    BUILDING_PREFIX, BUILDING_SUBDIVISION_PREFIX, CORNER_CONNECTOR_PREFIX
+    BUILDING_PREFIX, APARTMENT_PREFIX, CORNER_CONNECTOR_PREFIX
 
 
 class NoiseGenerator(Generator):
@@ -35,7 +35,7 @@ class NoiseGenerator(Generator):
     '''
 
     def generate_noise(self, data_set: DataFrame, address_amount=None):
-        print('Generate Noise II -- Type One')
+        # print('Generate Noise -- Type I')
         address_number = 0
         address_list = []
         words_list = []
@@ -90,7 +90,7 @@ class NoiseGenerator(Generator):
                     else:
                         # Contain apartment
                         identification_apartment = self.__generate_apartment_syntetic()
-                        identification_apartment_prefix = super().generate_prefix_randomly(BUILDING_SUBDIVISION_PREFIX,
+                        identification_apartment_prefix = super().generate_prefix_randomly(APARTMENT_PREFIX,
                                                                                            100)
 
                         components.append(
@@ -207,35 +207,38 @@ class NoiseGenerator(Generator):
                     else:
                         # Contain apartment
                         identification_apartment = self.__generate_apartment_syntetic()
-                        identification_apartment_prefix = super().generate_prefix_randomly(BUILDING_SUBDIVISION_PREFIX,100)
+                        identification_apartment_prefix = super().generate_prefix_randomly(APARTMENT_PREFIX,100)
                         components.append(
                             identification_building_prefix + [[item, 'building'] for item in
                                                               identification_building.split()] +
                             identification_apartment_prefix + [[item, 'apartment'] for item
                                                                in identification_apartment.split()]
                         )
+            # permutation between components
+            permutation_bool = rm.randint(1, 100) <= 1
+
             # Components Basics
             if not self.__is_empty(locality):
-                between_prefix = [[' , ', 'rw']] if rm.randint(1, 100) < 70 else []
+                between_prefix = [[' , ', 'rw']] if rm.randint(1, 100) < 70 and permutation_bool is False else []
                 locality_prefix = super().generate_prefix_randomly(LOCALITY_PREFIX, 35)
                 components.append(
                     between_prefix + locality_prefix + [[item, 'locality'] for item in locality.split()]
                 )
             if not self.__is_empty(municipality):
-                between_prefix = [[' , ', 'rw']] if rm.randint(1, 100) < 75 else []
+                between_prefix = [[' , ', 'rw']] if rm.randint(1, 100) < 75 and permutation_bool is False else []
                 municipality_prefix = super().generate_prefix_randomly(MUNICIPALITY_PREFIX, 8)
                 components.append(
                     between_prefix + municipality_prefix + [[item, 'municipality'] for item in municipality.split()]
                 )
             if not self.__is_empty(province):
                 province_prefix = super().generate_prefix_randomly(PROVINCE_PREFIX, 3)
-                between_prefix = [[' , ', 'rw']] if rm.randint(1, 100) < 85 else []
+                between_prefix = [[' , ', 'rw']] if rm.randint(1, 100) < 85 and permutation_bool is False else []
                 components.append(
                     between_prefix + province_prefix + [[item, 'province'] for item in province.split()]
                 )
 
             #  Permutación entre componentes.
-            if rm.randint(1, 100) <= 5:
+            if permutation_bool:
                 components = super().generate_non_standardization(components)
 
             address_number += 1

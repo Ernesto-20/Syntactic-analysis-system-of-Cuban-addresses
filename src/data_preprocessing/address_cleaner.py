@@ -73,6 +73,8 @@ class AddressCleaner:
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
                                                     '%', ' % ')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
+                                                    '@', 'a')
+        stripped_spanish = tf.strings.regex_replace(stripped_spanish,
                                                     '&', ' y ')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
                                                     '/', ' / ')

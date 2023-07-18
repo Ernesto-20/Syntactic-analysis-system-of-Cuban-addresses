@@ -24,7 +24,6 @@ class NeuralParserManage:
 
         neural_parser.get_model().save(dir_model, save_format="tf")
         DataSetManage.save(neural_parser.get_data(), route_and_name=dir_data_set)
-
         # Save cleaner method with dill
         dill.dump(neural_parser.get_cleaner_method(), open(dir_cleaner_method, 'wb'))
 
