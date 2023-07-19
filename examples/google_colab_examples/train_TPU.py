@@ -4,6 +4,7 @@ from src.neural_networks.deep_parser_model import DeepParserModel
 from src.tools.data_set_manage import DataSetManage
 from src.tools.decoder import Decoder
 from src.tools.neural_parser_manage import NeuralParserManage
+import tensorflow as tf
 
 
 def load_data_set_saved(data_set_directory):
@@ -13,10 +14,19 @@ def load_data_set_saved(data_set_directory):
 
 # load dataset saved
 def train(data_set_directory, save_directory, name_model='colab_training'):
+    resolver = tf.distribute.cluster_resolver.TPUClusterResolver(tpu='')
+    tf.config.experimental_connect_to_cluster(resolver)
+    # This is the TPU initialization code that has to be at the beginning.
+    tf.tpu.experimental.initialize_tpu_system(resolver)
+    print("All devices: ", tf.config.list_logical_devices('TPU'))
+
+    strategy = tf.distribute.TPUStrategy(resolver)
+
     data_set = load_data_set_saved(data_set_directory)
 
     # create model
-    model = DeepParserModel(data_set, AddressCleaner.cleaner_method('custom_standardization'))
+    with strategy.scope():
+        model = DeepParserModel(data_set, AddressCleaner.cleaner_method('custom_standardization'))
 
     # train
     model.train(batch_size=800, epochs=45)

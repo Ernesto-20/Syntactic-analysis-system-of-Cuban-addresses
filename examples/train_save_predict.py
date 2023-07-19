@@ -12,7 +12,7 @@ from src.tools.neural_parser_manage import NeuralParserManage
 
 def load_data_set_saved():
     """Load a saved data set """
-    return DataSetManage.load('../assets/default_data_set/model_type_one/DefaultDataSetInstance1C')
+    return DataSetManage.load('../assets/default_data_set/model_type_one/DS_Habana_30000')
 
 
 def create_new_data_set():
@@ -44,5 +44,5 @@ address_parser = AddressParser(model, Decoder(data_set.get_id_to_category(),
 
 # save
 NeuralParserManage.save_neural_parser(model, route='../assets/trained_models/model_type_one',
-                                      name='default_model_instance_1C')  # New instance C
+                                      name='training_with_30000')  # New instance C
 print('Finish')

@@ -4,23 +4,23 @@ from src.tools.neural_parser_manage import NeuralParserManage
 import pandas as pd
 
 print('Init')
-neural_parser = NeuralParserManage.load_neural_parser(route='../assets/trained_models/model_type_one', name='model_with_bert')
+neural_parser = NeuralParserManage.load_neural_parser(route='../assets/trained_models/model_type_one', name='default_model_instance_1C')
 neural_parser.evaluate()
 
 address_parser = AddressParser(neural_parser, Decoder(neural_parser.get_data().get_id_to_category(), neural_parser.get_cleaner_method()))
 
 # Predict
-evaluates = pd.read_excel('evaluate.xlsx')
-result_list = address_parser.process_address_data_frame(evaluates)
-
-print('\tRESULTS OF ADDRESS PARSER\n')
-count = 0
-for result in result_list:
-    print(count+1, ' ', str(evaluates.iloc[count, 0]))
-    print(result)
-    count += 1
-
-# AddressParser.to_xlsx(result_list, name_file='NewResults')
-
-print('Finish')
-
+# evaluates = pd.read_excel('evaluate.xlsx')
+# result_list = address_parser.process_address_data_frame(evaluates)
+#
+# print('\tRESULTS OF ADDRESS PARSER\n')
+# count = 0
+# for result in result_list:
+#     print(count+1, ' ', str(evaluates.iloc[count, 0]))
+#     print(result)
+#     count += 1
+#
+# # AddressParser.to_xlsx(result_list, name_file='NewResults')
+#
+# print('Finish')
+#
