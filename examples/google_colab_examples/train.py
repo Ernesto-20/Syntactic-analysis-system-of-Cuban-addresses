@@ -14,7 +14,7 @@ def load_data_set_saved(data_set_directory):
 # load dataset saved
 def train(data_set_directory, save_directory, name_model='colab_training'):
     data_set = load_data_set_saved(data_set_directory)
-
+    # print(data_set.get_x_train_sentence_values())
     # create model
     model = DeepParserModel(data_set, AddressCleaner.cleaner_method('custom_standardization'))
 
@@ -26,3 +26,4 @@ def train(data_set_directory, save_directory, name_model='colab_training'):
     # save
     NeuralParserManage.save_neural_parser(model, route=save_directory, name=name_model)
     print('Finish')
+

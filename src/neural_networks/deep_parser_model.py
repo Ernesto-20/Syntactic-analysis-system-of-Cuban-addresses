@@ -88,6 +88,7 @@ class DeepParserModel(NeuralParser):
             # Recall tells you how many times the model was able to detect a specific category.
 
             model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=metrics)
+
             model.summary()
             self.model = model
             # plot_model(model, 'DeepParse_Architecture.jpg')

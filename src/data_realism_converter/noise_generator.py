@@ -1,11 +1,14 @@
 import math
+import random
+
 from pandas import DataFrame
 import random as rm
 import itertools as itt
 
 from src.data_realism_converter.generator import Generator
-from src.tools.lookup import STREET_NAME_PREFIX, LOCALITY_PREFIX, MUNICIPALITY_PREFIX, PROVINCE_PREFIX, BETWEEN_PREFIX, \
-    BUILDING_PREFIX, APARTMENT_PREFIX, CORNER_CONNECTOR_PREFIX
+from src.tools.lookup import STREET_NAME_PREFIX, STREET_NAME_SUFFIX, LOCALITY_PREFIX, MUNICIPALITY_PREFIX, \
+    PROVINCE_PREFIX, BETWEEN_PREFIX, \
+    BUILDING_PREFIX, APARTMENT_PREFIX, CORNER_CONNECTOR_PREFIX, STREET_SUFFIX_POSSIBILITIES
 
 
 class NoiseGenerator(Generator):
@@ -35,6 +38,7 @@ class NoiseGenerator(Generator):
     '''
 
     def generate_noise(self, data_set: DataFrame, address_amount=None):
+        rm.seed(155)
         # print('Generate Noise -- Type I')
         address_number = 0
         address_list = []
@@ -53,30 +57,30 @@ class NoiseGenerator(Generator):
             municipality = str(data_set.iloc[i, 4])
             province = str(data_set.iloc[i, 5])
 
-            # RECORDAR LOS SUFIJOS: 5ta Ave. ; primera avenida
             # Determinar si es tipo 1 o 2:
             if not self.__is_empty(first_side_street) and not self.__is_empty(second_side_street):
-                #   Is type one
-                principal_street_prefix = super().generate_prefix_randomly(STREET_NAME_PREFIX, 50)
-                first_side_street_prefix = super().generate_prefix_randomly(STREET_NAME_PREFIX, 50)
-                second_side_street_prefix = super().generate_prefix_randomly(STREET_NAME_PREFIX, 50)
+                # Is type one
+                principal_street_added_word = self.__generate_prefix_or_suffix_randomly(principal_street,
+                                                                                        entity_type='principal_street')
+                first_side_street_added_word = self.__generate_prefix_or_suffix_randomly(first_side_street,
+                                                                                         entity_type='first_side_street')
+                second_side_street_added_word = self.__generate_prefix_or_suffix_randomly(second_side_street,
+                                                                                          entity_type='second_side_street')
 
                 between_prefix = super().generate_prefix_randomly(BETWEEN_PREFIX, 100)
-                conjunction_prefix = [[
-                    'e' if (len(second_side_street_prefix) == 0 and second_side_street[0] == 'i') else 'y', 'rw']]
+                first_side_street_added_word = [[item, 'first_side_street'] for item in first_side_street.split()] if \
+                    between_prefix[0][0] in ['e/c', 'e\c', 'entre calles'] else first_side_street_added_word
+
+                conjunction_prefix = [
+                    ['e' if (second_side_street_added_word[0][0][0].lower() == 'i') else self.__generate_conjunction(), 'rw']]
 
                 # create component
-                components.append(
-                    principal_street_prefix + [[item, 'principal_street'] for item in principal_street.split()]
-                )
+                components.append(principal_street_added_word)
                 flag = False
                 if rm.randint(1, 100) < 15:
                     flag = True
                     components.append(
-                        between_prefix + first_side_street_prefix + [[item, 'first_side_street'] for item in
-                                                                     first_side_street.split()] + conjunction_prefix +
-                        second_side_street_prefix + [[item, 'second_side_street'] for item in second_side_street.split()]
-                    )
+                        between_prefix + first_side_street_added_word + conjunction_prefix + second_side_street_added_word)
 
                 if rm.randint(1, 100) <= 50:
                     # Contain building
@@ -101,23 +105,22 @@ class NoiseGenerator(Generator):
                         )
                 if not flag:
                     components.append(
-                        between_prefix + first_side_street_prefix + [[item, 'first_side_street'] for item in
-                                                                     first_side_street.split()] + conjunction_prefix +
-                        second_side_street_prefix + [[item, 'second_side_street'] for item in
-                                                     second_side_street.split()]
-                    )
+                        between_prefix + first_side_street_added_word + conjunction_prefix + second_side_street_added_word)
+
             elif not self.__is_empty(first_side_street) or not self.__is_empty(second_side_street):
                 #   Is type 2
                 side_street = first_side_street if self.__is_empty(second_side_street) else second_side_street
 
-                principal_street_prefix = super().generate_prefix_randomly(STREET_NAME_PREFIX, 50)
-                side_street_prefix = super().generate_prefix_randomly(STREET_NAME_PREFIX, 50)
+                principal_street_added_word = self.__generate_prefix_or_suffix_randomly(principal_street,
+                                                                                        entity_type='principal_street')
+                side_street_added_word = self.__generate_prefix_or_suffix_randomly(first_side_street,
+                                                                                   entity_type='first_side_street')
 
                 if rm.randint(1, 100) <= 50:
                     # Is type 2.1
                     corner_prefix = super().generate_prefix_randomly(CORNER_CONNECTOR_PREFIX, 100)
-                    conjunction_prefix = [['e' if (len(side_street_prefix) == 0 and side_street[0] == 'i') else 'y',
-                                           'rw']]
+                    conjunction_prefix = [
+                        ['e' if side_street_added_word[0][0][0] == 'i' else self.__generate_conjunction(), 'rw']]
 
                     if rm.randint(1, 100) <= 50:
                         # Contain Building
@@ -127,31 +130,23 @@ class NoiseGenerator(Generator):
                         if rm.randint(1, 100) <= 50:
                             # Is type 2.1.1 left building
                             components.append(
-                                corner_prefix + principal_street_prefix + [[item, 'principal_street'] for item in
-                                                                           principal_street.split()] +
+                                corner_prefix + principal_street_added_word +
                                 identification_building_prefix + [[item, 'building'] for item in
                                                                   identification_building.split()] +
-                                conjunction_prefix + side_street_prefix + [[item, 'first_side_street'] for item in
-                                                                           side_street.split()]
+                                conjunction_prefix + side_street_added_word
                             )
                         else:
                             # Is type 2.1.1 right building
                             components.append(
-                                corner_prefix + principal_street_prefix + [[item, 'principal_street'] for item in
-                                                                           principal_street.split()] +
-                                conjunction_prefix + side_street_prefix + [[item, 'first_side_street'] for item in
-                                                                           side_street.split()] +
+                                corner_prefix + principal_street_added_word +
+                                conjunction_prefix + side_street_added_word +
                                 identification_building_prefix + [[item, 'building'] for item in
                                                                   identification_building.split()]
                             )
                     else:
                         # Not contain building
                         components.append(
-                            corner_prefix + principal_street_prefix + [[item, 'principal_street'] for item in
-                                                                       principal_street.split()] +
-                            conjunction_prefix + side_street_prefix + [[item, 'first_side_street'] for item in
-                                                                       side_street.split()]
-                        )
+                            corner_prefix + principal_street_added_word + conjunction_prefix + side_street_added_word)
                 else:
                     # Is type 2.2
                     corner_prefix = super().generate_prefix_randomly(CORNER_CONNECTOR_PREFIX, 100)
@@ -164,37 +159,27 @@ class NoiseGenerator(Generator):
                         if rm.randint(1, 100) <= 50:
                             # Is type 2.1.1 left building
                             components.append(
-                                principal_street_prefix + [[item, 'principal_street'] for item in
-                                                           principal_street.split()] +
+                                principal_street_added_word +
                                 identification_building_prefix + [[item, 'building'] for item in
                                                                   identification_building.split()] +
-                                corner_prefix + side_street_prefix + [[item, 'first_side_street'] for item in
-                                                                      side_street.split()]
+                                corner_prefix + side_street_added_word
                             )
                         else:
                             # Is type 2.1.1 right building
                             components.append(
-                                principal_street_prefix + [[item, 'principal_street'] for item in
-                                                           principal_street.split()] +
-                                corner_prefix + side_street_prefix + [[item, 'first_side_street'] for item in
-                                                                      side_street.split()] +
+                                principal_street_added_word +
+                                corner_prefix + side_street_added_word +
                                 identification_building_prefix + [[item, 'building'] for item in
                                                                   identification_building.split()]
                             )
                     else:
                         # Not contain building
-                        components.append(
-                            principal_street_prefix + [[item, 'principal_street'] for item in
-                                                       principal_street.split()] +
-                            corner_prefix + side_street_prefix + [[item, 'first_side_street'] for item in
-                                                                  side_street.split()]
-                        )
+                        components.append(principal_street_added_word + corner_prefix + side_street_added_word)
             else:
                 # Is type 3
-                principal_street_prefix = super().generate_prefix_randomly(STREET_NAME_PREFIX, 70)
-                components.append(
-                    principal_street_prefix + [[item, 'principal_street'] for item in principal_street.split()]
-                )
+                principal_street_added_word = self.__generate_prefix_or_suffix_randomly(principal_street,
+                                                                                        entity_type='principal_street')
+                components.append(principal_street_added_word)
                 if rm.randint(1, 100) <= 50:
                     # Contain building
                     identification_building = self.__generate_building_syntetic()
@@ -207,7 +192,7 @@ class NoiseGenerator(Generator):
                     else:
                         # Contain apartment
                         identification_apartment = self.__generate_apartment_syntetic()
-                        identification_apartment_prefix = super().generate_prefix_randomly(APARTMENT_PREFIX,100)
+                        identification_apartment_prefix = super().generate_prefix_randomly(APARTMENT_PREFIX, 100)
                         components.append(
                             identification_building_prefix + [[item, 'building'] for item in
                                                               identification_building.split()] +
@@ -249,7 +234,7 @@ class NoiseGenerator(Generator):
         for address in real_address:
             address_number += 1
             self.__add_new_address(address, address_number, address_list, words_list, tags_list)
-
+        print('El total de direcciones fue de ', address_number)
         return self.__generate_data_frame(address_list, words_list, tags_list)
 
     def __generate_data_frame(self, address_list, words_list, tags_list):
@@ -269,11 +254,11 @@ class NoiseGenerator(Generator):
 
         count = 0
         var_aleatory = rm.randint(1, 6)
-        amount_errors = var_aleatory if rm.randint(0, 4) == 1 else 0
+        amount_errors = var_aleatory if rm.randint(1, 10) <= 2 else 0
         for compound_items in georeferential_elements_list:
             if compound_items[0] != 'nan':
                 word = str(compound_items[0])
-                if amount_errors > 0 and rm.randint(1, 4) == 1:
+                if amount_errors > 0 and rm.randint(1, 10) <= 3:
                     word = super().generate_spelling_errors(word)
 
                 words_list.append(word)
@@ -320,25 +305,124 @@ class NoiseGenerator(Generator):
 
             return number[0: letter_position] + letter + number[letter_position:]
 
+    def __generate_prefix_or_suffix_randomly(self, street_name: str, entity_type: str):
+        '''
+        :param street_name:
+        :return:
+            A list of reserved words that will correspond to suffixes or street prefixes.
+            A boolean indicating whether the list corresponds to a suffix or prefix.
+        '''
+
+        possibility_suffix = self.__eval_possibility_suffix_street(street_name)
+        if possibility_suffix:
+            return [[item, entity_type] for item in street_name.split()] + super().generate_suffix_randomly(
+                STREET_NAME_SUFFIX, 90)
+
+        return super().generate_prefix_randomly(STREET_NAME_PREFIX, 50) + [[item, entity_type] for item in
+                                                                           street_name.split()]
+
+    def __eval_possibility_suffix_street(self, street_name: str):
+
+        if not self.__is_empty(street_name):
+            for poss in STREET_SUFFIX_POSSIBILITIES:
+                if poss == street_name.lower():
+                    return True
+
+        return False
+
+    def __generate_conjunction(self):
+        '''
+            This function will return one of the following conjunctions "and, &, &&"
+        '''
+        if rm.randint(0, 100) <= 6:
+            if rm.randint(0, 10) < 7:
+                return '&'
+            else:
+                return '&%'
+        else:
+            return 'y'
+
     def __add_real_address(self):
+        '''
+            :return 19 real address
+        '''
         return [
-            [[['calle', 'rw'], ['30', 'principal_street'], ['959', 'building'], ['e', 'rw'], ['entre', 'rw'], ['avenida', 'rw'], ['26', 'first_side_street'], ['y', 'rw'], ['47', 'second_side_street'], ['Plaza', 'municipality'], ['de', 'municipality'], ['la', 'municipality'], ['Revolucion', 'municipality'], ['La', 'province'], ['Habana', 'province']]],
-            [[['ave', 'rw'], ['67', 'principal_street'], ['no', 'rw'], ['13613', 'building'], ['e', 'rw'], ['136', 'first_side_street'], ['y', 'rw'], ['138', 'second_side_street'], ['Marianao', 'municipality'], ['Marianao', 'municipality'], ['La', 'province'], ['HAbana', 'province'],]],
-            [[['calle', 'rw'], ['Gomez', 'principal_street'], ['2', 'building'], ['E', 'building'], ['entre', 'rw'], ['calle', 'rw'], ['Marti', 'first_side_street'], ['y', 'rw'], ['calle', 'rw'], ['Washington', 'second_side_street'], ['reparto', 'rw'], ['barrio', 'rw'], ['Azul', 'locality'], ['Arroyo', 'municipality'], ['Naranjo', 'municipality'], ['La', 'province'], ['Habana', 'province']]],
-            [[['San', 'principal_street'], ['Juan', 'principal_street'], ['de', 'principal_street'], ['Dios', 'principal_street'], ['Edif', 'rw'], ['108', 'building'], ['apto', 'rw'], ['15', 'apartment'], ['entre', 'rw'], ['aguacate', 'first_side_street'], ['y', 'rw'], ['Compostela', 'second_side_street'], ['La', 'municipality'], ['Habana', 'municipality'], ['Vieja', 'municipality'], ['La', 'province'], ['Habana', 'province']]],
-            [[['avenida', 'rw'], ['del', 'principal_street'], ['sur', 'principal_street'], ['entre', 'rw'], ['primelles', 'first_side_street'], ['y', 'rw'], ['Lazada', 'second_side_street'], [',', 'rw'], ['Norte', 'locality'], ['III', 'locality'], [',', 'rw'], ['CERRO', 'municipality'], [',', 'rw'], ['LA', 'province'], ['HABANA', 'province'],]],
-            [[['San', 'principal_street'], ['Juan', 'principal_street'], ['DE', 'principal_street'], ['dios', 'principal_street'], ['entre', 'rw'], ['aguacate', 'first_side_street'], ['y', 'rw'], ['compostela', 'second_side_street'], [',', 'rw'], ['La', 'municipality'], ['Habana', 'municipality'], ['Vieja', 'municipality'], [',', 'rw'], ['La', 'province'], ['Habana', 'province'],]],
-            [[['27', 'principal_street'], ['b', 'principal_street'], ['entre', 'rw'], ['230', 'first_side_street'], ['y', 'rw'], ['234', 'second_side_street'], [',', 'rw'], ['La', 'locality'], ['Coronela', 'locality'], [',', 'rw'], ['La', 'municipality'], ['Lisa', 'municipality'], [',', 'rw'], ['La', 'province'], ['Habana', 'province'],]],
-            [[['calle', 'rw'], ['REYES', 'principal_street'], ['entre', 'rw'], ['c', 'first_side_street'], ['y', 'rw'], ['calle', 'rw'], ['Altarriba', 'second_side_street'], ['Edificio', 'rw'], ['319', 'building'], ['Apto', 'rw'], ['9', 'apartment'], ['Barrio', 'rw'], ['Lawton', 'locality'], ['Diez', 'municipality'], ['de', 'municipality'], ['Octubre', 'municipality'], ['La', 'province'], ['Habana', 'province'],]],
-            [[['calle', 'rw'], ['real', 'principal_street'], ['#', 'rw'], ['360', 'building'], ['poblado', 'rw'], ['bacuranao', 'locality'], [',', 'rw'], ['guanabacoa', 'municipality'], [',', 'rw'], ['La', 'province'], ['Habana', 'province'],]],
-            [[['calle', 'rw'], ['82', 'principal_street'], ['E', 'rw'], ['/', 'rw'], ['calle', 'rw'], ['5D', 'first_side_street'], ['y', 'rw'], ['calle', 'rw'], ['7', 'second_side_street'], ['Edificio', 'rw'], ['iacc', 'building'], ['#', 'rw'], ['5d14', 'building'], [',', 'rw'], ['apto', 'rw'], ['8', 'apartment'], ['repto', 'rw'], ['villa', 'locality'], ['panamericana', 'locality'], [',', 'rw'], ['La', 'municipality'], ['Habana', 'municipality'], ['del', 'municipality'], ['Este', 'municipality'], [',', 'rw'], ['La', 'province'], ['Habana', 'province'],]],
-            [[['calle', 'rw'], ['5ta', 'principal_street'], ['num', 'rw'], ['5800', 'building'], ['Bajo', 'rw'], ['entre', 'rw'], ['calle', 'rw'], ['b', 'first_side_street'], ['y', 'rw'], ['calle', 'rw'], ['c', 'second_side_street'], [',', 'rw'], ['SAN', 'municipality'], ['MIGUEL', 'municipality'], ['DEL', 'municipality'], ['PADRON', 'municipality'], [',', 'rw'], ['LA', 'province'], ['HABANA', 'province'],]],
-            [[['calle', 'rw'], ['A', 'principal_street'], ['no', 'rw'], ['48', 'building'], ['y', 'rw'], ['apto', 'rw'], ['1', 'apartment'], ['e', 'rw'], ['entre', 'rw'], ['calle', 'rw'], ['pinar', 'first_side_street'], ['del', 'first_side_street'], ['rio', 'first_side_street'], ['y', 'rw'], ['calle', 'rw'], ['woodberry', 'second_side_street'], ['reparto', 'rw'], ['callejas', 'locality'], ['ARROYO', 'municipality'], ['NARANJO', 'municipality'], ['LA', 'province'], ['HABANA', 'province']]],
-            [[['calle', 'rw'], ['7ma', 'principal_street'], ['e', 'rw'], ['entre', 'rw'], ['calle', 'rw'], ['l', 'first_side_street'], ['y', 'rw'], ['calle', 'rw'], ['10', 'second_side_street'], ['edificio', 'rw'], ['10103', 'building'], ['apto', 'rw'], ['23', 'apartment'], ['reparto', 'rw'], ['Altahabana', 'locality'], ['BOYEROS', 'municipality'], ['LA', 'province'], ['HABANA', 'province'],]],
-            [[['avenida', 'rw'], ['27', 'principal_street'], ['b', 'principal_street'], ['entre', 'rw'], ['calle', 'rw'], ['230', 'first_side_street'], ['y', 'rw'], ['calle', 'rw'], ['234', 'second_side_street'], ['edificio', 'rw'], ['22', 'building'], ['apto', 'rw'], ['18', 'apartment'], ['reparto', 'rw'], ['la', 'locality'], ['coronela', 'locality'], ['la', 'municipality'], ['lisa', 'municipality'], ['La', 'province'], ['Habana', 'province'],]],
-            [[['avenida', 'rw'], ['27', 'principal_street'], ['b', 'principal_street'], ['e', 'rw'], ['entre', 'rw'], ['calle', 'rw'], ['230', 'first_side_street'], ['y', 'rw'], ['calle', 'rw'], ['234', 'second_side_street'], ['Edificio', 'rw'], ['10', 'building'], ['Apto', 'rw'], ['19', 'apartment'], ['reparto', 'rw'], ['la', 'locality'], ['coronela', 'locality'], ['la', 'municipality'], ['lisa', 'municipality'], ['La', 'province'], ['Habana', 'province'],]],
-            [[['calle', 'rw'], ['100', 'principal_street'], ['5907', 'building'], ['bajos', 'rw'], ['entre', 'rw'], ['ave', 'rw'], ['59', 'first_side_street'], ['y', 'rw'], ['61', 'second_side_street'], ['Marianao', 'municipality'], ['La', 'province'], ['HABANA', 'province'],]],
-            [[['Cisneros', 'principal_street'], ['21', 'building'], ['Altos', 'rw'], ['e', 'rw'], ['entre', 'rw'], ['arnao', 'first_side_street'], ['y', 'rw'], ['cortez', 'second_side_street'], ['ARROYO', 'municipality'], ['NARANJO', 'municipality'], ['LA', 'province'], ['HABANA', 'province'],]],
-            [[['avenida', 'rw'], ['47', 'principal_street'], ['4003', 'building'], ['e', 'rw'], ['entre', 'rw'], ['calle', 'rw'], ['40', 'first_side_street'], ['y', 'rw'], ['avenida', 'rw'], ['41', 'second_side_street'], ['reparto', 'rw'], ['kohly', 'locality'], ['playa', 'municipality'], ['la', 'province'], ['habana', 'province'],]],
-            [[['calle', 'rw'], ['59', 'principal_street'], ['no', 'rw'], ['10814A', 'building'], ['e', 'rw'], ['entre', 'rw'], ['108', 'first_side_street'], ['y', 'rw'], ['110', 'second_side_street'], ['Apto', 'rw'], ['3', 'apartment'], ['marianao', 'municipality'], ['la', 'province'], ['habana', 'province']]],
+            [[['calle', 'rw'], ['30', 'principal_street'], ['959', 'building'], ['e', 'rw'], ['entre', 'rw'],
+              ['avenida', 'rw'], ['26', 'first_side_street'], ['y', 'rw'], ['47', 'second_side_street'],
+              ['Plaza', 'municipality'], ['de', 'municipality'], ['la', 'municipality'], ['Revolucion', 'municipality'],
+              ['La', 'province'], ['Habana', 'province']]],
+            [[['ave', 'rw'], ['67', 'principal_street'], ['no', 'rw'], ['13613', 'building'], ['e', 'rw'],
+              ['136', 'first_side_street'], ['y', 'rw'], ['138', 'second_side_street'], ['Marianao', 'municipality'],
+              ['Marianao', 'municipality'], ['La', 'province'], ['HAbana', 'province'], ]],
+            [[['calle', 'rw'], ['Gomez', 'principal_street'], ['2', 'building'], ['E', 'building'], ['entre', 'rw'],
+              ['calle', 'rw'], ['Marti', 'first_side_street'], ['y', 'rw'], ['calle', 'rw'],
+              ['Washington', 'second_side_street'], ['reparto', 'rw'], ['barrio', 'rw'], ['Azul', 'locality'],
+              ['Arroyo', 'municipality'], ['Naranjo', 'municipality'], ['La', 'province'], ['Habana', 'province']]],
+            [[['San', 'principal_street'], ['Juan', 'principal_street'], ['de', 'principal_street'],
+              ['Dios', 'principal_street'], ['Edif', 'rw'], ['108', 'building'], ['apto', 'rw'], ['15', 'apartment'],
+              ['entre', 'rw'], ['aguacate', 'first_side_street'], ['y', 'rw'], ['Compostela', 'second_side_street'],
+              ['La', 'municipality'], ['Habana', 'municipality'], ['Vieja', 'municipality'], ['La', 'province'],
+              ['Habana', 'province']]],
+            [[['avenida', 'rw'], ['del', 'principal_street'], ['sur', 'principal_street'], ['entre', 'rw'],
+              ['primelles', 'first_side_street'], ['y', 'rw'], ['Lazada', 'second_side_street'], [',', 'rw'],
+              ['Norte', 'locality'], ['III', 'locality'], [',', 'rw'], ['CERRO', 'municipality'], [',', 'rw'],
+              ['LA', 'province'], ['HABANA', 'province'], ]],
+            [[['San', 'principal_street'], ['Juan', 'principal_street'], ['DE', 'principal_street'],
+              ['dios', 'principal_street'], ['entre', 'rw'], ['aguacate', 'first_side_street'], ['y', 'rw'],
+              ['compostela', 'second_side_street'], [',', 'rw'], ['La', 'municipality'], ['Habana', 'municipality'],
+              ['Vieja', 'municipality'], [',', 'rw'], ['La', 'province'], ['Habana', 'province'], ]],
+            [[['27', 'principal_street'], ['b', 'principal_street'], ['entre', 'rw'], ['230', 'first_side_street'],
+              ['y', 'rw'], ['234', 'second_side_street'], [',', 'rw'], ['La', 'locality'], ['Coronela', 'locality'],
+              [',', 'rw'], ['La', 'municipality'], ['Lisa', 'municipality'], [',', 'rw'], ['La', 'province'],
+              ['Habana', 'province'], ]],
+            [[['calle', 'rw'], ['REYES', 'principal_street'], ['entre', 'rw'], ['c', 'first_side_street'], ['y', 'rw'],
+              ['calle', 'rw'], ['Altarriba', 'second_side_street'], ['Edificio', 'rw'], ['319', 'building'],
+              ['Apto', 'rw'], ['9', 'apartment'], ['Barrio', 'rw'], ['Lawton', 'locality'], ['Diez', 'municipality'],
+              ['de', 'municipality'], ['Octubre', 'municipality'], ['La', 'province'], ['Habana', 'province'], ]],
+            [[['calle', 'rw'], ['real', 'principal_street'], ['#', 'rw'], ['360', 'building'], ['poblado', 'rw'],
+              ['bacuranao', 'locality'], [',', 'rw'], ['guanabacoa', 'municipality'], [',', 'rw'], ['La', 'province'],
+              ['Habana', 'province'], ]],
+            [[['calle', 'rw'], ['82', 'principal_street'], ['E', 'rw'], ['/', 'rw'], ['calle', 'rw'],
+              ['5D', 'first_side_street'], ['y', 'rw'], ['calle', 'rw'], ['7', 'second_side_street'],
+              ['Edificio', 'rw'], ['iacc', 'building'], ['#', 'rw'], ['5d14', 'building'], [',', 'rw'], ['apto', 'rw'],
+              ['8', 'apartment'], ['repto', 'rw'], ['villa', 'locality'], ['panamericana', 'locality'], [',', 'rw'],
+              ['La', 'municipality'], ['Habana', 'municipality'], ['del', 'municipality'], ['Este', 'municipality'],
+              [',', 'rw'], ['La', 'province'], ['Habana', 'province'], ]],
+            [[['calle', 'rw'], ['5ta', 'principal_street'], ['num', 'rw'], ['5800', 'building'], ['Bajo', 'rw'],
+              ['entre', 'rw'], ['calle', 'rw'], ['b', 'first_side_street'], ['y', 'rw'], ['calle', 'rw'],
+              ['c', 'second_side_street'], [',', 'rw'], ['SAN', 'municipality'], ['MIGUEL', 'municipality'],
+              ['DEL', 'municipality'], ['PADRON', 'municipality'], [',', 'rw'], ['LA', 'province'],
+              ['HABANA', 'province'], ]],
+            [[['calle', 'rw'], ['A', 'principal_street'], ['no', 'rw'], ['48', 'building'], ['y', 'rw'], ['apto', 'rw'],
+              ['1', 'apartment'], ['e', 'rw'], ['entre', 'rw'], ['calle', 'rw'], ['pinar', 'first_side_street'],
+              ['del', 'first_side_street'], ['rio', 'first_side_street'], ['y', 'rw'], ['calle', 'rw'],
+              ['woodberry', 'second_side_street'], ['reparto', 'rw'], ['callejas', 'locality'],
+              ['ARROYO', 'municipality'], ['NARANJO', 'municipality'], ['LA', 'province'], ['HABANA', 'province']]],
+            [[['calle', 'rw'], ['7ma', 'principal_street'], ['e', 'rw'], ['entre', 'rw'], ['calle', 'rw'],
+              ['l', 'first_side_street'], ['y', 'rw'], ['calle', 'rw'], ['10', 'second_side_street'],
+              ['edificio', 'rw'], ['10103', 'building'], ['apto', 'rw'], ['23', 'apartment'], ['reparto', 'rw'],
+              ['Altahabana', 'locality'], ['BOYEROS', 'municipality'], ['LA', 'province'], ['HABANA', 'province'], ]],
+            [[['avenida', 'rw'], ['27', 'principal_street'], ['b', 'principal_street'], ['entre', 'rw'],
+              ['calle', 'rw'], ['230', 'first_side_street'], ['y', 'rw'], ['calle', 'rw'],
+              ['234', 'second_side_street'], ['edificio', 'rw'], ['22', 'building'], ['apto', 'rw'],
+              ['18', 'apartment'], ['reparto', 'rw'], ['la', 'locality'], ['coronela', 'locality'],
+              ['la', 'municipality'], ['lisa', 'municipality'], ['La', 'province'], ['Habana', 'province'], ]],
+            [[['avenida', 'rw'], ['27', 'principal_street'], ['b', 'principal_street'], ['e', 'rw'], ['entre', 'rw'],
+              ['calle', 'rw'], ['230', 'first_side_street'], ['y', 'rw'], ['calle', 'rw'],
+              ['234', 'second_side_street'], ['Edificio', 'rw'], ['10', 'building'], ['Apto', 'rw'],
+              ['19', 'apartment'], ['reparto', 'rw'], ['la', 'locality'], ['coronela', 'locality'],
+              ['la', 'municipality'], ['lisa', 'municipality'], ['La', 'province'], ['Habana', 'province'], ]],
+            [[['calle', 'rw'], ['100', 'principal_street'], ['5907', 'building'], ['bajos', 'rw'], ['entre', 'rw'],
+              ['ave', 'rw'], ['59', 'first_side_street'], ['y', 'rw'], ['61', 'second_side_street'],
+              ['Marianao', 'municipality'], ['La', 'province'], ['HABANA', 'province'], ]],
+            [[['Cisneros', 'principal_street'], ['21', 'building'], ['Altos', 'rw'], ['e', 'rw'], ['entre', 'rw'],
+              ['arnao', 'first_side_street'], ['y', 'rw'], ['cortez', 'second_side_street'], ['ARROYO', 'municipality'],
+              ['NARANJO', 'municipality'], ['LA', 'province'], ['HABANA', 'province'], ]],
+            [[['avenida', 'rw'], ['47', 'principal_street'], ['4003', 'building'], ['e', 'rw'], ['entre', 'rw'],
+              ['calle', 'rw'], ['40', 'first_side_street'], ['y', 'rw'], ['avenida', 'rw'],
+              ['41', 'second_side_street'], ['reparto', 'rw'], ['kohly', 'locality'], ['playa', 'municipality'],
+              ['la', 'province'], ['habana', 'province'], ]],
+            [[['calle', 'rw'], ['59', 'principal_street'], ['no', 'rw'], ['10814A', 'building'], ['e', 'rw'],
+              ['entre', 'rw'], ['108', 'first_side_street'], ['y', 'rw'], ['110', 'second_side_street'], ['Apto', 'rw'],
+              ['3', 'apartment'], ['marianao', 'municipality'], ['la', 'province'], ['habana', 'province']]],
         ]

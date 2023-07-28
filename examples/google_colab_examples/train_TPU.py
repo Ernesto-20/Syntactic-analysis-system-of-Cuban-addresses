@@ -23,7 +23,6 @@ def train(data_set_directory, save_directory, name_model='colab_training'):
     strategy = tf.distribute.TPUStrategy(resolver)
 
     data_set = load_data_set_saved(data_set_directory)
-
     # create model
     with strategy.scope():
         model = DeepParserModel(data_set, AddressCleaner.cleaner_method('custom_standardization'))

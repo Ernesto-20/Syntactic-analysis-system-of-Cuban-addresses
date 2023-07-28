@@ -1,10 +1,13 @@
 STREET_NAME_PREFIX = ['calle', 'ave', 'avenida', 'ave.', 'Ave', 'Ave.', 'carretera', 'ctra',
                       'Ctra', 'Carr.', 'Carr', 'carret', 'calzada', 'czda.', 'calz', 'Calzada', 'czda.',
-                      'calz.', 'pasaje', 'psje', 'callejon', 'cjon', 'callejuela', 'acera', 'terr', 'Terraplen',
-                      'calle', 'calle', 'calle', 'calle', 'calle', 'calle', 'calle', 'calle', 'calle']
-BETWEEN_PREFIX = ['e/', 'e/c', '%', 'entre', 'entre', 'entre', 'entre', 'entre', 'E\\', 'E/', 'ent.', 'etr.', 'e\c', '/', '\\', 'e /']
+                      'calz.', 'pasaje', 'ca', 'calle', 'calle', 'calle', 'calle', 'calle', 'calle', 'calle', 'calle']
+STREET_NAME_SUFFIX = ['ave', 'avenida', 'ave.', 'Ave', 'Ave.', 'carretera', 'ctra',
+                      'Carr.', 'calzada', 'czda.', 'calz', 'Calzada', 'czda.',
+                      'calz.', 'calle', 'ca', 'calle']
+
+BETWEEN_PREFIX = ['e/', 'e/c', '%', 'entre', 'entre', 'entre', 'entre', 'entre calles', 'E\\', 'E/', 'ent.', 'etr.', 'e\c', '/', '\\', 'e /']
 CORNER_CONNECTOR_PREFIX = ['esq', 'esquina']
-LOCALITY_PREFIX = ['pueblo', 'localidad', 'poblado', 'ciudad', 'rpt', 'reparto', 'reparto', 'reparto', 'reparto']
+LOCALITY_PREFIX = ['localidad', 'poblado', 'ciudad', 'rpt', 'reparto', 'reparto', 'reparto', 'reparto', 'localidad', 'rpt', 'rpt']
 BUILDING_PREFIX = ['ed', 'edif', 'edf', 'edificio', 'EDIFICIO', 'Edificio', 'EDIF.', 'edf.', 'edi', 'EDF','Edif.', 'Edifi', 'edif.', 'ed.']
 PROPERTY_PREFIX = ['#', 'nro.', 'nu', 'num', 'no.', 'num.', 'nu.', 'número', 'no','nro', 'numero', '#', '#']
 DISTANCE_PREFIX = ['Km.', 'KM.', 'Km', 'KM', 'K.', 'k.', 'kilometro', 'Kilometro', 'KILOMETRO', 'K\M', 'K/M', 'k/m',
@@ -32,3 +35,9 @@ RW_ZONE = ['', 'Zn.', 'zn.', 'zon.', 'z.', 'zona', 'zna.', 'za', 'zo.']
 RW_APARTMENT_2 = ['apart.', 'apt.', 'apto', 'apto.', 'apartamento', 'apt', 'ap', 'aptto', '']
 RW_MUNICIPALITY = ['municipio', 'M.', 'm.', 'm', 'mun.', 'mcpio.', 'Mno.', '']
 RW_PROVINCE = ['provincia', 'prov.', 'prcia', 'provin.', 'prv.', '']
+
+
+
+# List of street name words possible to have suffixes
+STREET_SUFFIX_POSSIBILITIES = ['1ra', 'primera', '2da', 'segunda', '3ra', 'tercera', '4ta', 'cuarta',  '5ta', 'quinta', '6ta', 'sexta',
+                                '7ma', 'septima', '8va', 'octaba', '9na', 'novena', '10ma', 'decima',]
