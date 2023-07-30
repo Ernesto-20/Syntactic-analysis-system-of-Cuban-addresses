@@ -205,13 +205,13 @@ class NoiseGenerator(Generator):
             # Components Basics
             if not self.__is_empty(locality):
                 between_prefix = [[' , ', 'rw']] if rm.randint(1, 100) < 70 and permutation_bool is False else []
-                locality_prefix = super().generate_prefix_randomly(LOCALITY_PREFIX, 35)
+                locality_prefix = super().generate_prefix_randomly(LOCALITY_PREFIX, 25)
                 components.append(
                     between_prefix + locality_prefix + [[item, 'locality'] for item in locality.split()]
                 )
             if not self.__is_empty(municipality):
                 between_prefix = [[' , ', 'rw']] if rm.randint(1, 100) < 75 and permutation_bool is False else []
-                municipality_prefix = super().generate_prefix_randomly(MUNICIPALITY_PREFIX, 8)
+                municipality_prefix = super().generate_prefix_randomly(MUNICIPALITY_PREFIX, 5)
                 components.append(
                     between_prefix + municipality_prefix + [[item, 'municipality'] for item in municipality.split()]
                 )
@@ -313,14 +313,23 @@ class NoiseGenerator(Generator):
             A boolean indicating whether the list corresponds to a suffix or prefix.
         '''
 
-        possibility_suffix = self.__eval_possibility_suffix_street(street_name)
-        if possibility_suffix:
-            return [[item, entity_type] for item in street_name.split()] + super().generate_suffix_randomly(
-                STREET_NAME_SUFFIX, 90)
+        street_name_contain_some_type_prefix = False
+        for type in STREET_NAME_PREFIX:
+            for word in street_name.split():
+                if type.__contains__(word):
+                    street_name_contain_some_type_prefix = True
+                    break
 
-        return super().generate_prefix_randomly(STREET_NAME_PREFIX, 50) + [[item, entity_type] for item in
-                                                                           street_name.split()]
+        if not street_name_contain_some_type_prefix:
+            possibility_suffix = self.__eval_possibility_suffix_street(street_name)
+            if possibility_suffix:
+                return [[item, entity_type] for item in street_name.split()] + super().generate_suffix_randomly(
+                    STREET_NAME_SUFFIX, 90)
 
+            return super().generate_prefix_randomly(STREET_NAME_PREFIX, 50) + [[item, entity_type] for item in
+                                                                               street_name.split()]
+        else:
+            return [[item, entity_type] for item in street_name.split()]
     def __eval_possibility_suffix_street(self, street_name: str):
 
         if not self.__is_empty(street_name):

@@ -7,8 +7,8 @@ from tests.tools.address_list import ADDRESS_LIST
 import pandas as pd
 
 print('Init')
-# neural_parser = NeuralParserManage.load_neural_parser(route='../assets/trained_models/model_type_one', name='model_colab')
-neural_parser = NeuralParserManage.load_neural_parser(route='../assets/trained_models/model_type_one', name='default_model_instance_1C')
+neural_parser = NeuralParserManage.load_neural_parser(route='../assets/trained_models/model_type_one', name='colab_trained_v3')
+# neural_parser = NeuralParserManage.load_neural_parser(route='../assets/trained_models/model_type_one', name='default_model_instance_1C')
 neural_parser.evaluate()
 
 # address_parser = AddressParser(neural_parser, Decoder(neural_parser.get_data().get_id_to_category(), neural_parser.get_cleaner_method()))
