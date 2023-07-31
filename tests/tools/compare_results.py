@@ -1,13 +1,14 @@
 from src.structured_direction.classified_address_one import ClassifiedAddressOne
 
 
-def accurracy(y_predict: list, y_real: list):
+def calculate_results(y_predict: list, y_real: list):
     print('Accurracy')
     matches = 0
     no_matches = 0
 
     temp_2 = 0 # para ver los resultados por direccion
     temp_3 = 0 # para ver los resultados por direccion
+    count_correct_parsing = 0
     for i in range(len(y_predict)):
         temp = number_of_matches(y_predict[i].principal_street[:], y_real[i].principal_street[:])
         matches += temp
@@ -53,6 +54,9 @@ def accurracy(y_predict: list, y_real: list):
         print('FP: ', temp_3)
         print('VN:', temp_2*8+temp_3*7)
 
+        if temp_3 == 0:
+            count_correct_parsing += 1
+
         temp_2 = matches
         temp_3 = no_matches
 
@@ -61,7 +65,13 @@ def accurracy(y_predict: list, y_real: list):
     FP = FN
     VN = matches*8+no_matches*7
 
-    return (VP+VN)/(VP+FN+FP+VN)
+    result = {'accuracy': (VP+VN)/(VP+FN+FP+VN),
+              'precision': VP/(VP+FP),
+              'recall': VP/(VP+FN),
+              'amount_parsing_correct_address': count_correct_parsing
+              }
+
+    return result
 
 
 

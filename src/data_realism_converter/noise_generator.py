@@ -46,6 +46,7 @@ class NoiseGenerator(Generator):
         tags_list = []
 
         for i in data_set.index:
+            # print('address number: ', address_number+1)
             if address_amount is not None and address_number == address_amount:
                 break
             components = []
@@ -274,10 +275,23 @@ class NoiseGenerator(Generator):
 
     def __generate_building_syntetic(self):
         random_value = rm.randint(1, 100)
-        if random_value <= 45:
+        if random_value <= 38:
             # only numbers
-            return str(rm.randint(101, 99999))
-        elif random_value <= 55:
+            number = rm.randint(1, 100)
+            # two digits
+            if number <= 25:
+                return str(rm.randint(1, 99))
+            # three digits
+            if number <= 50:
+                return str(rm.randint(100, 999))
+            # four digits
+            if number <= 75:
+                return str(rm.randint(1000, 9999))
+            # five digits
+            if number <= 100:
+                return str(rm.randint(10000, 99999))
+
+        elif random_value <= 56:
             # only letter
             letters = ['A', 'B', 'C', 'D', 'F', 'G', 'H']
             return letters[rm.randint(0, len(letters) - 1)]
@@ -285,11 +299,24 @@ class NoiseGenerator(Generator):
             #  numbers and letters
             letters = ['A', 'B', 'C', 'D', 'F', 'G', 'H']
             letter = letters[rm.randint(0, len(letters) - 1)]
-            letter_position = rm.randint(0, 4)
-            number = str(rm.randint(101, 9999))
+            number = ''
+            random_number = rm.randint(1, 100)
+            # two digits
+            if random_number <= 25:
+                number = str(rm.randint(1, 99))
+            # three digits
+            elif random_number <= 50:
+                number = str(rm.randint(100, 999))
+            # four digits
+            elif random_number <= 75:
+                number = str(rm.randint(1000, 9999))
+            # five digits
+            elif random_number <= 100:
+                number = str(rm.randint(10000, 99999))
 
-            name = number[0: letter_position] + letter + number[letter_position:]
-            return name
+            letter_position = rm.randint(0, len(number)-1)
+            building_name = number[0: letter_position] + letter + number[letter_position:]
+            return building_name
 
     def __generate_apartment_syntetic(self):
         random_value = rm.randint(1, 100)
@@ -316,9 +343,11 @@ class NoiseGenerator(Generator):
         street_name_contain_some_type_prefix = False
         for type in STREET_NAME_PREFIX:
             for word in street_name.split():
-                if type.__contains__(word):
+                if type.lower() == word.lower():
                     street_name_contain_some_type_prefix = True
                     break
+            if street_name_contain_some_type_prefix:
+                break
 
         if not street_name_contain_some_type_prefix:
             possibility_suffix = self.__eval_possibility_suffix_street(street_name)

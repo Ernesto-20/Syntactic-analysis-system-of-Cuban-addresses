@@ -37,7 +37,7 @@ class Generator:
             if rand < 25:
                 # Duplicate character
                 word = self.__duplicate_character(word)
-            elif rand < 50 and len(word) > 1:
+            elif rand < 50 and len(word) > 2:
                 # Omit character
                 word = self.__omit_character(word)
             # elif rand < 75:
@@ -78,11 +78,12 @@ class Generator:
         return ret_word
 
     def __similar_character(self,word):
-        ret_word = ''
+        ret_word = word
         char_index = randrange(len(word))
         similar_chars = {'a': 'e', 'e': 'a', 'i': 'l', 'l': 'i', 'o': 'u', 'u': 'o', 'a': '@', '0': '@', 'm':'n', 'n':'m',
                          'b':'v', 's':'z', 'v': 'b', 'z':'s'}
         if word[char_index].lower() in similar_chars:
             new_char = similar_chars[word[char_index].lower()]
             ret_word = word[:char_index] + new_char + word[char_index + 1:]
+
         return ret_word
