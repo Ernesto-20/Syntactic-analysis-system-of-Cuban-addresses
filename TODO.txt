@@ -1,0 +1,9 @@
+TODO:
+- Nombrar cada componente dentro de la red neuronal, como TextVectorization Words, con nombres sugerentes.
+
+
+Suggestions for tesis:
+- Talk about non-linearity inside datas (address postal) and how to influence the Narrow AI.
+
+
+The algorithm is a DNN Multi-Label and Multi-Class Classifier

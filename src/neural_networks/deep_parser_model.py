@@ -62,11 +62,11 @@ class DeepParserModel(NeuralParser):
                 merge_mode='concat')
             layer_blstm_concat = blstm_concat(concat)
 
-            # ********* LAYER PROJECT ***************
+            # ********* PROJECTION LAYER ***************
             projection = Flatten()(layer_blstm_concat)
             projection = Dense(units=data_set.get_max_len_word() * 100)(projection)
             projection = Reshape((data_set.get_max_len_word(), 100))(projection)
-            # ********* LAYER PROJECT ***************
+            # ********* PROJECTION LAYER ***************
 
             concat_2 = Concatenate()([projection, layer_embedding_word])
             blstm_concat_2 = Bidirectional(
