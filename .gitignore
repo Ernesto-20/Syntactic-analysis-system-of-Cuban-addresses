@@ -1,6 +1,6 @@
 assets/default_corpus/model_type_two
-assets/default_data_set/model_type_one/
-assets/default_data_set/model_type_two/
+assets/default_data_set/model_type_one/other_ds
+assets/default_data_set/model_type_two
 assets/trained_models
 src/testing_bert
 

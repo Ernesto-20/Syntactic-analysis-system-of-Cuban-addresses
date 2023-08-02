@@ -1,0 +1,2 @@
+- 30000 postal address of Havana city.
+- 80% for train, 5% validation and 15% for testing
