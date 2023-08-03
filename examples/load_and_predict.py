@@ -2,8 +2,8 @@ from src.address_parser.address_parser import AddressParser
 from src.tools.decoder import Decoder
 from src.tools.neural_parser_manage import NeuralParserManage
 from src.data_preprocessing.address_cleaner import AddressCleaner
-from tests.tools.compare_results import calculate_results
-from tests.tools.address_list import ADDRESS_LIST
+from src.tools.compare_results import calculate_results
+from src.tools.address_list import ADDRESS_LIST
 import pandas as pd
 
 print('Init')
