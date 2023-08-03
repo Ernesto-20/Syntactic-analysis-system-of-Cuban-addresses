@@ -11,17 +11,17 @@ data = pd.read_excel('../assets/default_corpus/model_type_one/corpus_short_only_
 # data realism convert
 generator = NoiseGenerator()
 data_with_noise = generator.generate_noise(data, address_amount=30000)
-data_with_noise.to_csv('Prueba 2 30.csv')
+data_with_noise.to_csv('Prueba 3 30.csv')
 data_set = DataSetAdapter().adapt(data_with_noise, 0.80, 0.05, 0.15)
 
 
 # Uncomment to see addresses with noise
-count = 0
-for address in data_set.get_x_test_sentence_values():
-    print(address)
-    count += 1
-    if count == 10:
-        break
+# count = 0
+# for address in data_set.get_x_test_sentence_values():
+#     print(address)
+#     count += 1
+#     if count == 10:
+#         break
 
 DataSetManage.save(data_set, '../assets/default_data_set/model_type_one/DS_Habana_30000_v4')
 print('End')

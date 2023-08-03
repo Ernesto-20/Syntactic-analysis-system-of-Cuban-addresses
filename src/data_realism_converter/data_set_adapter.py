@@ -53,9 +53,9 @@ class DataSetAdapter:
             [len(''.join(s)) for s in group_addres['Word'].tolist()])  # Se cuenta tambien los signos de puntacion.
         max_len_trigram = max_len_characters
 
-        train_targets = DataSetAdapter.__get_tags(train_targets, n_tag, max_len_word)
-        test_targets = DataSetAdapter.__get_tags(test_targets, n_tag, max_len_word)
-        val_targets = DataSetAdapter.__get_tags(val_targets, n_tag, max_len_word)
+        train_targets = DataSetAdapter.__get_tags(train_targets, n_tag, max_len_word, value=-1)
+        test_targets = DataSetAdapter.__get_tags(test_targets, n_tag, max_len_word, value=-1)
+        val_targets = DataSetAdapter.__get_tags(val_targets, n_tag, max_len_word, value=-1)
 
         return DataSet(vocabulary_word, max_len_characters, max_len_trigram, max_len_word, n_tag, id_to_category,
                        input_dim,

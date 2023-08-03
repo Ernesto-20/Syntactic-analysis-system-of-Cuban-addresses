@@ -12,7 +12,7 @@ from src.tools.neural_parser_manage import NeuralParserManage
 
 def load_data_set_saved():
     """Load a saved data set """
-    return DataSetManage.load('../assets/default_data_set/model_type_one/DS_Habana_30000_v2')
+    return DataSetManage.load('../assets/default_data_set/model_type_one/DS_Habana_30000_v4')
 
 
 def create_new_data_set():
@@ -38,11 +38,10 @@ data_set = load_data_set_saved()
 model = DeepParserModel(data_set, AddressCleaner.cleaner_method('custom_standardization'))
 
 # train
-model.train(batch_size=800, epochs=45)
+model.train(batch_size=400, epochs=45)
 address_parser = AddressParser(model, Decoder(data_set.get_id_to_category(),
                                               AddressCleaner.cleaner_method('custom_standardization')))
 
 # save
-# NeuralParserManage.save_neural_parser(model, route='../assets/trained_models/model_type_one',
-#                                       name='training_with_30000')  # New instance C
+NeuralParserManage.save_neural_parser(model, route='../assets/trained_models/model_type_one', name='pc_trained_v1')
 print('Finish')
