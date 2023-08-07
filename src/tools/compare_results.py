@@ -67,7 +67,7 @@ def calculate_results(y_predict: list, y_real: list):
 
     result = {'accuracy': (VP+VN)/(VP+FN+FP+VN),
               'precision': VP/(VP+FP),
-              'recall': VP/(VP+FN),
+              'recall': VP/(VP+FN), # Me parece que esto esta mal. No deberia de ser igual que precision
               'amount_parsing_correct_address': count_correct_parsing
               }
 

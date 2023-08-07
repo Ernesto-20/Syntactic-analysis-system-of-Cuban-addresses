@@ -53,9 +53,9 @@ class DataSetAdapter:
             [len(''.join(s)) for s in group_addres['Word'].tolist()])  # Se cuenta tambien los signos de puntacion.
         max_len_trigram = max_len_characters
 
-        train_targets = DataSetAdapter.__get_tags(train_targets, n_tag, max_len_word, value=-1)
-        test_targets = DataSetAdapter.__get_tags(test_targets, n_tag, max_len_word, value=-1)
-        val_targets = DataSetAdapter.__get_tags(val_targets, n_tag, max_len_word, value=-1)
+        train_targets = DataSetAdapter.__get_tags(train_targets, n_tag, max_len_word)
+        test_targets = DataSetAdapter.__get_tags(test_targets, n_tag, max_len_word)
+        val_targets = DataSetAdapter.__get_tags(val_targets, n_tag, max_len_word)
 
         return DataSet(vocabulary_word, max_len_characters, max_len_trigram, max_len_word, n_tag, id_to_category,
                        input_dim,
@@ -73,11 +73,9 @@ class DataSetAdapter:
         return sentence_list
 
     @staticmethod
-    def __get_tags(data, n_tag, max_len, value=None):
-        if value is None:
-            value = n_tag - 1
-
+    def __get_tags(data, n_tag, max_len):
+        value = n_tag
         tags = pad_sequences(data, maxlen=max_len, dtype='int32', padding='post', value=value)
-        tags = to_categorical(tags, num_classes=n_tag)
+        tags = to_categorical(tags, num_classes=n_tag+1)
 
         return tags
