@@ -85,25 +85,9 @@ class NoiseGenerator(Generator):
 
                 if rm.randint(1, 100) <= 50:
                     # Contain building
-                    identification_building = self.__generate_building_syntetic()
-                    identification_building_prefix = super().generate_prefix_randomly(BUILDING_PREFIX, 90)
-                    if rm.randint(1, 100) <= 40:
-                        components.append(
-                            identification_building_prefix + [[item, 'building'] for item in
-                                                              identification_building.split()]
-                        )
-                    else:
-                        # Contain apartment
-                        identification_apartment = self.__generate_apartment_syntetic()
-                        identification_apartment_prefix = super().generate_prefix_randomly(APARTMENT_PREFIX,
-                                                                                           100)
-
-                        components.append(
-                            identification_building_prefix + [[item, 'building'] for item in
-                                                              identification_building.split()] +
-                            identification_apartment_prefix + [[item, 'apartment'] for item
-                                                               in identification_apartment.split()]
-                        )
+                    building_component, apartment_component = self.generate_building_and_apartment()
+                    components.append(building_component)
+                    components.append(apartment_component)
                 if not flag:
                     components.append(
                         between_prefix + first_side_street_added_word + conjunction_prefix + second_side_street_added_word)
@@ -125,15 +109,12 @@ class NoiseGenerator(Generator):
 
                     if rm.randint(1, 100) <= 50:
                         # Contain Building
-                        identification_building = self.__generate_building_syntetic()
-                        identification_building_prefix = super().generate_prefix_randomly(BUILDING_PREFIX, 90)
-
+                        building_component, apartment_component = self.generate_building_and_apartment()
                         if rm.randint(1, 100) <= 50:
                             # Is type 2.1.1 left building
                             components.append(
                                 corner_prefix + principal_street_added_word +
-                                identification_building_prefix + [[item, 'building'] for item in
-                                                                  identification_building.split()] +
+                                building_component + apartment_component +
                                 conjunction_prefix + side_street_added_word
                             )
                         else:
@@ -141,8 +122,7 @@ class NoiseGenerator(Generator):
                             components.append(
                                 corner_prefix + principal_street_added_word +
                                 conjunction_prefix + side_street_added_word +
-                                identification_building_prefix + [[item, 'building'] for item in
-                                                                  identification_building.split()]
+                                building_component + apartment_component
                             )
                     else:
                         # Not contain building
@@ -154,15 +134,12 @@ class NoiseGenerator(Generator):
 
                     if rm.randint(1, 100) <= 50:
                         # Contain Building
-                        identification_building = self.__generate_building_syntetic()
-                        identification_building_prefix = super().generate_prefix_randomly(BUILDING_PREFIX, 90)
-
+                        building_component, apartment_component = self.generate_building_and_apartment()
                         if rm.randint(1, 100) <= 50:
                             # Is type 2.1.1 left building
                             components.append(
                                 principal_street_added_word +
-                                identification_building_prefix + [[item, 'building'] for item in
-                                                                  identification_building.split()] +
+                                building_component + apartment_component +
                                 corner_prefix + side_street_added_word
                             )
                         else:
@@ -170,8 +147,7 @@ class NoiseGenerator(Generator):
                             components.append(
                                 principal_street_added_word +
                                 corner_prefix + side_street_added_word +
-                                identification_building_prefix + [[item, 'building'] for item in
-                                                                  identification_building.split()]
+                                building_component + apartment_component
                             )
                     else:
                         # Not contain building
@@ -183,23 +159,9 @@ class NoiseGenerator(Generator):
                 components.append(principal_street_added_word)
                 if rm.randint(1, 100) <= 50:
                     # Contain building
-                    identification_building = self.__generate_building_syntetic()
-                    identification_building_prefix = super().generate_prefix_randomly(BUILDING_PREFIX, 90)
-                    if rm.randint(1, 100) <= 30:
-                        components.append(
-                            identification_building_prefix + [[item, 'building'] for item in
-                                                              identification_building.split()]
-                        )
-                    else:
-                        # Contain apartment
-                        identification_apartment = self.__generate_apartment_syntetic()
-                        identification_apartment_prefix = super().generate_prefix_randomly(APARTMENT_PREFIX, 100)
-                        components.append(
-                            identification_building_prefix + [[item, 'building'] for item in
-                                                              identification_building.split()] +
-                            identification_apartment_prefix + [[item, 'apartment'] for item
-                                                               in identification_apartment.split()]
-                        )
+                    building_component, apartment_component = self.generate_building_and_apartment()
+                    components.append(building_component)
+                    components.append(apartment_component)
             # permutation between components
             permutation_bool = rm.randint(1, 100) <= 1
 
@@ -223,7 +185,7 @@ class NoiseGenerator(Generator):
                     between_prefix + province_prefix + [[item, 'province'] for item in province.split()]
                 )
 
-            #  Permutación entre componentes.
+            #  Components permutation
             if permutation_bool:
                 components = super().generate_non_standardization(components)
 
@@ -237,6 +199,35 @@ class NoiseGenerator(Generator):
             self.__add_new_address(address, address_number, address_list, words_list, tags_list)
         print('El total de direcciones fue de ', address_number)
         return self.__generate_data_frame(address_list, words_list, tags_list)
+
+    def generate_building_and_apartment(self):
+        """
+            Returns a tupa of two items. The first item is a list containing what is related to buildings and the other item is a list referring to apartments.
+            If no apartment was generated, by probability, then the second item will be an empty list
+        :return: tuple(building_list, apartment_list)
+        """
+
+        identification_building = self.__generate_building_syntetic()
+        identification_building_prefix = super().generate_prefix_randomly(BUILDING_PREFIX, 90)
+        building_number = []
+        if not identification_building.isalpha():
+            building_number = super().generate_prefix_randomly(PROPERTY_PREFIX, 15)
+        if rm.randint(1, 100) <= 40:
+            return (identification_building_prefix + building_number + [[item, 'building'] for item in
+                                                                    identification_building.split()], [])
+        else:
+            # Contain apartment
+            identification_apartment = self.__generate_apartment_syntetic()
+            identification_apartment_prefix = super().generate_prefix_randomly(APARTMENT_PREFIX,
+                                                                               100)
+            apartment_number = []
+            if not identification_apartment.isalpha():
+                apartment_number = super().generate_prefix_randomly(PROPERTY_PREFIX, 15)
+
+            return (identification_building_prefix + building_number + [[item, 'building'] for item in
+                                                  identification_building.split()]), \
+                (identification_apartment_prefix + apartment_number + [[item, 'apartment'] for item
+                                                                      in identification_apartment.split()])
 
     def __generate_data_frame(self, address_list, words_list, tags_list):
         return DataFrame({

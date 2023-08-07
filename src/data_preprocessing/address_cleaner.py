@@ -66,24 +66,24 @@ class AddressCleaner:
                                                     ';', ' , ')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
                                                     'ñ', 'n')
-        stripped_spanish = tf.strings.regex_replace(stripped_spanish,
-                                                    'entre', 'entre ')
+        # stripped_spanish = tf.strings.regex_replace(stripped_spanish,
+        #                                             'entre', 'entre ')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
                                                     '#', ' # ')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
                                                     '%', ' % ')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
                                                     '@', 'a')
-        stripped_spanish = tf.strings.regex_replace(stripped_spanish,
-                                                    '&', ' y ')
-        stripped_spanish = tf.strings.regex_replace(stripped_spanish,
-                                                    '/', '/ ')
+        # stripped_spanish = tf.strings.regex_replace(stripped_spanish,
+        #                                             '&', ' y ')
+        # stripped_spanish = tf.strings.regex_replace(stripped_spanish,
+        #                                             '/', '/ ')
         # stripped_spanish = tf.strings.regex_replace(stripped_spanish,
         #                                             'apt.', 'apt. ')
         # stripped_spanish = tf.strings.regex_replace(stripped_spanish,
         #                                             'apt', 'apt ')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
-                                                    'apartamento', 'apartamento ')
+                                                    'apartamento', ' apartamento ')
         stripped_spanish = tf.strings.regex_replace(stripped_spanish, '[^a-zA-Z0-9 -/]', '')
 
         output = tf.strings.regex_replace(

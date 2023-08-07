@@ -22,40 +22,22 @@ class Decoder:
                 index_tag = list(raw_address[i]).index(max(list(raw_address[i])))
                 components[index_tag] += [words[i]]
 
-            principal_street = None
-            first_side_street = None
-            second_side_street = None
-            building = None
-            apartment = None
-            locality = None
-            municipality = None
-            province = None
-            reserve_word = None
 
-            for cat in self.cat_to_id:
-                if cat == 'principal_street':
-                    principal_street = components[self.cat_to_id[cat]]
-                elif cat == 'first_side_street':
-                    first_side_street = components[self.cat_to_id[cat]]
-                elif cat == 'second_side_street':
-                    second_side_street = components[self.cat_to_id[cat]]
-                elif cat == 'building':
-                    building = components[self.cat_to_id[cat]]
-                elif cat == 'apartment':
-                    apartment = components[self.cat_to_id[cat]]
-                elif cat == 'locality':
-                    locality = components[self.cat_to_id[cat]]
-                elif cat == 'municipality':
-                    municipality = components[self.cat_to_id[cat]]
-                elif cat == 'province':
-                    province = components[self.cat_to_id[cat]]
-                elif cat == 'rw':
-                    reserve_word = components[self.cat_to_id[cat]]
+            principal_street = components[self.cat_to_id['principal_street']]
+            first_side_street = components[self.cat_to_id['first_side_street']]
+            second_side_street = components[self.cat_to_id['second_side_street']]
+            building = components[self.cat_to_id['building']]
+            apartment = components[self.cat_to_id['apartment']]
+            locality = components[self.cat_to_id['locality']]
+            municipality = components[self.cat_to_id['municipality']]
+            province = components[self.cat_to_id['province']]
+            reserve_word = components[self.cat_to_id['rw']]
+            padding = components[self.cat_to_id['padding']]
 
             list_address_classified.append(
                 ClassifiedAddressOne(principal_street=principal_street, first_side_street=first_side_street, second_side_street=second_side_street,
                                      locality=locality, municipality=municipality, province=province,
-                                     building=building, apartment=apartment, reserve_word=reserve_word))
+                                     building=building, apartment=apartment, reserve_word=reserve_word, padding=padding))
             index_address += 1
 
         return list_address_classified

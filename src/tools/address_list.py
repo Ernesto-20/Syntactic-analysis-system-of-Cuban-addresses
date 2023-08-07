@@ -1,5 +1,6 @@
 from src.structured_direction.classified_address_one import ClassifiedAddressOne
 
+
 ADDRESS_LIST = [
 #     ave 243 92a08 entre 92a y 94 la cumbre san miguel del padron la habana
 ClassifiedAddressOne(principal_street=['243'],

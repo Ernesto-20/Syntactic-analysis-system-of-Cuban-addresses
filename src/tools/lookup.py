@@ -2,8 +2,7 @@ STREET_NAME_PREFIX = ['calle', 'ave', 'avenida', 'ave.', 'Ave', 'Ave.', 'carrete
                       'Ctra', 'Carr.', 'Carr', 'carret', 'calzada', 'czda.', 'calz', 'Calzada', 'czda.',
                       'calz.', 'pasaje', 'ca', 'calle', 'calle', 'calle', 'calle', 'calle', 'calle', 'calle', 'calle']
 STREET_NAME_SUFFIX = ['ave', 'avenida', 'ave.', 'Ave', 'Ave.', 'carretera', 'ctra',
-                      'Carr.', 'calzada', 'czda.', 'calz', 'Calzada', 'czda.',
-                      'calz.', 'calle', 'ca', 'calle']
+                      'Carr.', 'calzada', 'czda.', 'calz', 'Calzada', 'calle',]
 
 BETWEEN_PREFIX = ['e/', 'e/c', '%', 'entre', 'entre', 'entre', 'entre', 'entre calles', 'E\\', 'E/', 'ent.', 'etr.', 'e\c', '/', '\\', 'e /']
 CORNER_CONNECTOR_PREFIX = ['esq', 'esquina']
