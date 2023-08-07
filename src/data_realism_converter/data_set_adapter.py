@@ -16,7 +16,7 @@ class DataSetAdapter:
         data_set['Tag'] = data_set['Tag'].astype('category')
         data_set['Tag_id'] = data_set['Tag'].cat.codes
         id_to_category = pd.Series(data_set.Tag.values, index=data_set.Tag_id).to_dict()
-        n_tag = len(id_to_category)
+        n_tag = len(id_to_category) +1
         input_dim = len(list(set(data_set['Word'].to_list()))) + 1
         data_fillna = data_set.fillna(method='ffill', axis=0)
         # Group by and collect columns
@@ -74,8 +74,8 @@ class DataSetAdapter:
 
     @staticmethod
     def __get_tags(data, n_tag, max_len):
-        value = n_tag
+        value = n_tag-1
         tags = pad_sequences(data, maxlen=max_len, dtype='int32', padding='post', value=value)
-        tags = to_categorical(tags, num_classes=n_tag+1)
+        tags = to_categorical(tags, num_classes=n_tag)
 
         return tags
