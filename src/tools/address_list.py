@@ -1,4 +1,52 @@
 from src.structured_direction.classified_address_one import ClassifiedAddressOne
+import tensorflow as tf
+# Assert Case
+# y_pred = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+# y_real = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+# Fail Case
+# y_pred = [0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+# y_real = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+
+# Test Case
+y_pred = [0.0973835886, 0.0959317908, 0.0735085383, 0.0930648819, 0.0859329849, 0.0832466409, 0.577864632, 0.501, 0.0859992132, 0.0921353698]
+y_real = [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]
+
+VP = tf.keras.metrics.TruePositives()
+VP.update_state(y_real, y_pred)
+VP = VP.result().numpy()
+
+VN = tf.keras.metrics.TrueNegatives()
+VN.update_state(y_real, y_pred)
+VN = VN.result().numpy()
+
+FP = tf.keras.metrics.FalsePositives()
+FP.update_state(y_real, y_pred)
+FP = FP.result().numpy()
+
+FN = tf.keras.metrics.FalseNegatives()
+FN.update_state(y_real, y_pred)
+FN = FN.result().numpy()
+
+
+print('Caso de acierto en la prediccion.')
+print('VP = ', VP)
+print('VN = ', VN)
+print('FP = ', FP)
+print('FN = ', FN)
+
+# Precision
+precision = tf.keras.metrics.Precision(thresholds=0)
+precision.update_state(y_real, y_pred)
+precision = precision.result().numpy()
+
+recall = tf.keras.metrics.Recall(thresholds=0)
+recall.update_state(y_real, y_pred)
+recall = recall.result().numpy()
+
+print('Metricas: ')
+print('Precision: ', precision)
+print('Recall: ', recall)
 
 
 ADDRESS_LIST = [

@@ -75,12 +75,14 @@ class DeepParserModel(NeuralParser):
             layer_blstm_concat_2 = blstm_concat_2(concat_2)
 
             output = Dense(data_set.get_n_tag(), activation='softmax')(layer_blstm_concat_2)
+            # from tensorflow.python.ops.logging_ops import Print
+            # output = Print(output, [output], 'This is output', summarize=-1)
             model = keras.Model(inputs, output, name='Model')
 
             # opt = keras.optimizers.Adam(learning_rate=0.0005)
 
             # Optimiser
-            opt = keras.optimizers.Adam(learning_rate=0.0005, beta_1=0.9, beta_2=0.999)
+            opt = keras.optimizers.Adam(learning_rate=0.0005)
             metrics = [tf.metrics.CategoricalAccuracy(), tf.metrics.Precision(), tf.metrics.Recall()]
             # metrics = [tf.metrics.Accuracy()]
             # Accuracy tells you how many times the ML model was correct overall.

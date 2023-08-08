@@ -17,7 +17,7 @@ class DataSetAdapter:
         data_set['Tag_id'] = data_set['Tag'].cat.codes
         id_to_category = pd.Series(data_set.Tag.values, index=data_set.Tag_id).to_dict()
         id_to_category[len(id_to_category.keys())] = 'padding'
-        n_tag = len(id_to_category) + 1
+        n_tag = len(id_to_category)
         input_dim = len(list(set(data_set['Word'].to_list()))) + 1
         data_fillna = data_set.fillna(method='ffill', axis=0)
         # Group by and collect columns
@@ -51,7 +51,7 @@ class DataSetAdapter:
 
         max_len_word = max([len(s) for s in group_addres['Word'].tolist()])
         max_len_characters = max(
-            [len(''.join(s)) for s in group_addres['Word'].tolist()])  # Se cuenta tambien los signos de puntacion.
+            [len(''.join(s)) for s in group_addres['Word'].tolist()])
         max_len_trigram = max_len_characters
 
         train_targets = DataSetAdapter.__get_tags(train_targets, n_tag, max_len_word)

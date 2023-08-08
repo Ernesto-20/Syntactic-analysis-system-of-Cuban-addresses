@@ -163,7 +163,7 @@ class NoiseGenerator(Generator):
                     components.append(building_component)
                     components.append(apartment_component)
             # permutation between components
-            permutation_bool = rm.randint(1, 100) <= 1
+            permutation_bool = rm.randint(1, 100) <= 5
 
             # Components Basics
             if not self.__is_empty(locality):
