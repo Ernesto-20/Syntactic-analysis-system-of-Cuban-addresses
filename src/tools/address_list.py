@@ -1,55 +1,55 @@
 from src.structured_direction.classified_address_one import ClassifiedAddressOne
 import tensorflow as tf
-# Assert Case
+# assert case
 # y_pred = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 # y_real = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-# Fail Case
+# fail case
 # y_pred = [0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
 # y_real = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
 
-# Test Case
-y_pred = [0.0973835886, 0.0959317908, 0.0735085383, 0.0930648819, 0.0859329849, 0.0832466409, 0.577864632, 0.501, 0.0859992132, 0.0921353698]
-y_real = [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]
-
-VP = tf.keras.metrics.TruePositives()
-VP.update_state(y_real, y_pred)
-VP = VP.result().numpy()
-
-VN = tf.keras.metrics.TrueNegatives()
-VN.update_state(y_real, y_pred)
-VN = VN.result().numpy()
-
-FP = tf.keras.metrics.FalsePositives()
-FP.update_state(y_real, y_pred)
-FP = FP.result().numpy()
-
-FN = tf.keras.metrics.FalseNegatives()
-FN.update_state(y_real, y_pred)
-FN = FN.result().numpy()
-
-
-print('Caso de acierto en la prediccion.')
-print('VP = ', VP)
-print('VN = ', VN)
-print('FP = ', FP)
-print('FN = ', FN)
-
-# Precision
-precision = tf.keras.metrics.Precision(thresholds=0)
-precision.update_state(y_real, y_pred)
-precision = precision.result().numpy()
-
-recall = tf.keras.metrics.Recall(thresholds=0)
-recall.update_state(y_real, y_pred)
-recall = recall.result().numpy()
-
-print('Metricas: ')
-print('Precision: ', precision)
-print('Recall: ', recall)
+# test case
+# y_pred = [0.0973835886, 0.0959317908, 0.0735085383, 0.0930648819, 0.0859329849, 0.0832466409, 0.577864632, 0.501, 0.0859992132, 0.0921353698]
+# y_real = [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]
+# 
+# vp = tf.keras.metrics.truepositives()
+# vp.update_state(y_real, y_pred)
+# vp = vp.result().numpy()
+# 
+# vn = tf.keras.metrics.truenegatives()
+# vn.update_state(y_real, y_pred)
+# vn = vn.result().numpy()
+# 
+# fp = tf.keras.metrics.falsepositives()
+# fp.update_state(y_real, y_pred)
+# fp = fp.result().numpy()
+# 
+# fn = tf.keras.metrics.falsenegatives()
+# fn.update_state(y_real, y_pred)
+# fn = fn.result().numpy()
 
 
-ADDRESS_LIST = [
+# print('caso de acierto en la prediccion.')
+# print('vp = ', vp)
+# print('vn = ', vn)
+# print('fp = ', fp)
+# print('fn = ', fn)
+# 
+# # precision
+# precision = tf.keras.metrics.precision(thresholds=0)
+# precision.update_state(y_real, y_pred)
+# precision = precision.result().numpy()
+# 
+# recall = tf.keras.metrics.recall(thresholds=0)
+# recall.update_state(y_real, y_pred)
+# recall = recall.result().numpy()
+# 
+# print('metricas: ')
+# print('precision: ', precision)
+# print('recall: ', recall)
+
+
+ADDRESS_LIST_EVAL_1 = [
 #     ave 243 92a08 entre 92a y 94 la cumbre san miguel del padron la habana
 ClassifiedAddressOne(principal_street=['243'],
                                           first_side_street=['92a',],
@@ -210,10 +210,10 @@ ClassifiedAddressOne(principal_street=['ca', 'ongo'],
                                           building=['120'],
                                           apartment=[],
                                       reserve_word=['calle', 'no', 'entre', 'calle', 'y', 'calle']),
-# calle arroyo 27 entre calle cristina y calle línea la habana vieja, la habana
+# calle arroyo 27 entre calle cristina y calle linea la habana vieja, la habana
 ClassifiedAddressOne(principal_street=['arroyo'],
                                           first_side_street=['cristina',],
-                                          second_side_street=['línea'],
+                                          second_side_street=['linea'],
                                           locality=[],
                                           municipality=['la', 'habana', 'vieja'],
                                           province=['la', 'habana'],
@@ -290,7 +290,7 @@ ClassifiedAddressOne(principal_street=['31'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['entre', 'y', ',', ',']),
-# calle san rafael entre mazon y ronda, plaza de la revolución, la habana
+# calle san rafael entre mazon y ronda, plaza de la revolucion, la habana
 ClassifiedAddressOne(principal_street=['san', 'rafael'],
                                           first_side_street=['mazon',],
                                           second_side_street=['ronda'],
@@ -340,11 +340,11 @@ ClassifiedAddressOne(principal_street=['vento'],
                                           building=['9519'],
                                           apartment=[],
                                       reserve_word=['calle', '#', 'e/', 'calle', 'y', 'calle', ',', ',']),
-# pasaje infante e / mayía rodrígez y goicuría, santo suárez, diez de octubre, la habana
+# pasaje infante e / mayia rodrigez y goicuria, santo suarez, diez de octubre, la habana
 ClassifiedAddressOne(principal_street=['infante'],
-                                          first_side_street=['mayía', 'rodrígez'],
-                                          second_side_street=['goicuría'],
-                                          locality=['santo', 'suárez'],
+                                          first_side_street=['mayia', 'rodrigez'],
+                                          second_side_street=['goicuria'],
+                                          locality=['santo', 'suarez'],
                                           municipality=['diez', 'de', 'octubre'],
                                           province=['la', 'habana'],
                                           building=[],
@@ -380,7 +380,7 @@ ClassifiedAddressOne(principal_street=['san', 'pedro'],
                                           building=['709'],
                                           apartment=['12', 'y', 'h'],
                                       reserve_word=['clle', '#', 'apto', 'e/', 'calle', 'y', 'calle', ',']),
-# obrapía 357 entre habana y compostela, la habana vieja, la habana
+# obrapia 357 entre habana y compostela, la habana vieja, la habana
 ClassifiedAddressOne(principal_street=['obrapia'],
                                           first_side_street=['habana',],
                                           second_side_street=['compostela'],
@@ -522,139 +522,138 @@ ClassifiedAddressOne(principal_street=['sayas'],
                                       reserve_word=['calle', 'esq', ',']),
 
 ]
-
 ADDRESS_LIST_EVAL_2 = [
-# Pliar SN  e/  Julio de Cardenas y Lindero, Arroyo Naranjo, La Habana
-ClassifiedAddressOne(principal_street=['Pliar'],
-                                          first_side_street=['Julio', 'de', 'Cardenas'],
-                                          second_side_street=['Lindero'],
+# pliar sn  e/  julio de cardenas y lindero, arroyo naranjo, la habana
+ClassifiedAddressOne(principal_street=['pliar'],
+                                          first_side_street=['julio', 'de', 'cardenas'],
+                                          second_side_street=['lindero'],
                                           locality=[],
-                                          municipality=['Arroyo', 'Naranjo'],
+                                          municipality=['arroyo', 'naranjo'],
                                           province=['la', 'habana'],
-                                          building=['SN'],
+                                          building=['sn'],
                                           apartment=[],
                                       reserve_word=['e/', 'y',',' ',']),
-# 31 A e/ 320 y 322, La Lisa, La Habana
-ClassifiedAddressOne(principal_street=['31', 'A'],
+# 31 a e/ 320 y 322, la lisa, la habana
+ClassifiedAddressOne(principal_street=['31', 'a'],
                                           first_side_street=['320'],
                                           second_side_street=['322'],
                                           locality=[],
-                                          municipality=['La', 'Lisa'],
+                                          municipality=['la', 'lisa'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', ',', ',']),
-# C  e/  Delicias y San Francisco, San  Miguel del Padron, La Habana
-ClassifiedAddressOne(principal_street=['C'],
-                                          first_side_street=['Delicias'],
-                                          second_side_street=['San', 'Francisco'],
+# c  e/  delicias y san francisco, san  miguel del padron, la habana
+ClassifiedAddressOne(principal_street=['c'],
+                                          first_side_street=['delicias'],
+                                          second_side_street=['san', 'francisco'],
                                           locality=[],
-                                          municipality=['San',  'Miguel', 'del', 'Padron'],
+                                          municipality=['san',  'miguel', 'del', 'padron'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', ',', ',']),
-# 39 e/ San Juan Bautista y Union, Plaza de la Revolucion, La Habana
+# 39 e/ san juan bautista y union, plaza de la revolucion, la habana
 ClassifiedAddressOne(principal_street=['39'],
-                                          first_side_street=['San', 'Juan', 'Bautista'],
-                                          second_side_street=['Union'],
+                                          first_side_street=['san', 'juan', 'bautista'],
+                                          second_side_street=['union'],
                                           locality=[],
-                                          municipality=['Plaza', 'de', 'la', 'Revolucion'],
+                                          municipality=['plaza', 'de', 'la', 'revolucion'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', ',', ',']),
-# Línea e/ 20 y 22, Vedado, Plaza de la Revolucion, La Habana
-ClassifiedAddressOne(principal_street=['Línea'],
+# linea e/ 20 y 22, vedado, plaza de la revolucion, la habana
+ClassifiedAddressOne(principal_street=['linea'],
                                           first_side_street=['20'],
                                           second_side_street=['22'],
-                                          locality=['Vedado'],
-                                          municipality=['Plaza', 'de', 'la', 'Revolucion'],
+                                          locality=['vedado'],
+                                          municipality=['plaza', 'de', 'la', 'revolucion'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', ',', ',', ',']),
-# 1ra e/ D y E, reparto Luyano Moderno, San  Miguel del Padron, La Habana
+# 1ra e/ d y e, reparto luyano moderno, san  miguel del padron, la habana
 ClassifiedAddressOne(principal_street=['1ra'],
-                                          first_side_street=['D'],
-                                          second_side_street=['E'],
-                                          locality=['Luyano', 'Moderno'],
-                                          municipality=['San',  'Miguel', 'del', 'Padron'],
+                                          first_side_street=['d'],
+                                          second_side_street=['e'],
+                                          locality=['luyano', 'moderno'],
+                                          municipality=['san',  'miguel', 'del', 'padron'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', 'reparto', ',', ',', ',']),
-# 29 e/ 310 y 312, La Lisa, La Habana
+# 29 e/ 310 y 312, la lisa, la habana
 ClassifiedAddressOne(principal_street=['29'],
                                           first_side_street=['310'],
                                           second_side_street=['312'],
                                           locality=[],
-                                          municipality=['La', 'Lisa'],
+                                          municipality=['la', 'lisa'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', ',', ',']),
-# 428 e/ 19 y 21, Pena altas, Guanabo, La Habana del Este, La Habana
+# 428 e/ 19 y 21, pena altas, guanabo, la habana del este, la habana
 ClassifiedAddressOne(principal_street=['428'],
                                           first_side_street=['19'],
                                           second_side_street=['21'],
-                                          locality=['Pena altas', 'Guanabo'],
-                                          municipality=['La Habana del Este'],
+                                          locality=['pena altas', 'guanabo'],
+                                          municipality=['la habana del este'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', ',', ',', ',', ',']),
-# 246 e/ 33 C y 35, La Lisa, La Habana
+# 246 e/ 33 c y 35, la lisa, la habana
 ClassifiedAddressOne(principal_street=['246'],
-                                          first_side_street=['33', 'C'],
+                                          first_side_street=['33', 'c'],
                                           second_side_street=['35'],
                                           locality=[],
-                                          municipality=['La', 'Lisa'],
+                                          municipality=['la', 'lisa'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', ',', ',']),
-# Figura e/ Vives y Esperanza, La Habana Vieja, La Habana
-ClassifiedAddressOne(principal_street=['Figura'],
-                                          first_side_street=['Vives'],
-                                          second_side_street=['Esperanza'],
+# figura e/ vives y esperanza, la habana vieja, la habana
+ClassifiedAddressOne(principal_street=['figura'],
+                                          first_side_street=['vives'],
+                                          second_side_street=['esperanza'],
                                           locality=[],
-                                          municipality=['La', 'Habana', 'Vieja'],
+                                          municipality=['la', 'habana', 'vieja'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', ',', ',']),
-# B e/ 1 y 2, Mercedita, San Miguel del Padron, La Habana
-ClassifiedAddressOne(principal_street=['B'],
+# b e/ 1 y 2, mercedita, san miguel del padron, la habana
+ClassifiedAddressOne(principal_street=['b'],
                                           first_side_street=['1'],
                                           second_side_street=['2'],
-                                          locality=['Mercedita'],
-                                          municipality=['San', 'Miguel', 'del', 'Padron'],
+                                          locality=['mercedita'],
+                                          municipality=['san', 'miguel', 'del', 'padron'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', ',', ',', ',']),
-# 161 e/ 310 y 314, Valle Brande, La Lisa, La Habana
+# 161 e/ 310 y 314, valle brande, la lisa, la habana
 ClassifiedAddressOne(principal_street=['161'],
                                           first_side_street=['310'],
                                           second_side_street=['314'],
-                                          locality=['Valle', 'Brande'],
-                                          municipality=['La', 'Lisa'],
+                                          locality=['valle', 'brande'],
+                                          municipality=['la', 'lisa'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', ',', ',', ',']),
-# Santa Ana e/ Luco y Villanueva, Diez de Octubre, La Habana
-ClassifiedAddressOne(principal_street=['Santa', 'Ana'],
-                                          first_side_street=['Luco'],
-                                          second_side_street=['Villanueva'],
+# santa ana e/ luco y villanueva, diez de octubre, la habana
+ClassifiedAddressOne(principal_street=['santa', 'ana'],
+                                          first_side_street=['luco'],
+                                          second_side_street=['villanueva'],
                                           locality=[],
-                                          municipality=['Diez', 'de', 'Octubre'],
+                                          municipality=['diez', 'de', 'octubre'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', ',', ',']),
-# 44 e/ 19 Y  21, Playa, La Habana
+# 44 e/ 19 y  21, playa, la habana
 ClassifiedAddressOne(principal_street=['44'],
                                           first_side_street=['19'],
                                           second_side_street=['21'],
@@ -664,344 +663,344 @@ ClassifiedAddressOne(principal_street=['44'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', ',', ',']),
-#  Joaquin Delgado e Santa Clara y Esperanza, reparto Parraga, Arroyo Naranjo, La Habana
-ClassifiedAddressOne(principal_street=['Joaquin', 'Delgado'],
-                                          first_side_street=['Santa', 'Clara'],
-                                          second_side_street=['Esperanza'],
-                                          locality=['Parraga'],
-                                          municipality=['Arroyo', 'Naranjo'],
+#  joaquin delgado e santa clara y esperanza, reparto parraga, arroyo naranjo, la habana
+ClassifiedAddressOne(principal_street=['joaquin', 'delgado'],
+                                          first_side_street=['santa', 'clara'],
+                                          second_side_street=['esperanza'],
+                                          locality=['parraga'],
+                                          municipality=['arroyo', 'naranjo'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e', 'y', ',', 'reparto', ',', ',']),
-# CALLE C  # 9512 A  /  6 y 10 Reparto Altahabana ,BOYEROS,La Habana
+# calle c  # 9512 a  /  6 y 10 reparto altahabana ,boyeros,la habana
 ClassifiedAddressOne(principal_street=['c'],
                                           first_side_street=['6'],
                                           second_side_street=['10'],
-                                          locality=['Altahabana'],
-                                          municipality=['BOYEROS'],
+                                          locality=['altahabana'],
+                                          municipality=['boyeros'],
                                           province=['la', 'habana'],
                                           building=['9512'],
-                                          apartment=['A'],
-                                      reserve_word=['CALLE', '#', '/', 'y', 'Reparto', ',', ',']),
-# Calle 160 No 4509E / Ave 45 y Ave 47,LA LISA,La Habana
+                                          apartment=['a'],
+                                      reserve_word=['calle', '#', '/', 'y', 'reparto', ',', ',']),
+# calle 160 no 4509e / ave 45 y ave 47,la lisa,la habana
 ClassifiedAddressOne(principal_street=['160'],
                                           first_side_street=['45'],
                                           second_side_street=[47],
                                           locality=[],
-                                          municipality=['LA', 'LISA'],
+                                          municipality=['la', 'lisa'],
                                           province=['la', 'habana'],
-                                          building=['4509E'],
+                                          building=['4509e'],
                                           apartment=[],
-                                      reserve_word=['Calle', 'No', '/', 'Ave', 'y', 'Ave', ',', ',']),
-# Calle Maceo  # 61Alto entre Bertenati y Nazareno,PLAZA DE LA REVOLUCION,La Habana
-ClassifiedAddressOne(principal_street=['Maceo'],
-                                          first_side_street=['Bertenati'],
-                                          second_side_street=['Nazareno'],
+                                      reserve_word=['calle', 'no', '/', 'ave', 'y', 'ave', ',', ',']),
+# calle maceo  # 61 alto entre bertenati y nazareno,plaza de la revolucion,la habana
+ClassifiedAddressOne(principal_street=['maceo'],
+                                          first_side_street=['bertenati'],
+                                          second_side_street=['nazareno'],
                                           locality=[],
-                                          municipality=['PLAZA', 'DE', 'LA', 'REVOLUCION'],
+                                          municipality=['plaza', 'de', 'la', 'revolucion'],
                                           province=['la', 'habana'],
-                                          building=['61Alto'],
+                                          building=['61'],
                                           apartment=[],
-                                      reserve_word=['Calle', '#', 'entre', 'y', ',', ',']),
-# Destramoes  # 58 entre Luis esteves y Lacret, Santo Suarez,DIEZ DE OCTUBRE,La Habana
-ClassifiedAddressOne(principal_street=['Destramoes'],
-                                          first_side_street=['Luis', 'esteves'],
-                                          second_side_street=['Lacret'],
-                                          locality=['Santo', 'Suarez'],
-                                          municipality=['DIEZ', 'DE', 'OCTUBRE'],
+                                      reserve_word=['calle', '#', 'entre', 'y', ',', ',', 'alto']),
+# destramoes  # 58 entre luis esteves y lacret, santo suarez,diez de octubre,la habana
+ClassifiedAddressOne(principal_street=['destramoes'],
+                                          first_side_street=['luis', 'esteves'],
+                                          second_side_street=['lacret'],
+                                          locality=['santo', 'suarez'],
+                                          municipality=['diez', 'de', 'octubre'],
                                           province=['la', 'habana'],
                                           building=['58'],
                                           apartment=[],
                                       reserve_word=['#', 'entre', 'y', ',', ',', ',']),
-# Calle Máximo Gómez  # 264 Altos  E / 27 DE Noviembre y Pereira,REGLA,La Habana
-ClassifiedAddressOne(principal_street=['Máximo', 'Gómez'],
-                                          first_side_street=['27', 'DE', 'Noviembre'],
-                                          second_side_street=['Pereira'],
+# calle maximo gomez  # 264 altos  e / 27 de noviembre y pereira,regla,la habana
+ClassifiedAddressOne(principal_street=['maximo', 'gomez'],
+                                          first_side_street=['27', 'de', 'noviembre'],
+                                          second_side_street=['pereira'],
                                           locality=[],
-                                          municipality=['REGLA'],
+                                          municipality=['regla'],
                                           province=['la', 'habana'],
                                           building=['264'],
                                           apartment=[],
-                                      reserve_word=['Calle', '#', 'Altos', 'E', '/', 'y', ',', ',']),
-# Calle San Mariano  # 761 entre San Juan Bosco y Graciela apto 8, Vibora,DIEZ DE OCTUBRE,La Habana
-ClassifiedAddressOne(principal_street=['San', 'Mariano'],
-                                          first_side_street=['San', 'Juan', 'Bosco'],
-                                          second_side_street=['Graciela'],
-                                          locality=['Vibora'],
-                                          municipality=['DIEZ', 'DE', 'OCTUBRE'],
+                                      reserve_word=['calle', '#', 'altos', 'e', '/', 'y', ',', ',']),
+# calle san mariano  # 761 entre san juan bosco y graciela apto 8, vibora,diez de octubre,la habana
+ClassifiedAddressOne(principal_street=['san', 'mariano'],
+                                          first_side_street=['san', 'juan', 'bosco'],
+                                          second_side_street=['graciela'],
+                                          locality=['vibora'],
+                                          municipality=['diez', 'de', 'octubre'],
                                           province=['la', 'habana'],
                                           building=['761'],
                                           apartment=['8'],
-                                      reserve_word=['Calle', '#', 'entre', 'y', 'apto', ',', ',', ',']),
-# Calle 111 E / cALLE 24 y Calle 24 A Edificio 6 apt 4 Reparto Sierra Maestra,BOYEROS,La Habana
+                                      reserve_word=['calle', '#', 'entre', 'y', 'apto', ',', ',', ',']),
+# calle 111 e / calle 24 y calle 24 a edificio 6 apt 4 reparto sierra maestra,boyeros,la habana
 ClassifiedAddressOne(principal_street=['111'],
                                           first_side_street=['24'],
-                                          second_side_street=['24', 'A'],
-                                          locality=['Sierra', 'Maestra'],
-                                          municipality=['BOYEROS'],
+                                          second_side_street=['24', 'a'],
+                                          locality=['sierra', 'maestra'],
+                                          municipality=['boyeros'],
                                           province=['la', 'habana'],
                                           building=['6'],
                                           apartment=['4'],
-                                      reserve_word=['Calle', 'E', '/', 'cALLE', 'y', 'Calle', 'Edificio', 'apt', 'Reparto', ',', ',']),
-# Calle Barbería e /  Calle Universidad y Calle Estevez edf 32 apto 4,CERRO,La Habana
-ClassifiedAddressOne(principal_street=['Barbería'],
-                                          first_side_street=['Universidad'],
-                                          second_side_street=['Estevez'],
+                                      reserve_word=['calle', 'e', '/', 'calle', 'y', 'calle', 'edificio', 'apt', 'reparto', ',', ',']),
+# calle barberia e /  calle universidad y calle estevez edf 32 apto 4,cerro,la habana
+ClassifiedAddressOne(principal_street=['barberia'],
+                                          first_side_street=['universidad'],
+                                          second_side_street=['estevez'],
                                           locality=[],
-                                          municipality=['CERRO'],
+                                          municipality=['cerro'],
                                           province=['la', 'habana'],
                                           building=['32'],
                                           apartment=['4'],
-                                      reserve_word=['Calle', 'e', '/',  'Calle', 'y', 'Calle', 'edf', 'apto', ',', ',']),
-# CALLE 18  #  505 BAJO ENTRE CONCEPCION Y SAN FRANCISCO LAWTON,DIEZ DE OCTUBRE,La Habana
+                                      reserve_word=['calle', 'e', '/',  'calle', 'y', 'calle', 'edf', 'apto', ',', ',']),
+# calle 18  #  505 bajo entre concepcion y san francisco lawton,diez de octubre,la habana
 ClassifiedAddressOne(principal_street=['18'],
-                                          first_side_street=['CONCEPCION'],
-                                          second_side_street=['SAN', 'FRANCISCO'],
+                                          first_side_street=['concepcion'],
+                                          second_side_street=['san', 'francisco'],
                                           locality=[],
-                                          municipality=['DIEZ', 'DE', 'OCTUBRE'],
+                                          municipality=['diez', 'de', 'octubre'],
                                           province=['la', 'habana'],
                                           building=['505'],
                                           apartment=[],
-                                      reserve_word=['CALLE', '#', 'BAJO', 'ENTRE', 'Y', ',', ',']),
-# 180  #  42109 ENTRE 421 Y 423, LA AURORA,BOYEROS,La Habana
+                                      reserve_word=['calle', '#', 'bajo', 'entre', 'y', ',', ',']),
+# 180  #  42109 entre 421 y 423, la aurora,boyeros,la habana
 ClassifiedAddressOne(principal_street=['180'],
                                           first_side_street=['421'],
                                           second_side_street=['423'],
-                                          locality=['LA', 'AURORA'],
-                                          municipality=['BOYEROS'],
+                                          locality=['la', 'aurora'],
+                                          municipality=['boyeros'],
                                           province=['la', 'habana'],
                                           building=['42109'],
                                           apartment=[],
-                                      reserve_word=['#', 'ENTRE', 'Y', ',', ',', ',']),
-# Calle Gertrudis Oeste  # 459 E /  Anita y Goicuria Repto Sevillano,DIEZ DE OCTUBRE,La Habana
-ClassifiedAddressOne(principal_street=['Gertrudis', 'Oeste'],
-                                          first_side_street=['Anita'],
-                                          second_side_street=['Goicuria'],
-                                          locality=['Sevillano'],
-                                          municipality=['DIEZ', 'DE', 'OCTUBRE'],
+                                      reserve_word=['#', 'entre', 'y', ',', ',', ',']),
+# calle gertrudis oeste  # 459 e /  anita y goicuria repto sevillano,diez de octubre,la habana
+ClassifiedAddressOne(principal_street=['gertrudis', 'oeste'],
+                                          first_side_street=['anita'],
+                                          second_side_street=['goicuria'],
+                                          locality=['sevillano'],
+                                          municipality=['diez', 'de', 'octubre'],
                                           province=['la', 'habana'],
                                           building=['459'],
                                           apartment=[],
-                                      reserve_word=['Calle', '#', 'E', '/', 'Repto', ',', ',']),
-# Avenida Santa Catalina e / Mayia Rodriguez  y La Sola,Edificio616,Apto 3,Reparto Santos Suarez,DIEZ DE OCTUBRE,La Habana
-ClassifiedAddressOne(principal_street=['Santa', 'Catalina'],
-                                          first_side_street=['Mayia', 'Rodriguez'],
-                                          second_side_street=['La', 'Sola'],
-                                          locality=['Santos', 'Suarez'],
-                                          municipality=['DIEZ', 'DE', 'OCTUBRE'],
+                                      reserve_word=['calle', '#', 'e', '/', 'repto', ',', ',']),
+# avenida santa catalina e / mayia rodriguez  y la sola,edificio 616,apto 3,reparto santos suarez,diez de octubre,la habana
+ClassifiedAddressOne(principal_street=['santa', 'catalina'],
+                                          first_side_street=['mayia', 'rodriguez'],
+                                          second_side_street=['la', 'sola'],
+                                          locality=['santos', 'suarez'],
+                                          municipality=['diez', 'de', 'octubre'],
                                           province=['la', 'habana'],
-                                          building=[],
+                                          building=['616'],
                                           apartment=['3'],
-                                      reserve_word=['Avenida', 'e', '/', 'y', 'Edificio616', 'Apto', ',', 'Reparto', ',', ',', ',']),
-# Calle Pinar  # 8003 E / Santa Teresa y Collazo,Reparto Ponce,ARROYO NARANJO,La Habana
-ClassifiedAddressOne(principal_street=['Pinar'],
-                                          first_side_street=['Santa', 'Teresa'],
-                                          second_side_street=['Collazo'],
-                                          locality=['Ponce'],
-                                          municipality=['ARROYO', 'NARANJO'],
+                                      reserve_word=['avenida', 'e', '/', 'y', 'edificio', 'apto', ',', 'reparto', ',', ',', ',']),
+# calle pinar  # 8003 e / santa teresa y collazo,reparto ponce,arroyo naranjo,la habana
+ClassifiedAddressOne(principal_street=['pinar'],
+                                          first_side_street=['santa', 'teresa'],
+                                          second_side_street=['collazo'],
+                                          locality=['ponce'],
+                                          municipality=['arroyo', 'naranjo'],
                                           province=['la', 'habana'],
                                           building=['8003'],
                                           apartment=[],
-                                      reserve_word=['Calle', '#', 'e', '/', 'y', ',', 'Reparto', ',', ',']),
-# Avenida Ciudamar  # 17521 e /  Calle 13 y Calle 15, Reparto Ciudamar,SAN MIGUEL DEL PADRON,La Habana
-ClassifiedAddressOne(principal_street=['Ciudamar'],
+                                      reserve_word=['calle', '#', 'e', '/', 'y', ',', 'reparto', ',', ',']),
+# avenida ciudamar  # 17521 e /  calle 13 y calle 15, reparto ciudamar,san miguel del padron,la habana
+ClassifiedAddressOne(principal_street=['ciudamar'],
                                           first_side_street=['13'],
                                           second_side_street=['15'],
-                                          locality=['Ciudamar'],
-                                          municipality=['SAN', 'MIGUEL', 'DEL', 'PADRON'],
+                                          locality=['ciudamar'],
+                                          municipality=['san', 'miguel', 'del', 'padron'],
                                           province=['la', 'habana'],
                                           building=['17521'],
                                           apartment=[],
-                                      reserve_word=['Avenida', '#', 'e', '/', 'Calle', 'y', 'Calle', ',', 'Reparto', ',', ',']),
-# Calzada de 10 de Octubre  # 1155 apto1 e /  Santa Catalina y San Mariano,DIEZ DE OCTUBRE,La Habana
-ClassifiedAddressOne(principal_street=['Calzada de 10 de Octubre'],
-                                          first_side_street=['Santa', 'Catalina'],
-                                          second_side_street=['San', 'Mariano'],
+                                      reserve_word=['avenida', '#', 'e', '/', 'calle', 'y', 'calle', ',', 'reparto', ',', ',']),
+# calzada de 10 de octubre  # 1155 apto 1 e /  santa catalina y san mariano,diez de octubre,la habana
+ClassifiedAddressOne(principal_street=['calzada de 10 de octubre'],
+                                          first_side_street=['santa', 'catalina'],
+                                          second_side_street=['san', 'mariano'],
                                           locality=[],
-                                          municipality=['DIEZ', 'DE', 'OCTUBRE'],
+                                          municipality=['diez', 'de', 'octubre'],
                                           province=['la', 'habana'],
                                           building=['1155'],
-                                          apartment=[],
-                                      reserve_word=['#', 'apto1', 'e', '/', 'y', ',', ',']),
-# Calle 5ta B  #  9606 2 int,entre calle 96 y 98, Barrio Querejeta,PLAYA,La Habana
-ClassifiedAddressOne(principal_street=['5ta', 'B'],
+                                          apartment=['1'],
+                                      reserve_word=['#', 'apto', 'e', '/', 'y', ',', ',']),
+# calle 5ta b  #  9606 2 int,entre calle 96 y 98, barrio querejeta,playa,la habana
+ClassifiedAddressOne(principal_street=['5ta', 'b'],
                                           first_side_street=['96'],
                                           second_side_street=['98'],
-                                          locality=['Querejeta'],
-                                          municipality=['PLAYA'],
+                                          locality=['querejeta'],
+                                          municipality=['playa'],
                                           province=['la', 'habana'],
                                           building=['9606'],
                                           apartment=['2'],
-                                      reserve_word=['Calle', '#', 'int', ',', 'entre', 'calle', 'y', ',', ',' ,',', 'Barrio']),
-# Calle 1 No  17416 E / Calle A y Calle San Luis,Reparto Encanto,SAN MIGUEL DEL PADRON,La Habana
+                                      reserve_word=['calle', '#', 'int', ',', 'entre', 'calle', 'y', ',', ',' ,',', 'barrio']),
+# calle 1 no  17416 e / calle a y calle san luis,reparto encanto,san miguel del padron,la habana
 ClassifiedAddressOne(principal_street=['1'],
-                                          first_side_street=['A'],
-                                          second_side_street=['San', 'Luis'],
-                                          locality=['Encanto'],
-                                          municipality=['SAN', 'MIGUEL', 'DEL', 'PADRON'],
+                                          first_side_street=['a'],
+                                          second_side_street=['san', 'luis'],
+                                          locality=['encanto'],
+                                          municipality=['san', 'miguel', 'del', 'padron'],
                                           province=['la', 'habana'],
                                           building=['17416'],
                                           apartment=[],
-                                      reserve_word=['Calle', 'No', 'e', '/', 'Calle', 'y', 'Calle', ',', 'Reparto', ',', ',']),
-# Calle 9na  # 14 ,Apto 3 E / Calle E y Calle D,Barrio Lawton,DIEZ DE OCTUBRE,La Habana
+                                      reserve_word=['calle', 'no', 'e', '/', 'calle', 'y', 'calle', ',', 'reparto', ',', ',']),
+# calle 9na  # 14 ,apto 3 e / calle e y calle d,barrio lawton,diez de octubre,la habana
 ClassifiedAddressOne(principal_street=['9na'],
-                                          first_side_street=['E'],
-                                          second_side_street=['D'],
-                                          locality=['Lawton'],
-                                          municipality=['DIEZ', 'DE', 'OCTUBRE'],
+                                          first_side_street=['e'],
+                                          second_side_street=['d'],
+                                          locality=['lawton'],
+                                          municipality=['diez', 'de', 'octubre'],
                                           province=['la', 'habana'],
                                           building=['14'],
                                           apartment=['3'],
-                                      reserve_word=['Calle', '#', ',', 'Apto', 'E', '/', 'Calle', 'y', 'Calle', ',', 'Barrio', ',', ',']),
-# Calle Tenerifr # 156 apto  6 E /  Rastro y Carmen  ,CENTRO HABANA,La Habana
-ClassifiedAddressOne(principal_street=['Tenerifr'],
-                                          first_side_street=['Rastro'],
-                                          second_side_street=['Carmen'],
+                                      reserve_word=['calle', '#', ',', 'apto', 'e', '/', 'calle', 'y', 'calle', ',', 'barrio', ',', ',']),
+# calle tenerifr # 156 apto  6 e /  rastro y carmen  ,centro habana,la habana
+ClassifiedAddressOne(principal_street=['tenerifr'],
+                                          first_side_street=['rastro'],
+                                          second_side_street=['carmen'],
                                           locality=[],
-                                          municipality=['CENTRO', 'HABANA'],
+                                          municipality=['centro', 'habana'],
                                           province=['la', 'habana'],
                                           building=['156'],
                                           apartment=['6'],
-                                      reserve_word=['Calle', '#', 'apto', 'E', '/', 'y', ',', ',']),
-# Ave Entrada E / Ave de los Ocujes y Ave  de la Ceiba Edificio 2 APTO 5 Reparto Santa Catalina,CERRO,La Habana
-ClassifiedAddressOne(principal_street=['Entrada'],
-                                          first_side_street=['Ave de los Ocujes'],
-                                          second_side_street=['Ave', 'de', 'la', 'Ceiba'],
-                                          locality=['Santa', 'Catalina'],
-                                          municipality=['CERRO'],
+                                      reserve_word=['calle', '#', 'apto', 'e', '/', 'y', ',', ',']),
+# ave entrada e / ave de los ocujes y ave  de la ceiba edificio 2 apto 5 reparto santa catalina,cerro,la habana
+ClassifiedAddressOne(principal_street=['entrada'],
+                                          first_side_street=['ave de los ocujes'],
+                                          second_side_street=['ave', 'de', 'la', 'ceiba'],
+                                          locality=['santa', 'catalina'],
+                                          municipality=['cerro'],
                                           province=['la', 'habana'],
                                           building=['2'],
                                           apartment=['5'],
-                                      reserve_word=['Ave', 'E', '/', 'y', 'Edificio', 'APTO', 'Reparto', ',', ',']),
-# Sta Catalina e / Vento y San Juán Bosco ed 817 Y 819 apto 4,DIEZ DE OCTUBRE,La Habana
-# ClassifiedAddressOne(principal_street=['Sta', 'Catalina'],
-#                                           first_side_street=['Vento'],
-#                                           second_side_street=[San Juán Bosco],
-#                                           locality=[],
-#                                           municipality=[''],
-#                                           province=['la', 'habana'],
-#                                           building=[],
-#                                           apartment=[],
-#                                       reserve_word=['e', '/', 'y', 'ed', ]),
-# Aliados e/ Pasaje D y Central, San Miguel del Padron, La Habana
-ClassifiedAddressOne(principal_street=['Aliados'],
-                                          first_side_street=['D'],
-                                          second_side_street=['Central'],
+                                      reserve_word=['ave', 'e', '/', 'y', 'edificio', 'apto', 'reparto', ',', ',']),
+# sta catalina e / vento y san juan bosco ed 817 apto 4,diez de octubre,la habana
+ClassifiedAddressOne(principal_street=['sta', 'catalina'],
+                                          first_side_street=['vento'],
+                                          second_side_street=['san', 'juan', 'bosco'],
                                           locality=[],
-                                          municipality=['San', 'Miguel', 'del', 'Padron'],
+                                          municipality=['diez', 'de', 'octubre'],
+                                          province=['la', 'habana'],
+                                          building=['817'],
+                                          apartment=['4'],
+                                      reserve_word=['e', '/', 'y', 'ed', 'apto', ',', ',']),
+# aliados e/ pasaje d y central, san miguel del padron, la habana
+ClassifiedAddressOne(principal_street=['aliados'],
+                                          first_side_street=['d'],
+                                          second_side_street=['central'],
+                                          locality=[],
+                                          municipality=['san', 'miguel', 'del', 'padron'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
-                                      reserve_word=['e/', 'Pasaje', 'y', ',', ',']),
-# Estancia e/ San Pedro y Lombill, Nuevo Vedado, Plaza de la Revolucion, La Habana
-ClassifiedAddressOne(principal_street=['Estancia'],
-                                          first_side_street=['San Pedro'],
-                                          second_side_street=['Lombill'],
-                                          locality=['Nuevo', 'Vedado'],
-                                          municipality=['Plaza', 'de', 'la', 'Revolucion'],
+                                      reserve_word=['e/', 'pasaje', 'y', ',', ',']),
+# estancia e/ san pedro y lombill, nuevo vedado, plaza de la revolucion, la habana
+ClassifiedAddressOne(principal_street=['estancia'],
+                                          first_side_street=['san pedro'],
+                                          second_side_street=['lombill'],
+                                          locality=['nuevo', 'vedado'],
+                                          municipality=['plaza', 'de', 'la', 'revolucion'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', ',', ',', ',']),
-# Estrella e/ Aguila y Angeles, Centro Habana, La Habana
-ClassifiedAddressOne(principal_street=['Estrella'],
-                                          first_side_street=['Aguila'],
-                                          second_side_street=['Angeles'],
+# estrella e/ aguila y angeles, centro habana, la habana
+ClassifiedAddressOne(principal_street=['estrella'],
+                                          first_side_street=['aguila'],
+                                          second_side_street=['angeles'],
                                           locality=[],
-                                          municipality=['Centro', 'Habana'],
+                                          municipality=['centro', 'habana'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', ',', ',']),
-# Virginia e/ Pinar del Rio y Woodbury, reparto Callejas, Arroyo Naranjo, La Habana
-ClassifiedAddressOne(principal_street=['Virginia'],
-                                          first_side_street=['Pinar', 'del', 'Rio'],
-                                          second_side_street=['Woodbury'],
-                                          locality=['Callejas'],
-                                          municipality=['Arroyo', 'Naranjo'],
+# virginia e/ pinar del rio y woodbury, reparto callejas, arroyo naranjo, la habana
+ClassifiedAddressOne(principal_street=['virginia'],
+                                          first_side_street=['pinar', 'del', 'rio'],
+                                          second_side_street=['woodbury'],
+                                          locality=['callejas'],
+                                          municipality=['arroyo', 'naranjo'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', 'reparto', ',', ',', ',']),
-# Recurso e/ Masarredo y Lindero, Nuevo Vedado, Plaza de la Revolucion, La Habana
-ClassifiedAddressOne(principal_street=['Recurso'],
-                                          first_side_street=['Masarredo'],
-                                          second_side_street=['Lindero'],
-                                          locality=['Nuevo', 'Vedado'],
-                                          municipality=['Plaza', 'de', 'la', 'Revolucion'],
+# recurso e/ masarredo y lindero, nuevo vedado, plaza de la revolucion, la habana
+ClassifiedAddressOne(principal_street=['recurso'],
+                                          first_side_street=['masarredo'],
+                                          second_side_street=['lindero'],
+                                          locality=['nuevo', 'vedado'],
+                                          municipality=['plaza', 'de', 'la', 'revolucion'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', ',', ',', ',']),
-# San Quintin e/ Salvador y Cerezo, Cerro, La Habana
-ClassifiedAddressOne(principal_street=['San', 'Quintin'],
-                                          first_side_street=['Salvador'],
-                                          second_side_street=['Cerezo'],
+# san quintin e/ salvador y cerezo, cerro, la habana
+ClassifiedAddressOne(principal_street=['san', 'quintin'],
+                                          first_side_street=['salvador'],
+                                          second_side_street=['cerezo'],
                                           locality=[],
-                                          municipality=['Cerro'],
+                                          municipality=['cerro'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
                                       reserve_word=['e/', 'y', ',', ',']),
-# Calle 6ta entre 16 y 17 Edificio 37 Apto 29 Reparto Guiteras  LA HABANA DEL ESTE La Habana
+# calle 6ta entre 16 y 17 edificio 37 apto 29 reparto guiteras  la habana del este la habana
 ClassifiedAddressOne(principal_street=['6ta'],
                                           first_side_street=['16'],
                                           second_side_street=['17'],
-                                          locality=['Guiteras'],
-                                          municipality=['LA', 'HABANA', 'DEL', 'ESTE'],
+                                          locality=['guiteras'],
+                                          municipality=['la', 'habana', 'del', 'este'],
                                           province=['la', 'habana'],
                                           building=['37'],
                                           apartment=['29'],
-                                      reserve_word=['Calle', 'entre', 'y', 'Edificio', 'Apto', 'Reparto']),
-# Calle 308   1904A entre 19 y 21 Reparto Santa Fe  PLAYA La Habana
+                                      reserve_word=['calle', 'entre', 'y', 'edificio', 'apto', 'reparto']),
+# calle 308   1904a entre 19 y 21 reparto santa fe  playa la habana
 ClassifiedAddressOne(principal_street=['308'],
                                           first_side_street=['19'],
                                           second_side_street=['21'],
-                                          locality=['Santa', 'Fe'],
-                                          municipality=['PLAYA'],
+                                          locality=['santa', 'fe'],
+                                          municipality=['playa'],
                                           province=['la', 'habana'],
-                                          building=['1904A'],
+                                          building=['1904a'],
                                           apartment=[],
-                                      reserve_word=['Calle', 'entre', 'y', 'Reparto']),
-# Calle Santa Rosa     8 e entre San Antonio y Rizo  PLaza PLAZA DE LA REVOLUCION La Habana
-ClassifiedAddressOne(principal_street=['Santa', 'Rosa'],
-                                          first_side_street=['San', 'Antonio'],
-                                          second_side_street=['Rizo'],
-                                          locality=['PLaza'],
-                                          municipality=['PLAZA', 'DE', 'LA', 'REVOLUCION'],
+                                      reserve_word=['calle', 'entre', 'y', 'reparto']),
+# calle santa rosa     8 e entre san antonio y rizo  plaza plaza de la revolucion la habana
+ClassifiedAddressOne(principal_street=['santa', 'rosa'],
+                                          first_side_street=['san', 'antonio'],
+                                          second_side_street=['rizo'],
+                                          locality=['plaza'],
+                                          municipality=['plaza', 'de', 'la', 'revolucion'],
                                           province=['la', 'habana'],
                                           building=['8'],
                                           apartment=['e'],
-                                      reserve_word=['Calle', 'entre', 'y']),
-# Calle 17    853 e entre  4 y 6 PLAZA DE LA REVOLUCION La Habana
+                                      reserve_word=['calle', 'entre', 'y']),
+# calle 17    853 e entre  4 y 6 plaza de la revolucion la habana
 ClassifiedAddressOne(principal_street=['17'],
                                           first_side_street=['4'],
                                           second_side_street=['6'],
                                           locality=[],
-                                          municipality=['PLAZA', 'DE', 'LA', 'REVOLUCION'],
+                                          municipality=['plaza', 'de', 'la', 'revolucion'],
                                           province=['la', 'habana'],
                                           building=['853'],
                                           apartment=['e'],
-                                      reserve_word=['Calle', 'entre', 'y']),
-# 67A No 11404 e 114 y 116 MARIANAO La Habana
-ClassifiedAddressOne(principal_street=['67A'],
+                                      reserve_word=['calle', 'entre', 'y']),
+# 67a no 11404 e 114 y 116 marianao la habana
+ClassifiedAddressOne(principal_street=['67a'],
                                           first_side_street=['114'],
                                           second_side_street=['116'],
                                           locality=[],
-                                          municipality=['MARIANAO'],
+                                          municipality=['marianao'],
                                           province=['la', 'habana'],
                                           building=['11404'],
                                           apartment=[],
-                                      reserve_word=['No', 'e', 'y']),
-# Calle 203 entre 290 y Prensa Latina, Poblado Pueblo del Chico, BOYEROS, La Habana
-ClassifiedAddressOne(principal_street=[''],
+                                      reserve_word=['no', 'e', 'y']),
+# calle 203 entre 290 y prensa latina, poblado pueblo del chico, boyeros, la habana
+ClassifiedAddressOne(principal_street=['203'],
                                           first_side_street=['290'],
-                                          second_side_street=['Prensa', 'Latina'],
-                                          locality=['Pueblo', 'del', 'Chico'],
-                                          municipality=['BOYEROS'],
+                                          second_side_street=['prensa', 'latina'],
+                                          locality=['pueblo', 'del', 'chico'],
+                                          municipality=['boyeros'],
                                           province=['la', 'habana'],
                                           building=[],
                                           apartment=[],
-                                      reserve_word=['Calle', 'entre', 'y', ',', 'Poblado', ',', ',']),
+                                      reserve_word=['calle', 'entre', 'y', ',', 'poblado', ',', ',']),
 ]
