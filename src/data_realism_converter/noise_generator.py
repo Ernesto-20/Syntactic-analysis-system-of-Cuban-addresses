@@ -376,11 +376,11 @@ class NoiseGenerator(Generator):
             :return 19 real address
         '''
         return [
-            [[['calle', 'rw'], ['30', 'principal_street'], ['959', 'building'], ['e', 'rw'], ['entre', 'rw'],
+            [[['calle', 'rw'], ['30', 'principal_street'], ['959', 'building'], ['e', 'apartment'], ['entre', 'rw'],
               ['avenida', 'rw'], ['26', 'first_side_street'], ['y', 'rw'], ['47', 'second_side_street'],
               ['Plaza', 'municipality'], ['de', 'municipality'], ['la', 'municipality'], ['Revolucion', 'municipality'],
               ['La', 'province'], ['Habana', 'province']]],
-            [[['ave', 'rw'], ['67', 'principal_street'], ['no', 'rw'], ['13613', 'building'], ['e', 'rw'],
+            [[['ave', 'rw'], ['67', 'principal_street'], ['no', 'rw'], ['13613', 'building'], ['e', 'apartment'],
               ['136', 'first_side_street'], ['y', 'rw'], ['138', 'second_side_street'], ['Marianao', 'municipality'],
               ['Marianao', 'municipality'], ['La', 'province'], ['HAbana', 'province'], ]],
             [[['calle', 'rw'], ['Gomez', 'principal_street'], ['2', 'building'], ['E', 'building'], ['entre', 'rw'],
@@ -423,7 +423,7 @@ class NoiseGenerator(Generator):
               ['DEL', 'municipality'], ['PADRON', 'municipality'], [',', 'rw'], ['LA', 'province'],
               ['HABANA', 'province'], ]],
             [[['calle', 'rw'], ['A', 'principal_street'], ['no', 'rw'], ['48', 'building'], ['y', 'rw'], ['apto', 'rw'],
-              ['1', 'apartment'], ['e', 'rw'], ['entre', 'rw'], ['calle', 'rw'], ['pinar', 'first_side_street'],
+              ['1', 'apartment'], ['e', 'apartment'], ['entre', 'rw'], ['calle', 'rw'], ['pinar', 'first_side_street'],
               ['del', 'first_side_street'], ['rio', 'first_side_street'], ['y', 'rw'], ['calle', 'rw'],
               ['woodberry', 'second_side_street'], ['reparto', 'rw'], ['callejas', 'locality'],
               ['ARROYO', 'municipality'], ['NARANJO', 'municipality'], ['LA', 'province'], ['HABANA', 'province']]],

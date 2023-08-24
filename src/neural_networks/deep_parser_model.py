@@ -9,10 +9,6 @@ from tensorflow.python.ops.ragged.ragged_string_ops import string_bytes_split
 from src.neural_networks.neural_parser import NeuralParser
 from src.tools.address_data_set import DataSet
 
-# import psutil
-# import time
-# import csv
-
 class DeepParserModel(NeuralParser):
 
     def __init__(self, data_set: DataSet, cleaner_method, model=None):
@@ -42,15 +38,15 @@ class DeepParserModel(NeuralParser):
             vocab_size_word = len(tv_by_word.get_layer('text_vectorization_2').get_vocabulary())
             layer_tv_by_word = tv_by_word(inputs)
 
-            embedding_character = Embedding(vocab_size_character, 25, name='Embedding_Character')
+            embedding_character = Embedding(vocab_size_character, 100, name='Embedding_Character')
             layer_embedding_character = embedding_character(layer_tv_character)
-            blstm_character = Bidirectional(LSTM(units=25, return_sequences=True, dropout=0.6, recurrent_dropout=0.1),
+            blstm_character = Bidirectional(LSTM(units=25, return_sequences=True, dropout=0.4),
                                             merge_mode='concat')
             layer_blstm_character = blstm_character(layer_embedding_character)
 
-            embedding_trigram = Embedding(vocab_size_trigram, 25, name='Embedding_Trigram')
+            embedding_trigram = Embedding(vocab_size_trigram, 100, name='Embedding_Trigram')
             layer_embedding_trigram = embedding_trigram(layer_tv_by_trigram)
-            blstm_trigram = Bidirectional(LSTM(units=25, return_sequences=True, dropout=0.6, recurrent_dropout=0.1),
+            blstm_trigram = Bidirectional(LSTM(units=25, return_sequences=True, dropout=0.4),
                                           merge_mode='concat')
             layer_blstm_trigram = blstm_trigram(layer_embedding_trigram)
 
@@ -58,7 +54,7 @@ class DeepParserModel(NeuralParser):
             layer_embedding_word = embedding_word(layer_tv_by_word)
             concat = Concatenate()([layer_blstm_character, layer_blstm_trigram])
             blstm_concat = Bidirectional(
-                LSTM(units=output_dim, return_sequences=True, dropout=0.2, recurrent_dropout=0.1),
+                LSTM(units=output_dim, return_sequences=True, dropout=0.2),
                 merge_mode='concat')
             layer_blstm_concat = blstm_concat(concat)
 
@@ -126,7 +122,7 @@ class DeepParserModel(NeuralParser):
         print(self.data.get_id_to_category())
         result = self.model.predict(address_list)
 
-        return np.round(result, decimals=2)
+        return np.round(result, decimals=4)
 
     def evaluate(self):
         self.model.evaluate(
@@ -147,24 +143,3 @@ class DeepParserModel(NeuralParser):
             self.data = data
         else:
             raise NotImplementedError('The number of tags does not correspond to the trained network')
-
-    # def train_and_log(self, epochs, batch_size, log_file):
-    #     x = np.asarray(self.data.get_x_train_sentence_values())
-    #     x_val = np.asarray(self.data.get_x_val_sentence_values())
-    #
-    #     with open(log_file, 'w', newline='') as file:
-    #         writer = csv.writer(file)
-    #         writer.writerow(['Iteration', 'RAM (MB)', 'CPU (%)', 'Time (s)'])
-    #
-    #
-    #         for epoch in range(epochs):
-    #             start_time = time.time()
-    #             self.model.fit(x, self.data.get_y_train_values(), batch_size=batch_size,
-    #                    verbose=1, epochs=epochs, validation_data=(x_val, self.data.get_y_val_values()))
-    #             end_time = time.time()
-    #
-    #             ram_usage = psutil.virtual_memory().used / 1024 / 1024
-    #             cpu_usage = psutil.cpu_percent()
-    #             elapsed_time = end_time - start_time
-    #
-    #             writer.writerow([epoch + 1, ram_usage, cpu_usage, elapsed_time])

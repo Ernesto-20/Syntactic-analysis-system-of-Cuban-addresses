@@ -64,7 +64,7 @@ def calculate_results(y_predict: list, y_real: list):
     FN = no_matches
     FP = FN
     VN = matches*8+no_matches*7
-
+    print('Total number of errrors: ', FN)
     result = {'accuracy': (VP+VN)/(VP+FN+FP+VN),
               'precision': VP/(VP+FP),
               'recall': VP/(VP+FN), # Me parece que esto esta mal. No deberia de ser igual que precision
