@@ -40,13 +40,13 @@ class DeepParserModel(NeuralParser):
 
             embedding_character = Embedding(vocab_size_character, 100, name='Embedding_Character')
             layer_embedding_character = embedding_character(layer_tv_character)
-            blstm_character = Bidirectional(LSTM(units=100, return_sequences=True, dropout=0.4, recurrent_dropout=0),
+            blstm_character = Bidirectional(LSTM(units=60, return_sequences=True, dropout=0.5, recurrent_dropout=0),
                                             merge_mode='concat')
             layer_blstm_character = blstm_character(layer_embedding_character)
 
             embedding_trigram = Embedding(vocab_size_trigram, 100, name='Embedding_Trigram')
             layer_embedding_trigram = embedding_trigram(layer_tv_by_trigram)
-            blstm_trigram = Bidirectional(LSTM(units=100, return_sequences=True, dropout=0.4, recurrent_dropout=0),
+            blstm_trigram = Bidirectional(LSTM(units=60, return_sequences=True, dropout=0.5git, recurrent_dropout=0),
                                           merge_mode='concat')
             layer_blstm_trigram = blstm_trigram(layer_embedding_trigram)
 
@@ -54,7 +54,7 @@ class DeepParserModel(NeuralParser):
             layer_embedding_word = embedding_word(layer_tv_by_word)
             concat = Concatenate()([layer_blstm_character, layer_blstm_trigram])
             blstm_concat = Bidirectional(
-                LSTM(units=output_dim, return_sequences=True, dropout=0.2),
+                LSTM(units=output_dim, return_sequences=True, dropout=0.5),
                 merge_mode='concat')
             layer_blstm_concat = blstm_concat(concat)
 
@@ -66,7 +66,7 @@ class DeepParserModel(NeuralParser):
 
             concat_2 = Concatenate()([projection, layer_embedding_word])
             blstm_concat_2 = Bidirectional(
-                LSTM(units=data_set.get_n_tag(), return_sequences=True, dropout=0, recurrent_dropout=0),
+                LSTM(units=data_set.get_n_tag(), return_sequences=True, dropout=0.5, recurrent_dropout=0),
                 merge_mode='sum')
             layer_blstm_concat_2 = blstm_concat_2(concat_2)
 
