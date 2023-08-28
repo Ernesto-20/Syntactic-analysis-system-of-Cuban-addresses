@@ -40,13 +40,13 @@ class DeepParserModel(NeuralParser):
 
             embedding_character = Embedding(vocab_size_character, 100, name='Embedding_Character')
             layer_embedding_character = embedding_character(layer_tv_character)
-            blstm_character = Bidirectional(LSTM(units=25, return_sequences=True, dropout=0.4),
+            blstm_character = Bidirectional(LSTM(units=100, return_sequences=True, dropout=0.4, recurrent_dropout=0),
                                             merge_mode='concat')
             layer_blstm_character = blstm_character(layer_embedding_character)
 
             embedding_trigram = Embedding(vocab_size_trigram, 100, name='Embedding_Trigram')
             layer_embedding_trigram = embedding_trigram(layer_tv_by_trigram)
-            blstm_trigram = Bidirectional(LSTM(units=25, return_sequences=True, dropout=0.4),
+            blstm_trigram = Bidirectional(LSTM(units=100, return_sequences=True, dropout=0.4, recurrent_dropout=0),
                                           merge_mode='concat')
             layer_blstm_trigram = blstm_trigram(layer_embedding_trigram)
 
@@ -113,10 +113,23 @@ class DeepParserModel(NeuralParser):
         return vectorize_layer_model
 
     def train(self, batch_size=1200, epochs=50):
+        # tensorboard_callback = keras.callbacks.TensorBoard(
+        #     log_dir='tb_callback_dir', histogram_freq=0
+        # )
+
         x = np.asarray(self.data.get_x_train_sentence_values())
+        y = self.data.get_y_train_values()
         x_val = np.asarray(self.data.get_x_val_sentence_values())
-        self.model.fit(x, self.data.get_y_train_values(), batch_size=batch_size,
-                       verbose=1, epochs=epochs, validation_data=(x_val, self.data.get_y_val_values()))
+        y_val = self.data.get_y_val_values()
+        history = self.model.fit(x, y,
+                       batch_size=batch_size,
+                       verbose=1,
+                       epochs=epochs,
+                       validation_data=(x_val, y_val),
+                       # callbacks=[tensorboard_callback]
+                       )
+
+        return history
 
     def predict(self, address_list: list):
         print(self.data.get_id_to_category())
@@ -125,9 +138,11 @@ class DeepParserModel(NeuralParser):
         return np.round(result, decimals=4)
 
     def evaluate(self):
-        self.model.evaluate(
+        history = self.model.evaluate(
             np.asarray(self.data.get_x_test_sentence_values()),
             self.data.get_y_test_values())
+
+        return history
 
     def get_cleaner_method(self):
         return self.cleaner_method

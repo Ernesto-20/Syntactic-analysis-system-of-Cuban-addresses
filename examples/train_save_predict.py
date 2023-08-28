@@ -12,7 +12,7 @@ from src.tools.neural_parser_manage import NeuralParserManage
 
 def load_data_set_saved():
     """Load a saved data set """
-    return DataSetManage.load('../assets/default_data_set/model_type_one/DS_Habana_25000_PC_v1')
+    return DataSetManage.load('../assets/default_data_set/model_type_one/DS_Habana_5000_PC_v2')
 
 
 def create_new_data_set():
@@ -36,14 +36,34 @@ data_set = load_data_set_saved()
 
 # create model
 model = DeepParserModel(data_set, AddressCleaner.cleaner_method('custom_standardization'))
-
+print(model.get_model().get_config())
 # train
-model.train(batch_size=480, epochs=1)
+history = model.train(batch_size=560, epochs=1)
 print(data_set.get_id_to_category())
 print(data_set.get_n_tag())
 address_parser = AddressParser(model, Decoder(data_set.get_id_to_category(),
                                               AddressCleaner.cleaner_method('custom_standardization')))
 
 # save
-NeuralParserManage.save_neural_parser(model, route='../assets/trained_models/model_type_one', name='pc_trained_v2')
+# NeuralParserManage.save_neural_parser(model, route='../assets/trained_models/model_type_one', name='pc_trained_v2')
+import matplotlib.pyplot as plt
+
+print(history.history.keys())
+acc = history.history['categorical_accuracy']
+val_acc = history.history['val_categorical_accuracy']
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+
+epochs = 1
+plt.plot(epochs, acc, 'bo', label='Training acc')
+plt.plot(epochs, val_acc, 'b', label='Validation acc')
+plt.title('Training and validation accuracy')
+plt.legend()
+plt.figure()
+plt.plot(epochs, loss, 'bo', label='Training loss')
+plt.plot(epochs, val_loss, 'b', label='Validation loss')
+plt.title('Training and validation loss')
+plt.legend()
+plt.show()
+
 print('Finish')
