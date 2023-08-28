@@ -46,7 +46,7 @@ class DeepParserModel(NeuralParser):
 
             embedding_trigram = Embedding(vocab_size_trigram, 100, name='Embedding_Trigram')
             layer_embedding_trigram = embedding_trigram(layer_tv_by_trigram)
-            blstm_trigram = Bidirectional(LSTM(units=60, return_sequences=True, dropout=0.5git, recurrent_dropout=0),
+            blstm_trigram = Bidirectional(LSTM(units=60, return_sequences=True, dropout=0.5, recurrent_dropout=0),
                                           merge_mode='concat')
             layer_blstm_trigram = blstm_trigram(layer_embedding_trigram)
 
