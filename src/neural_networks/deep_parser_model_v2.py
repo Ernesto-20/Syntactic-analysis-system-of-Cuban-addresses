@@ -54,29 +54,26 @@ class DeepParserModel(NeuralParser):
             layer_embedding_word = embedding_word(layer_tv_by_word)
 
             concat = Concatenate()([layer_blstm_character, layer_blstm_trigram])
-
+            print('vocab_size_word:', vocab_size_word)
+            print('data_set.get_max_len_word():', data_set.get_max_len_word())
             blstm_concat = Bidirectional(
-                LSTM(units=vocab_size_word*5, return_sequences=False, dropout=0.5),
+                LSTM(units=data_set.get_max_len_word()*128, return_sequences=False, dropout=0.5),
                 merge_mode='sum')
             layer_blstm_concat = blstm_concat(concat)
 
             # ********* PROJECTION LAYER ***************
-            projection = Reshape((vocab_size_word, 5))(layer_blstm_concat)
+            projection = Reshape((data_set.get_max_len_word(), 128))(layer_blstm_concat)
             concat_2 = Concatenate()([projection, layer_embedding_word])
             # ********* PROJECTION LAYER ***************
 
 
             blstm_concat_2 = Bidirectional(
                 LSTM(units=data_set.get_n_tag(), return_sequences=True, dropout=0.5, recurrent_dropout=0),
-                merge_mode='sum')
+                merge_mode='concat')
             layer_blstm_concat_2 = blstm_concat_2(concat_2)
 
             output = Dense(data_set.get_n_tag(), activation='softmax', name='Classifier')(layer_blstm_concat_2)
-            # from tensorflow.python.ops.logging_ops import Print
-            # output = Print(output, [output], 'This is output', summarize=-1)
             model = keras.Model(inputs, output, name='DeepParser')
-
-            # opt = keras.optimizers.Adam(learning_rate=0.0005)
 
             # Optimiser
             opt = keras.optimizers.Adam(learning_rate=0.0005)
@@ -87,7 +84,6 @@ class DeepParserModel(NeuralParser):
             # Recall tells you how many times the model was able to detect a specific category.
 
             model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=metrics)
-
             model.summary()
             self.model = model
             # plot_model(model, 'DeepParse_Architecture.jpg')
