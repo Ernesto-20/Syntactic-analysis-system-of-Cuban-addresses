@@ -56,17 +56,16 @@ class DeepParserModel(NeuralParser):
             concat = Concatenate()([layer_blstm_character, layer_blstm_trigram])
 
             blstm_concat = Bidirectional(
-                LSTM(units=64, return_sequences=True, dropout=0.5),
-                merge_mode='concat')
+                LSTM(units=vocab_size_word*5, return_sequences=False, dropout=0.5),
+                merge_mode='sum')
             layer_blstm_concat = blstm_concat(concat)
 
             # ********* PROJECTION LAYER ***************
-            projection = Flatten()(layer_blstm_concat)
-            projection = Dense(units=data_set.get_max_len_word() * 100)(projection)
-            projection = Reshape((data_set.get_max_len_word(), 100))(projection)
+            projection = Reshape((vocab_size_word, 5))(layer_blstm_concat)
+            concat_2 = Concatenate()([projection, layer_embedding_word])
             # ********* PROJECTION LAYER ***************
 
-            concat_2 = Concatenate()([projection, layer_embedding_word])
+
             blstm_concat_2 = Bidirectional(
                 LSTM(units=data_set.get_n_tag(), return_sequences=True, dropout=0.5, recurrent_dropout=0),
                 merge_mode='sum')
