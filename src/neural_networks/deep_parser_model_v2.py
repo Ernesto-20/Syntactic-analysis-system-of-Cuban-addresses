@@ -12,7 +12,7 @@ from src.tools.address_data_set import DataSet
 
 
 class DeepParserConfig:
-    def __init(self, output_emb_char,
+    def __init__(self, output_emb_char,
                output_emb_trigram,
                output_emb_word,
                units_char_blstm,
