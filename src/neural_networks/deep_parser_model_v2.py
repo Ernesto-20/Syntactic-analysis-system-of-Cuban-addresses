@@ -109,10 +109,10 @@ class DeepParserModel(NeuralParser):
 
         if model is None:
             self.__create_model()
-        elif type(model) is Functional:
-            self.__model = model
+        # elif type(model) is not Functional:
+        #     raise NotImplementedError('Model variable could be Keras.Model instance')
         else:
-            raise NotImplementedError('Model variable could be Keras.Model instance')
+            self.__model = model
 
     def __create_model(self):
         inputs = keras.Input(shape=(1,), dtype="string", name='Input')
