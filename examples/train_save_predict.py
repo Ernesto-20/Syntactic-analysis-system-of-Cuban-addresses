@@ -39,14 +39,15 @@ data_set = load_data_set_saved()
 model = DeepParserModel(data_set, AddressCleaner.cleaner_method('custom_standardization'))
 print(model.get_model().get_config())
 # train
-# history = model.train(batch_size=560, epochs=1)
+# history = model.train(batch_size=560, epochs=20)
 # print(data_set.get_id_to_category())
 # print(data_set.get_n_tag())
-# address_parser = AddressParser(model, Decoder(data_set.get_id_to_category(),
-#                                               AddressCleaner.cleaner_method('custom_standardization')))
+address_parser = AddressParser(model, Decoder(data_set.get_id_to_category(),
+                                              AddressCleaner.cleaner_method('custom_standardization')))
+address_parser.process_address(['Hola compadre'])
 #
 # # save
-# # NeuralParserManage.save_neural_parser(model, route='../assets/trained_models/model_type_one', name='pc_trained_v2')
+# NeuralParserManage.save_neural_parser(model, route='../assets/trained_models/model_type_one', name='pc_trained_v1')
 # import matplotlib.pyplot as plt
 #
 # print(history.history.keys())

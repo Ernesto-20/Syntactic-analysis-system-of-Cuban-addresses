@@ -1,5 +1,5 @@
 from tensorflow.python.ops.ragged.ragged_string_ops import string_bytes_split
-from src.neural_networks.deep_parser_model import DeepParserModel
+from src.neural_networks.deep_parser_model_v2 import DeepParserModel
 from src.neural_networks.neural_parser import NeuralParser
 from src.tools.data_set_manage import DataSetManage
 import tensorflow as tf

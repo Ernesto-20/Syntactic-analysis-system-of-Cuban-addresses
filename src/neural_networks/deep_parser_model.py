@@ -2,6 +2,7 @@ import keras
 import keras.optimizers
 import numpy as np
 import tensorflow as tf
+from tensorflow.python.keras.engine.functional import Functional
 from keras import Sequential
 from keras.layers import LSTM, Embedding, Dense, Bidirectional, Concatenate, Reshape, Flatten
 from keras.layers import TextVectorization
@@ -92,7 +93,7 @@ class DeepParserModel(NeuralParser):
             model.summary()
             self.model = model
             # plot_model(model, 'DeepParse_Architecture.jpg')
-        elif type(model) is not keras.engine.functional.Functional:
+        elif type(model) is not Functional:
             raise NotImplementedError('Model variable could be Keras.Model instance')
         else:
             self.model = model
@@ -133,11 +134,11 @@ class DeepParserModel(NeuralParser):
 
         return history
 
-    def predict(self, address_list: list):
-        print(self.data.get_id_to_category())
-        result = self.model.predict(address_list)
-
-        return np.round(result, decimals=4)
+    # def predict(self, address_list: list):
+    #     print(self.data.get_id_to_category())
+    #     result = self.model.predict(address_list)
+    #
+    #     return np.round(result, decimals=4)
 
     def evaluate(self):
         history = self.model.evaluate(
