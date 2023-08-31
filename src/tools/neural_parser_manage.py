@@ -21,11 +21,13 @@ class NeuralParserManage:
         dir_model = route + '/' + name + '/model'
         dir_data_set = route + '/' + name + '/data_set'
         dir_cleaner_method = route + '/' + name + '/cleaner_method'
+        dir_config = route + '/' + name + '/config'
 
         neural_parser.get_model().save(dir_model, save_format="tf")
         DataSetManage.save(neural_parser.get_data(), route_and_name=dir_data_set)
         # Save cleaner method with dill
         dill.dump(neural_parser.get_cleaner_method(), open(dir_cleaner_method, 'wb'))
+        dill.dump(neural_parser.get_config(), open(dir_config, 'wb'))
 
     @staticmethod
     def load_neural_parser(route='default', name='default') -> NeuralParser:
@@ -35,9 +37,11 @@ class NeuralParserManage:
 
         # load address cleaner
         cleaner_method = dill.load(open(file_path + '/cleaner_method', 'rb'))
+        config = dill.load(open(file_path + '/config', 'rb'))
         # load keras model
-        model = tf.keras.models.load_model(file_path + '/model', custom_objects={cleaner_method.__name__: cleaner_method, 'string_bytes_split': string_bytes_split})
-        return DeepParserModel(data, cleaner_method=cleaner_method, model=model)
+        model = tf.keras.models.load_model(file_path + '/model', custom_objects={cleaner_method.__name__: cleaner_method,
+                                                                                 'string_bytes_split': string_bytes_split})
+        return DeepParserModel(data, cleaner_method=cleaner_method, config=config, model=model)
 
     @staticmethod
     def __reformat_and_validate_route(route: str):

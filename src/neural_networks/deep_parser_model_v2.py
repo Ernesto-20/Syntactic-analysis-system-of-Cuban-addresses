@@ -82,7 +82,7 @@ class DeepParserConfig:
 
 class DeepParserModel(NeuralParser):
 
-    def __init__(self, data_set: DataSet, cleaner_method, config: None, model=None):
+    def __init__(self, data_set: DataSet, cleaner_method, config=None, model=None):
         self.__data = data_set
         self.__cleaner_method = cleaner_method
 
@@ -162,7 +162,7 @@ class DeepParserModel(NeuralParser):
             layer_blstm_concat)
         concat_2 = Concatenate(name='Word_Projection_Concat')([projection, layer_embedding_word])
         # ********* PROJECTION LAYER ***************
-        
+
         blstm_concat_2 = Bidirectional(
             LSTM(units=self.__data.get_n_tag(), return_sequences=True,
                  dropout=self.__config.get_dropout_char_trigram_word_blstm(),

@@ -31,4 +31,7 @@ class NeuralParser(ABC):
     def set_data(self, data: DataSet) -> None:
         pass
 
+    def get_config(self):
+        pass
+
 
