@@ -94,7 +94,7 @@ class DeepParserModel(NeuralParser):
                 units_char_blstm=50,
                 units_trigram_blstm=50,
                 dropout_char_blstm=0,
-                dropout_trigram_trigram=0,
+                dropout_trigram_blstm=0,
                 rdropout_char_blstm=0,
                 rdropout_trigram_blstm=0,
                 dropout_char_trigram_blstm=0,
