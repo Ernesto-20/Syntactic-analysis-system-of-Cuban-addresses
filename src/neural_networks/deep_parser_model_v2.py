@@ -59,7 +59,7 @@ class DeepParserConfig:
         return self.__dropout_char_blstm
 
     def get_dropout_trigram_blstm(self):
-        return self.get_dropout_trigram_blstm()
+        return self.__dropout_trigram_blstm
 
     def get_rdropout_char_blstm(self):
         return self.__rdropout_char_blstm
