@@ -6,7 +6,6 @@ def calculate_results(y_predict: list, y_real: list):
     matches = 0
     no_matches = 0
 
-    temp_2 = 0 # para ver los resultados por direccion
     temp_3 = 0 # para ver los resultados por direccion
     count_correct_parsing = 0
     for i in range(len(y_predict)):
@@ -46,18 +45,12 @@ def calculate_results(y_predict: list, y_real: list):
         matches += temp
         no_matches += len(y_predict[i].reserve_word) - temp
 
-        temp_2 = matches - temp_2
         temp_3 = no_matches - temp_3
-        print('address #',(i+1))
-        print('VP: ', temp_2)
-        print('FN: ', temp_3)
-        print('FP: ', temp_3)
-        print('VN:', temp_2*8+temp_3*7)
-
+        if temp_3 > 0:
+            print('address #', (i+1), ' --- ( ', temp_3, ' )')
         if temp_3 == 0:
             count_correct_parsing += 1
 
-        temp_2 = matches
         temp_3 = no_matches
 
     VP = matches
@@ -72,20 +65,6 @@ def calculate_results(y_predict: list, y_real: list):
               }
 
     return result
-
-
-
-
-
-def precision(y_predict: list, y_real: list):
-    print('Precision')
-
-def recall(y_predict: list, y_real: list):
-    print('recall')
-
-def amount_correct_address_parser(y_predict: list, y_real: list):
-    print('Amount correct address parser')
-
 
 # others methods
 def number_of_matches(list_a: list, list_b:list):
