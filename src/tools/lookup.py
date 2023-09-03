@@ -19,8 +19,10 @@ PLACE_PREFIX = ['Bar','Club','Restaurante','Hotel','Centro comercial','Supermerc
 ZONE_PREFIX = ['', 'Zn.', 'zn.', 'zon.', 'z.', 'zona', 'zna.', 'za', 'zo.', 'Zona']
 MUNICIPALITY_PREFIX = ['Mun.', 'mun.', 'Mun', 'mun', 'Municipio', 'municipio', 'MUNICIPIO','M.','m.','mcpio.','Mno.']
 PROVINCE_PREFIX = ['Prov.', 'prov.', 'PROV.', 'Prov', 'prov', 'Provincia', 'provicia', 'PROVINCIA', 'Pro.', 'PRO.',
-                   'Pro', 'prcia','provin.', 'prv.']
+                   'Pro', 'prcia', 'provin.', 'prv.']
 APARTMENT_PREFIX = ['apart.', 'apt.', 'apto', 'apto.', 'apartamento', 'apt', 'ap', 'aptto']
+IMPLICIT_APARTMENT = ['altos', 'alto', 'bajos', 'bajo', 'altos', 'alto', 'bajos', 'bajo', 'altos', 'alto', 'bajos', 'bajo', 'pb'] # less likely to 'pb'
+APARTMENT_SPECIFICATION = ['int', 'interior']
 BUILDING_SUBDIVISION_PREFIX = ['apto', 'bloque', 'blq', 'esc', 'escalera', 'piso', 'Apto', 'apartamento', 'Bloque',
                                'apto.', 'Apto.', 'apart', 'APTO', 'apt', 'apto']
 CONJUNCTION = ['y', 'e']

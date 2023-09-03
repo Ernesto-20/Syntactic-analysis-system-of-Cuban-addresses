@@ -8,7 +8,7 @@ import itertools as itt
 from src.data_realism_converter.generator import Generator
 from src.tools.lookup import STREET_NAME_PREFIX, STREET_NAME_SUFFIX, LOCALITY_PREFIX, MUNICIPALITY_PREFIX, \
     PROVINCE_PREFIX, BETWEEN_PREFIX, \
-    BUILDING_PREFIX, APARTMENT_PREFIX, CORNER_CONNECTOR_PREFIX, STREET_SUFFIX_POSSIBILITIES, PROPERTY_PREFIX
+    BUILDING_PREFIX, APARTMENT_PREFIX, IMPLICIT_APARTMENT, APARTMENT_SPECIFICATION, CORNER_CONNECTOR_PREFIX, STREET_SUFFIX_POSSIBILITIES, PROPERTY_PREFIX
 
 
 class NoiseGenerator(Generator):
@@ -212,11 +212,16 @@ class NoiseGenerator(Generator):
         building_number = []
         if not identification_building.isalpha():
             building_number = super().generate_prefix_randomly(PROPERTY_PREFIX, 15)
-        if rm.randint(1, 100) <= 40:
+
+        random_value = rm.randint(1, 100)
+        if random_value > 40:
+            # Does not contain apartment
             return (identification_building_prefix + building_number + [[item, 'building'] for item in
                                                                     identification_building.split()], [])
-        else:
+        elif random_value <= 39:
             # Contain apartment
+            # is_explicit_apartment
+
             identification_apartment = self.__generate_apartment_syntetic()
             identification_apartment_prefix = super().generate_prefix_randomly(APARTMENT_PREFIX,
                                                                                100)
@@ -224,10 +229,21 @@ class NoiseGenerator(Generator):
             if not identification_apartment.isalpha():
                 apartment_number = super().generate_prefix_randomly(PROPERTY_PREFIX, 15)
 
+            apartment_specification = super().generate_prefix_randomly(APARTMENT_SPECIFICATION, 2)
+
             return (identification_building_prefix + building_number + [[item, 'building'] for item in
                                                   identification_building.split()]), \
                 (identification_apartment_prefix + apartment_number + [[item, 'apartment'] for item
-                                                                      in identification_apartment.split()])
+                                                                      in identification_apartment.split()] +
+                 apartment_specification)
+        else:
+            # is implicit apartment
+            identification_apartment_implicit_prefix = super().generate_prefix_randomly(IMPLICIT_APARTMENT,
+                                                                               100)
+
+            return ((identification_building_prefix + building_number + [[item, 'building'] for item in
+                                                                        identification_building.split()]),
+                    identification_apartment_implicit_prefix)
 
     def __generate_data_frame(self, address_list, words_list, tags_list):
         return DataFrame({

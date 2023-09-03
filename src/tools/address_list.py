@@ -532,7 +532,7 @@ ClassifiedAddressOne(principal_street=['pliar'],
                                           province=['la', 'habana'],
                                           building=['sn'],
                                           apartment=[],
-                                      reserve_word=['e/', 'y',',' ',']),
+                                      reserve_word=['e/', 'y', ',', ',']),
 # 31 a e/ 320 y 322, la lisa, la habana
 ClassifiedAddressOne(principal_street=['31', 'a'],
                                           first_side_street=['320'],
