@@ -179,7 +179,7 @@ class NoiseGenerator(Generator):
                     between_prefix + municipality_prefix + [[item, 'municipality'] for item in municipality.split()]
                 )
             if not self.__is_empty(province):
-                province_prefix = super().generate_prefix_randomly(PROVINCE_PREFIX, 3)
+                province_prefix = super().generate_prefix_randomly(PROVINCE_PREFIX, 1)
                 between_prefix = [[' , ', 'rw']] if rm.randint(1, 100) < 85 and permutation_bool is False else []
                 components.append(
                     between_prefix + province_prefix + [[item, 'province'] for item in province.split()]
@@ -224,7 +224,7 @@ class NoiseGenerator(Generator):
 
             identification_apartment = self.__generate_apartment_syntetic()
             identification_apartment_prefix = super().generate_prefix_randomly(APARTMENT_PREFIX,
-                                                                               100)
+                                                                               70)
             apartment_number = []
             if not identification_apartment.isalpha():
                 apartment_number = super().generate_prefix_randomly(PROPERTY_PREFIX, 15)
@@ -300,11 +300,18 @@ class NoiseGenerator(Generator):
 
         elif random_value <= 56:
             # only letter
-            letters = ['A', 'B', 'C', 'D', 'F', 'G', 'H']
-            return letters[rm.randint(0, len(letters) - 1)]
+            letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'R', 'S', 'T']
+            temp = rm.randint(0, 100)
+            if temp <= 90:
+                # one letter
+                return letters[rm.randint(0, len(letters) - 1)]
+            else:
+                # two letters
+                return letters[rm.randint(0, len(letters) - 1)] + letters[rm.randint(0, len(letters) - 1)]
+
         else:
             #  numbers and letters
-            letters = ['A', 'B', 'C', 'D', 'F', 'G', 'H']
+            letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'R', 'S', 'T']
             letter = letters[rm.randint(0, len(letters) - 1)]
             number = ''
             random_number = rm.randint(1, 100)
@@ -330,11 +337,15 @@ class NoiseGenerator(Generator):
         if random_value <= 50:
             # only numbers
             return str(rm.randint(10, 101))
+        elif random_value <= 75:
+            # only letters
+            letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'R', 'S', 'T']
+            return letters[rm.randint(0, len(letters) - 1)]
         else:
             #  numbers and letters
             letters = ['A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'R', 'S', 'T']
             letter = letters[rm.randint(0, len(letters) - 1)]
-            letter_position = rm.randint(0, 4)
+            letter_position = rm.randint(0, 2)
             number = str(rm.randint(1, 90))
 
             return number[0: letter_position] + letter + number[letter_position:]
