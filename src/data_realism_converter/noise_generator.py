@@ -58,6 +58,10 @@ class NoiseGenerator(Generator):
             municipality = str(data_set.iloc[i, 4])
             province = str(data_set.iloc[i, 5])
 
+            # omit administrative political divisions
+            locality, municipality, province = self.__omit_administrative_political(locality, municipality, province)
+
+
             # Determinar si es tipo 1 o 2:
             if not self.__is_empty(first_side_street) and not self.__is_empty(second_side_street):
                 # Is type one
@@ -163,7 +167,7 @@ class NoiseGenerator(Generator):
                     components.append(building_component)
                     components.append(apartment_component)
             # permutation between components
-            permutation_bool = rm.randint(1, 100) <= 5
+            permutation_bool = rm.randint(1, 100) <= 10
 
             # Components Basics
             if not self.__is_empty(locality):
@@ -199,6 +203,17 @@ class NoiseGenerator(Generator):
             self.__add_new_address(address, address_number, address_list, words_list, tags_list)
         print('El total de direcciones fue de ', address_number)
         return self.__generate_data_frame(address_list, words_list, tags_list)
+
+    def __omit_administrative_political(self, locality, municipality, province):
+        temp = rm.randint(0, 100)
+        if temp <= 7:
+            province = ''
+        elif temp <= 5:
+            municipality = ''
+        if rm.randint(1, 100) <= 2:
+            locality = ''
+
+        return locality, municipality, province
 
     def generate_building_and_apartment(self):
         """
