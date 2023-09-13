@@ -1,3 +1,6 @@
-import numpy as np
+from src.data_preprocessing.address_cleaner import AddressCleaner
 
-print(np.arange(1, 18, 1))
+fuc = AddressCleaner.cleaner_method('custom_standardization')
+
+print(fuc)
+print('type: ', type(fuc))

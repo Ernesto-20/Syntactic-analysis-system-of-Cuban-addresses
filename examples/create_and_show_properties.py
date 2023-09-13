@@ -2,7 +2,7 @@ import pandas as pd
 
 from src.address_parser.address_parser import AddressParser
 from src.data_realism_converter.data_set_adapter import DataSetAdapter
-from src.data_realism_converter.noise_generator import NoiseGenerator
+from src.data_realism_converter.scheme_one_noise_generator import SchemeOneNoiseGenerator
 from src.neural_networks.deep_parser_model import DeepParserModel
 from src.data_preprocessing.address_cleaner import AddressCleaner
 from src.neural_networks.lstm_cnn_model import LstmCnnModel
@@ -20,7 +20,7 @@ def create_new_data_set():
     data = pd.read_excel('../assets/default_corpus/model_type_one/corpus_short.xlsx')
 
     # data realism convert
-    generator = NoiseGenerator()
+    generator = SchemeOneNoiseGenerator()
     data_with_noise = generator.generate_noise(data)
 
     # create object DataSet with data generated

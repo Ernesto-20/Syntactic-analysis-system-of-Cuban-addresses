@@ -3,12 +3,12 @@ from pandas import DataFrame
 import random as rm
 
 
-from src.data_realism_converter.noise_generator import NoiseGenerator
+from src.data_realism_converter.scheme_one_noise_generator import SchemeOneNoiseGenerator
 
 from src.tools.lookup import *
 
 
-class PDModelTypeSelector(NoiseGenerator):
+class PDModelTypeSelector(SchemeOneNoiseGenerator):
     def generate_noise(self, data_set: DataFrame, type=None, address_amount=None):
         '''
 
@@ -22,13 +22,13 @@ class PDModelTypeSelector(NoiseGenerator):
                             after that number they begin to be generated randomly
         :return: DataFrame
         '''
-        self.address_amount = address_amount
-        self.data = data_set
-        self.type = type
+        self.__address_amount = address_amount
+        self.__data = data_set
+        self.__type = type
 
-        if self.type == 'build' and address_amount==None:
+        if self.__type == 'build' and address_amount==None:
             return self.__generate_noise_type_two()
-        elif self.type == 'build':
+        elif self.__type == 'build':
             return self.__generate_random_noise_type_two(address_amount)
         elif type == 'dist':
             return self.__generate_random_noise_type_three(address_amount)
@@ -45,7 +45,7 @@ class PDModelTypeSelector(NoiseGenerator):
         tag_list = []
 
 
-        for index,row in self.data.iterrows():
+        for index,row in self.__data.iterrows():
 
             components = []
 
@@ -210,9 +210,9 @@ class PDModelTypeSelector(NoiseGenerator):
             components = []
 
             building = self.__generate_building_syntetic()
-            locality = str(rm.choice(self.data['locality']))
-            municipality = str(rm.choice(self.data['municipality']))
-            province = str(rm.choice(self.data['province']))
+            locality = str(rm.choice(self.__data['locality']))
+            municipality = str(rm.choice(self.__data['municipality']))
+            province = str(rm.choice(self.__data['province']))
 
             building_form = super().generate_prefix_randomly(BUILDING_PREFIX, 55)
             number_form = super().generate_prefix_randomly(PROPERTY_PREFIX, 55)
@@ -369,12 +369,12 @@ class PDModelTypeSelector(NoiseGenerator):
                 break
             components = []
 
-            principal_street = str(rm.choice(self.data['principal_street']))
+            principal_street = str(rm.choice(self.__data['principal_street']))
             distance = str(rm.randint(200, 800))
-            interesting_place_name = str(rm.choice(self.data['interesting_place_name']))
-            locality = str(rm.choice(self.data['locality']))
-            municipality = str(rm.choice(self.data['municipality']))
-            province = str(rm.choice(self.data['province']))
+            interesting_place_name = str(rm.choice(self.__data['interesting_place_name']))
+            locality = str(rm.choice(self.__data['locality']))
+            municipality = str(rm.choice(self.__data['municipality']))
+            province = str(rm.choice(self.__data['province']))
 
             principal_street_prefix = super().generate_prefix_randomly(STREET_NAME_PREFIX, 55)
             number_form = super().generate_prefix_randomly(PROPERTY_PREFIX, 55)

@@ -2,9 +2,9 @@ import pandas as pd
 
 from src.address_parser.address_parser import AddressParser
 from src.data_realism_converter.data_set_adapter import DataSetAdapter
-from src.data_realism_converter.noise_generator import NoiseGenerator
+from src.data_realism_converter.scheme_one_noise_generator import SchemeOneNoiseGenerator
 # from src.neural_networks.deep_parser_model import DeepParserModel
-from src.neural_networks.deep_parser_model_v2 import DeepParserModel
+from src.neural_networks.deep_parser_model import DeepParserModel
 from src.data_preprocessing.address_cleaner import AddressCleaner
 from src.tools.data_set_manage import DataSetManage
 from src.tools.decoder import Decoder
@@ -22,7 +22,7 @@ def create_new_data_set():
     data = pd.read_excel('../assets/default_corpus/model_type_one/corpus_short.xlsx')
 
     # data realism convert
-    generator = NoiseGenerator()
+    generator = SchemeOneNoiseGenerator()
     data_with_noise = generator.generate_noise(data)
 
     # create object DataSet with data generated
@@ -37,14 +37,14 @@ data_set = load_data_set_saved()
 
 # create model
 model = DeepParserModel(data_set, AddressCleaner.cleaner_method('custom_standardization'))
-print(model.get_model().get_config())
+
 # train
-# history = model.train(batch_size=560, epochs=20)
+history = model.train(batch_size=560, epochs=20)
 # print(data_set.get_id_to_category())
 # print(data_set.get_n_tag())
-address_parser = AddressParser(model, Decoder(data_set.get_id_to_category(),
-                                              AddressCleaner.cleaner_method('custom_standardization')))
-address_parser.process_address(['Hola compadre'])
+# address_parser = AddressParser(model, Decoder(data_set.get_id_to_category(),
+#                                               AddressCleaner.cleaner_method('custom_standardization')))
+# address_parser.process_address(['Hola compadre'])
 #
 # # save
 # NeuralParserManage.save_neural_parser(model, route='../assets/trained_models/model_type_one', name='pc_trained_v1')

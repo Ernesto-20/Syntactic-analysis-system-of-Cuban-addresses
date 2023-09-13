@@ -7,15 +7,15 @@ class AddressCleaner:
     @staticmethod
     def cleaner_method(method='custom_standardization'):
         if method == 'custom_standardization':
-            return AddressCleaner.__custom_standardization
+            return AddressCleaner._custom_standardization
         elif method == 'custom_standardization_v2':
-            return AddressCleaner.__custom_standardization_v2
+            return AddressCleaner._custom_standardization_v2
         else:
             raise NotImplementedError('There is no such cleaning method')
 
     @staticmethod
     @tf.keras.utils.register_keras_serializable()
-    def __custom_standardization(input_string):
+    def _custom_standardization(input_string):
         """ transforms words into lowercase and deletes punctuations """
 
         stripped_spanish = tf.strings.lower(input_string)
@@ -93,7 +93,7 @@ class AddressCleaner:
 
     @staticmethod
     @tf.keras.utils.register_keras_serializable()
-    def __custom_standardization_v2(input_string):
+    def _custom_standardization_v2(input_string):
         # Transforma toda la cadena a minúsculas
         lower_str = input_string.lower()
 
