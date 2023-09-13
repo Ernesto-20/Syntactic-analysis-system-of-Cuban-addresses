@@ -43,7 +43,6 @@ class DataSetAdapter:
 
         # Vocabulary is the list of all words in every sentence of train set
         vocabulary_word = DataSetAdapter._extract_vocabulary(train_features)
-        print(vocabulary_word)
 
         train_features_sentence = DataSetAdapter._get_sentence(train_features)
         test_features_sentence = DataSetAdapter._get_sentence(test_features)
@@ -76,9 +75,7 @@ class DataSetAdapter:
     def _extract_vocabulary(words_list):
         words = set()
         for sentence in words_list:
-            print('sentence: ', sentence)
             for word in sentence:
-                print('word: ', word)
                 words.add(word)
         return list(words)
 
