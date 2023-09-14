@@ -39,7 +39,7 @@ class NeuralParserManage:
         cleaner_method = dill.load(open(file_path + '/cleaner_method', 'rb'))
         config = dill.load(open(file_path + '/config', 'rb'))
         # load keras model
-        model = tf.keras.models.load_model(file_path + '/model', custom_objects={cleaner_method._name_: cleaner_method,
+        model = tf.keras.models.load_model(file_path + '/model', custom_objects={cleaner_method.__name__: cleaner_method,
                                                                                  'string_bytes_split': string_bytes_split})
         return DeepParserModel(data, cleaner_method=cleaner_method, config=config, model=model)
 
