@@ -17,6 +17,7 @@ from src.tools.address_data_set import DataSet
 class LstmCnnModel(NeuralParser):
 
     def __init__(self, data_set: DataSet, address_cleaner: AddressCleaner, model=None):
+        global model_complex
         self.data = data_set
         self.address_cleaner = address_cleaner
         if model is None:

@@ -3,6 +3,8 @@ from random import choice
 import itertools as itt
 import math
 import random as rm
+
+from pandas import DataFrame
 from spellchecker import SpellChecker
 from fuzzywuzzy import fuzz
 
@@ -50,8 +52,6 @@ class Generator:
 
         return word
 
-
-
     def __duplicate_character(self, word):
         char_index = randrange(len(word))
         return word[:char_index] + word[char_index] + word[char_index:]
@@ -87,3 +87,35 @@ class Generator:
             ret_word = word[:char_index] + new_char + word[char_index + 1:]
 
         return ret_word
+
+    def add_new_address(self, components, address_number, address_list, words_list, tags_list):
+        address_list.append('Sentence ' + str(address_number))
+
+        # breaking down
+        georeferential_elements_list = []
+        for element in components:
+            georeferential_elements_list += element
+
+        count = 0
+        var_aleatory = rm.randint(1, 6)
+        amount_errors = var_aleatory if rm.randint(1, 10) <= 2 else 0
+        for compound_items in georeferential_elements_list:
+            if compound_items[0] != 'nan':
+                word = str(compound_items[0])
+                if amount_errors > 0 and rm.randint(1, 10) <= 3:
+                    word = super().generate_spelling_errors(word)
+
+                words_list.append(word)
+                tags_list.append(str(compound_items[1]))
+
+                if count != 0 and len(words_list) == len(address_list) + 1:
+                    address_list.append(None)
+            count += 1
+
+
+    def generate_data_frame(self, address_list, words_list, tag_list):
+        return DataFrame({
+            'Sentence #': address_list,
+            'Word': words_list,
+            'Tag': tag_list
+        })
