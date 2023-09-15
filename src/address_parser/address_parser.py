@@ -14,7 +14,7 @@ class AddressParser:
     def process_address(self, address_list: list):
         probability_matrix = self.model.predict(address_list)
 
-        return self.decoder.decoder_to_first_address_model(probability_matrix, address_list)
+        return self.decoder.decode_to_scheme_one(probability_matrix, address_list)
 
     def process_address_data_frame(self, address: DataFrame):
         address_list = []
@@ -23,7 +23,7 @@ class AddressParser:
                 address_list.append(str(address.iloc[i, 0]))
         probability_matrix = self.model.predict(address_list)
 
-        return self.decoder.decoder_to_first_address_model(probability_matrix, address_list)
+        return self.decoder.decode_to_scheme_one(probability_matrix, address_list)
 
     @staticmethod
     def to_xlsx(list_address: list, name_file='Results'):
@@ -41,7 +41,7 @@ class AddressParser:
             AddressParser.__export_one(list_address, name_file=name_file, format='csv')
         # FRANK poner la otra condicion de que si es instancia de ClassifiedAddresTwoAndThree
     @staticmethod
-    def __export_one(list_address: list, name_file='Results', format='xlsx'):
+    def _export_one(list_address: list, name_file='Results', format='xlsx'):
         principal_street_list = []
         first_side_street_list = []
         second_side_street_list = []

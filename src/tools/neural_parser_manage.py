@@ -1,5 +1,5 @@
 from tensorflow.python.ops.ragged.ragged_string_ops import string_bytes_split
-from src.neural_networks.deep_parser_model_v2 import DeepParserModel
+from src.neural_networks.deep_parser_model import DeepParserModel
 from src.neural_networks.neural_parser import NeuralParser
 from src.tools.data_set_manage import DataSetManage
 import tensorflow as tf
@@ -16,18 +16,18 @@ class NeuralParserManage:
         if type(name) is not str:
             raise NotImplementedError('name_model variable could be string instance')
         # save model
-        route = NeuralParserManage.__reformat_and_validate_route(route)
-        name = NeuralParserManage.__reformat_and_validate_name_model(name)
+        route = NeuralParserManage._reformat_and_validate_route(route)
+        name = NeuralParserManage._reformat_and_validate_name_model(name)
         dir_model = route + '/' + name + '/model'
         dir_data_set = route + '/' + name + '/data_set'
         dir_cleaner_method = route + '/' + name + '/cleaner_method'
         dir_config = route + '/' + name + '/config'
 
-        neural_parser.get_model().save(dir_model, save_format="tf")
-        DataSetManage.save(neural_parser.get_data(), route_and_name=dir_data_set)
+        neural_parser.model.save(dir_model, save_format="tf")
+        DataSetManage.save(neural_parser.data, route_and_name=dir_data_set)
         # Save cleaner method with dill
-        dill.dump(neural_parser.get_cleaner_method(), open(dir_cleaner_method, 'wb'))
-        dill.dump(neural_parser.get_config(), open(dir_config, 'wb'))
+        dill.dump(neural_parser.cleaner_method, open(dir_cleaner_method, 'wb'))
+        dill.dump(neural_parser.config, open(dir_config, 'wb'))
 
     @staticmethod
     def load_neural_parser(route='default', name='default') -> NeuralParser:
@@ -44,7 +44,7 @@ class NeuralParserManage:
         return DeepParserModel(data, cleaner_method=cleaner_method, config=config, model=model)
 
     @staticmethod
-    def __reformat_and_validate_route(route: str):
+    def _reformat_and_validate_route(route: str):
         if len(route) == 0:
             raise NotImplementedError('name_model variable cannot be an empty text')
 
@@ -57,7 +57,7 @@ class NeuralParserManage:
         return route
 
     @staticmethod
-    def __reformat_and_validate_name_model(name_model: str):
+    def _reformat_and_validate_name_model(name_model: str):
         if len(name_model) == 0:
             raise NotImplementedError('name_model variable cannot be an empty text')
         if name_model[len(name_model) - 1] == '/':

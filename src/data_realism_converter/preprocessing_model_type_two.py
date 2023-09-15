@@ -5,12 +5,12 @@ from pandas import DataFrame
 import random as rm
 import itertools as itt
 
-from src.data_realism_converter.noise_generator import NoiseGenerator
+from src.data_realism_converter.scheme_one_noise_generator import SchemeOneNoiseGenerator
 
 from src.tools.lookup import *
 
 
-class PDModelTypeTwo(NoiseGenerator):
+class PDModelTypeTwo(SchemeOneNoiseGenerator):
     def generate_noise(self, data_set: DataFrame):
 
         print('Generate some noise -- Type Two')

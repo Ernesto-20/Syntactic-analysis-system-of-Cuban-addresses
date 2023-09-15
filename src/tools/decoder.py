@@ -9,7 +9,7 @@ class Decoder:
         self.cat_to_id = {v: k for k, v in id_to_cat.items()}
         self.cleaner_method = cleaner_method
 
-    def decoder_to_first_address_model(self, matrix_probability, text_address_list):
+    def decode_to_scheme_one(self, matrix_probability, text_address_list):
         list_address_classified = []
         index_address = 0
         for raw_address in matrix_probability:
@@ -42,7 +42,7 @@ class Decoder:
 
         return list_address_classified
 
-    def decoder_to_second_address_model(self, matrix_probability, text_address_list):
+    def decode_to_scheme_two(self, matrix_probability, text_address_list):
         list_address_classified = []
         index_address = 0
         for raw_address in matrix_probability:
@@ -82,7 +82,7 @@ class Decoder:
 
         return list_address_classified
 
-    def decoder_to_third_address_model(self, matrix_probability, text_address_list):
+    def decode_to_scheme_three(self, matrix_probability, text_address_list):
         list_address_classified = []
         index_address = 0
         for raw_address in matrix_probability:
