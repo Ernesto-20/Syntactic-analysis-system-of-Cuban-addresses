@@ -22,7 +22,7 @@ class DataSetManage:
 
         return data_set
 
-    def export_data(df, filename, file_format='csv'):
+    def export_data(sefl,df, filename, file_format='csv'):
         if file_format == 'csv':
             df.to_csv(filename + '.csv', index=False)
         elif file_format == 'xlsx':

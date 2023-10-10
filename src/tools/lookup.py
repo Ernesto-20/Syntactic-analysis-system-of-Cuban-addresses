@@ -9,7 +9,7 @@ CORNER_CONNECTOR_PREFIX = ['esq', 'esquina']
 LOCALITY_PREFIX = ['localidad', 'poblado', 'ciudad', 'rpt', 'reparto', 'reparto', 'reparto', 'reparto', 'localidad', 'rpt', 'rpt']
 BUILDING_PREFIX = ['ed', 'edif', 'edf', 'edificio', 'EDIFICIO', 'Edificio', 'EDIF.', 'edf.', 'edi', 'EDF','Edif.', 'Edifi', 'edif.', 'ed.']
 PROPERTY_PREFIX = ['#', 'nro.', 'nu', 'num', 'no.', 'num.', 'nu.', 'número', 'no','nro', 'numero', '#', '#']
-DISTANCE_PREFIX = ['Km.', 'KM.', 'Km', 'KM', 'K.', 'k.', 'kilometro', 'Kilometro', 'KILOMETRO', 'K\M', 'K/M', 'k/m',
+DISTANCE_PREFIX = ['Km.', 'KM.', 'Km', 'KM', 'K.', 'k.','kilometro', 'Kilometro', 'KILOMETRO', 'K\M', 'K/M', 'k/m',
                    'k\m','kmts','kmts.',]
 DISTANCE_SPECIFICATION_PREFIX =['½','¼','¾','1/4','1/2','3/4']
 OTHER_PREFIX = ['batey', 'bat', 'ciudad','finca', 'Finca']

@@ -1,5 +1,5 @@
 
-class ClassifiedAddressThree:
+class AddressSchemeThree:
 
     def __init__(self, principal_street, distance, interesting_place, locality,
                                    municipality, province, reserve_word):

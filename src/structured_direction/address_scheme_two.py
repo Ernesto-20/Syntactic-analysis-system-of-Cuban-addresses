@@ -1,4 +1,4 @@
-class ClassifiedAddressTwo:
+class AddressSchemeTwo:
     def __init__(self, locality, municipality,province, building, apartment, reserve_word):
         self.locality = locality
         self.municipality = municipality
