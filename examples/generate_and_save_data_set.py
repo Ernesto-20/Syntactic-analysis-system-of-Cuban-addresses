@@ -22,7 +22,7 @@ data_set = DataSetAdapter().adapt(data_with_noise, 0.80, 0.05, 0.15)
 #     if count == 10:
 #         break
 
-DataSetManage.save(data_set, '../assets/default_data_set/model_type_one/DS_Habana_5000_PC_v2')
+# DataSetManage.save(data_set, '../assets/default_data_set/model_type_one/DS_Habana_5000_PC_v2')
 print('End')
 
 
