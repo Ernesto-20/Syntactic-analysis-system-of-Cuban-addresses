@@ -4,6 +4,8 @@ from random import choice
 import itertools as itt
 import math
 import random as rm
+
+from pandas import DataFrame
 from spellchecker import SpellChecker
 from fuzzywuzzy import fuzz
 
@@ -21,17 +23,6 @@ class NoiseGenerator(ABC):
 
         return reorder_components
 
-    def generate_prefix_randomly(self, list_prefix, probability):
-        if rm.randint(1, 100) <= probability:
-            prefix = list_prefix[rm.randint(0, len(list_prefix) - 1)]
-            return [[item, 'rw'] for item in prefix.split()]
-        return []
-
-    def generate_suffix_randomly(self, list_suffix, probability):
-        if rm.randint(1, 100) <= probability:
-            suffix = list_suffix[rm.randint(0, len(list_suffix) - 1)]
-            return [[item, 'rw'] for item in suffix.split()]
-        return []
 
     def omit_administrative_political(self, locality, municipality, province, loc_probability, mun_probability, prov_probability):
 
@@ -54,10 +45,7 @@ class NoiseGenerator(ABC):
             elif rand < 50 and len(word) > 2:
                 # Omit character
                 word = self._omit_character(word)
-            # elif rand < 75:
-            # Misspelling
-            # To fix this function
-            # word = self._misspelling(word)
+
             else:
                 # Replace similar character
                 word = self._similar_character(word)
@@ -72,23 +60,6 @@ class NoiseGenerator(ABC):
         char_index = randrange(len(word))
         return word[:char_index] + word[char_index + 1:]
 
-    def _misspelling(self, word):
-        print('Word: ', word)
-        spell = SpellChecker()
-        ret_word = ''
-        if word.lower() in spell:
-            suggestions = list(spell.candidates(word.lower()))
-            print(suggestions)
-            if len(suggestions) > 0:
-                new_word = choice(suggestions)
-                print('New word: ', new_word)
-                if fuzz.ratio(word.lower(), new_word) < 75:
-                    print('AQUI NUNCA ENTRA')
-                    ret_word = new_word
-
-        print('Ret_word: ', ret_word)
-        return ret_word
-
     def _similar_character(self, word):
         ret_word = word
         char_index = randrange(len(word))
@@ -100,3 +71,4 @@ class NoiseGenerator(ABC):
             ret_word = word[:char_index] + new_char + word[char_index + 1:]
 
         return ret_word
+
