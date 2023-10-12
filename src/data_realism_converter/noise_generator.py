@@ -6,8 +6,8 @@ import math
 import random as rm
 
 from pandas import DataFrame
-from spellchecker import SpellChecker
-from fuzzywuzzy import fuzz
+# from spellchecker import SpellChecker
+# from fuzzywuzzy import fuzz
 
 
 class NoiseGenerator(ABC):
@@ -72,3 +72,14 @@ class NoiseGenerator(ABC):
 
         return ret_word
 
+    def generate_prefix_randomly(self, list_prefix, probability):
+        if rm.randint(1, 100) <= probability:
+            prefix = list_prefix[rm.randint(0, len(list_prefix) - 1)]
+            return [[item, 'rw'] for item in prefix.split()]
+        return []
+
+    def generate_suffix_randomly(self, list_suffix, probability):
+        if rm.randint(1, 100) <= probability:
+            suffix = list_suffix[rm.randint(0, len(list_suffix) - 1)]
+            return [[item, 'rw'] for item in suffix.split()]
+        return []

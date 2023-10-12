@@ -1,8 +1,9 @@
 from src.structured_direction.classified_address_one import ClassifiedAddressOne
 import tensorflow as tf
 # assert case
-# y_pred = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-# y_real = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+y_pred = [0.6, 0, 0, 0.501, 0, 0, 0, 0, 0, 0]
+y_real = [  1, 0, 0,     1, 0, 0, 0, 0, 0, 0]
+
 
 # fail case
 # y_pred = [0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
@@ -12,9 +13,11 @@ import tensorflow as tf
 # y_pred = [0.0973835886, 0.0959317908, 0.0735085383, 0.0930648819, 0.0859329849, 0.0832466409, 0.577864632, 0.501, 0.0859992132, 0.0921353698]
 # y_real = [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]
 # 
-# vp = tf.keras.metrics.truepositives()
-# vp.update_state(y_real, y_pred)
-# vp = vp.result().numpy()
+vp = tf.keras.metrics.TruePositives()
+vp.update_state(y_real, y_pred)
+vp = vp.result().numpy()
+
+print('vp: ', vp)
 # 
 # vn = tf.keras.metrics.truenegatives()
 # vn.update_state(y_real, y_pred)
@@ -36,7 +39,7 @@ import tensorflow as tf
 # print('fn = ', fn)
 # 
 # # precision
-# precision = tf.keras.metrics.precision(thresholds=0)
+# precision = tf.keras.metrics.Precision(thresholds=0)
 # precision.update_state(y_real, y_pred)
 # precision = precision.result().numpy()
 # 

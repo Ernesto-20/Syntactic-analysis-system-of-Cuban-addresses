@@ -176,7 +176,8 @@ class DeepParserModel(NeuralParser):
         model = keras.Model(inputs, output, name='DeepParser')
         # Optimiser
         opt = keras.optimizers.Adam(learning_rate=0.0005)
-        metrics = [tf.metrics.CategoricalAccuracy(), tf.metrics.Precision(), tf.metrics.Recall()]
+        metrics = [tf.metrics.CategoricalAccuracy(), tf.metrics.Precision(), tf.metrics.Recall(), DeepParserModel.my_metric]
+        # metrics = [DeepParserModel.my_metric]
         # metrics = [tf.metrics.Accuracy()]
         # Accuracy tells you how many times the ML model was correct overall.
         # Precision is how good the model is at predicting a specific category.
@@ -184,7 +185,37 @@ class DeepParserModel(NeuralParser):
         model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=metrics)
         model.summary()
         self.__model = model
-        plot_model(model, 'DeepParse_Architecture.png')
+        # plot_model(model, 'DeepParse_Architecture.png')
+
+    @staticmethod
+    def my_metric(y_true, y_pred):
+
+        class_number = len(y_pred[0][0])
+        corrects_number = 0
+        wrongs_number = 0
+
+        # tf.print('*******************')
+        # tf.print(tf.shape(y_pred))
+
+        for batch_pred_index in range(len(y_pred)):
+            for words_percents_index in range(len(y_pred[batch_pred_index])):
+                max_index = tf.argmax(y_pred[batch_pred_index][words_percents_index])
+                if y_true[batch_pred_index][words_percents_index][max_index] == 1:
+                    corrects_number += 1
+                else:
+                    wrongs_number += 1
+
+        # tf.print('corrects_number: ', corrects_number)
+        # tf.print('wrongs_number: ', wrongs_number)
+        true_positive = corrects_number
+        false_positive = wrongs_number
+        false_negative = wrongs_number
+        true_negative = corrects_number*(class_number-1) + wrongs_number*(class_number-2)
+
+        value = true_positive/(true_positive - false_positive)
+
+
+        return tf.convert_to_tensor(value)
 
     def _create_layer_vectorization(self, name, max_len, ngrams=None, split="whitespace"):
         vectorize_layer = TextVectorization(

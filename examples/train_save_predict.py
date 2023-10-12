@@ -39,7 +39,7 @@ data_set = load_data_set_saved()
 model = DeepParserModel(data_set, AddressCleaner.cleaner_method('custom_standardization'))
 
 # train
-# history = model.train(batch_size=560, epochs=20)
+history = model.train(batch_size=560, epochs=10)
 # print(data_set.get_id_to_category())
 # print(data_set.get_n_tag())
 # address_parser = AddressParser(model, Decoder(data_set.get_id_to_category(),
