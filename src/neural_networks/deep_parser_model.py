@@ -188,6 +188,7 @@ class DeepParserModel(NeuralParser):
         # plot_model(model, 'DeepParse_Architecture.png')
 
     @staticmethod
+    @tf.keras.utils.register_keras_serializable()
     def my_metric_v2(y_true, y_pred):
 
         result = tf.equal(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1))
