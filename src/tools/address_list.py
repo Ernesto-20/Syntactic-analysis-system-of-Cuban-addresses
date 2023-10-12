@@ -1,8 +1,18 @@
 from src.structured_direction.classified_address_one import ClassifiedAddressOne
 import tensorflow as tf
 # assert case
-y_pred = [0.6, 0, 0, 0.501, 0, 0, 0, 0, 0, 0]
-y_real = [  1, 0, 0,     1, 0, 0, 0, 0, 0, 0]
+y_pred = [[0.6, 0, 0, 0.2, 0, 0, 0.2, 0, 0, 0],
+          [0.09, 0, 0, 0.51, 0, 0.2, 0, 0.1, 0.1, 0]]
+y_real = [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+result = tf.equal(tf.argmax(y_real, axis=-1), tf.argmax(y_pred, axis=-1))
+print(result)
+print('cast: ', tf.cast(result, tf.float32))
+result = tf.reduce_sum(tf.cast(result, tf.float32))
+print(result)
+
+
+# K.mean(K.equal(K.argmax(y_true, axis=-1), K.argmax(y_pred, axis=-1)))
 
 
 # fail case
@@ -12,12 +22,18 @@ y_real = [  1, 0, 0,     1, 0, 0, 0, 0, 0, 0]
 # test case
 # y_pred = [0.0973835886, 0.0959317908, 0.0735085383, 0.0930648819, 0.0859329849, 0.0832466409, 0.577864632, 0.501, 0.0859992132, 0.0921353698]
 # y_real = [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]
-# 
-vp = tf.keras.metrics.TruePositives()
-vp.update_state(y_real, y_pred)
-vp = vp.result().numpy()
 
-print('vp: ', vp)
+# precision = tf.keras.metrics.Precision()
+# precision.update_state(y_real, y_pred)
+# precision = precision.result().numpy()
+#
+# print('precision: ', precision)
+
+# vp = tf.keras.metrics.TruePositives()
+# vp.update_state(y_real, y_pred)
+# vp = vp.result().numpy()
+#
+# print('vp: ', vp)
 # 
 # vn = tf.keras.metrics.truenegatives()
 # vn.update_state(y_real, y_pred)
