@@ -177,7 +177,7 @@ class DeepParserModel(NeuralParser):
         # Optimiser
         opt = keras.optimizers.Adam(learning_rate=0.0005)
         # metrics = [tf.metrics.CategoricalAccuracy(), tf.metrics.Precision(), tf.metrics.Recall(), DeepParserModel.my_metric]
-        metrics = [DeepParserModel.my_metric_v2, tf.metrics.Precision()]
+        metrics = [DeepParserModel.precision]
         # metrics = [tf.metrics.Accuracy()]
         # Accuracy tells you how many times the ML model was correct overall.
         # Precision is how good the model is at predicting a specific category.
@@ -189,7 +189,7 @@ class DeepParserModel(NeuralParser):
 
     @staticmethod
     @tf.keras.utils.register_keras_serializable()
-    def my_metric_v2(y_true, y_pred):
+    def precision(y_true, y_pred):
 
         result = tf.equal(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1))
         result = tf.reduce_sum(tf.cast(result, tf.float32))

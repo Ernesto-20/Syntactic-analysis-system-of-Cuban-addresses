@@ -3,15 +3,15 @@ from src.tools.decoder import Decoder
 from src.tools.neural_parser_manage import NeuralParserManage
 from src.data_preprocessing.address_cleaner import AddressCleaner
 from src.tools.compare_results import calculate_results
-from src.tools.address_list import ADDRESS_LIST_EVAL_1, ADDRESS_LIST_EVAL_2
+from src.tools.address_list import ADDRESS_LIST_EVAL_1
 import pandas as pd
 
 print('Init')
-neural_parser = NeuralParserManage.load_neural_parser(route='../assets/trained_models/model_type_one', name='pc_trained_v1')
+neural_parser = NeuralParserManage.load_neural_parser(route='../assets/trained_models/model_type_one', name='colab_trained_v20')
 # neural_parser.evaluate()
 
 # address_parser = AddressParser(neural_parser, Decoder(neural_parser.get_data().get_id_to_category(), neural_parser.get_cleaner_method()))
-address_parser = AddressParser(neural_parser, Decoder(neural_parser.get_data().get_id_to_category(), AddressCleaner.cleaner_method('custom_standardization')))
+address_parser = AddressParser(neural_parser, Decoder(neural_parser.data.get_id_to_category(), AddressCleaner.cleaner_method('custom_standardization')))
 
 # Predict
 evaluates = pd.read_excel('../assets/default_corpus/model_type_one/evaluate 1.xlsx')

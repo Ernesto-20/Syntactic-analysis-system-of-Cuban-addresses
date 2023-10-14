@@ -6,10 +6,10 @@ y_pred = [[0.6, 0, 0, 0.2, 0, 0, 0.2, 0, 0, 0],
 y_real = [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 result = tf.equal(tf.argmax(y_real, axis=-1), tf.argmax(y_pred, axis=-1))
-print(result)
-print('cast: ', tf.cast(result, tf.float32))
-result = tf.reduce_sum(tf.cast(result, tf.float32))
-print(result)
+# print(result)
+# print('cast: ', tf.cast(result, tf.float32))
+# result = tf.reduce_sum(tf.cast(result, tf.float32))
+# print(result)
 
 
 # K.mean(K.equal(K.argmax(y_true, axis=-1), K.argmax(y_pred, axis=-1)))

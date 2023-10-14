@@ -37,6 +37,7 @@ class NeuralParserManage:
 
         # load address cleaner
         cleaner_method = dill.load(open(file_path + '/cleaner_method', 'rb'))
+
         config = dill.load(open(file_path + '/config', 'rb'))
         # load keras model
         model = tf.keras.models.load_model(file_path + '/model', custom_objects={cleaner_method.__name__: cleaner_method,
