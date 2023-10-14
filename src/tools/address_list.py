@@ -1058,7 +1058,17 @@ ClassifiedAddressOne(principal_street=['puerta', 'cerrada'],
                                           province=[],
                                           building=['222'],
                                           apartment=[],
-                                      reserve_word=['/', 'y'])
+                                      reserve_word=['/', 'y']),
+# 7MA  # 10302 APT 18  E/ L Y K . ALTAHABANA
+ClassifiedAddressOne(principal_street=['7ma'],
+                                          first_side_street=['l'],
+                                          second_side_street=['k'],
+                                          locality=['altahabana'],
+                                          municipality=[],
+                                          province=[],
+                                          building=['10302'],
+                                          apartment=['18'],
+                                      reserve_word=['#', 'apt', 'e/', 'y']),
 ]
 # ADDRESS_LIST_EVAL_2 = [
 # # pliar sn  e/  julio de cardenas y lindero, arroyo naranjo, la habana
