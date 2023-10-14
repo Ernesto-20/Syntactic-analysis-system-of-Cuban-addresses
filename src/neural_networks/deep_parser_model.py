@@ -20,6 +20,7 @@ class DeepParserConfig:
                output_emb_word,
                units_char_blstm,
                units_trigram_blstm,
+               units_word_blstm,
                dropout_char_blstm,
                dropout_trigram_blstm,
                rdropout_char_blstm,
@@ -34,6 +35,8 @@ class DeepParserConfig:
         self.__output_emb_word = output_emb_word
         self.__units_char_blstm = units_char_blstm
         self.__units_trigram_blstm = units_trigram_blstm
+        self.__units_word_blstm = units_word_blstm
+
         self.__dropout_char_blstm = dropout_char_blstm
         self.__dropout_trigram_blstm = dropout_trigram_blstm
         self.__rdropout_char_blstm = rdropout_char_blstm
@@ -57,6 +60,9 @@ class DeepParserConfig:
 
     def get_units_trigram_blstm(self):
         return self.__units_trigram_blstm
+
+    def get_units_word_blstm(self):
+        return self.__units_word_blstm
 
     def get_dropout_char_blstm(self):
         return self.__dropout_char_blstm
@@ -91,18 +97,19 @@ class DeepParserModel(NeuralParser):
 
         if config is None:
             self.__config = DeepParserConfig(
-                output_emb_char=100,
-                output_emb_trigram=100,
-                output_emb_word=128,
-                units_char_blstm=50,
-                units_trigram_blstm=50,
+                output_emb_char=128,
+                output_emb_trigram=128,
+                output_emb_word=64,
+                units_char_blstm=32,
+                units_trigram_blstm=32,
+                units_word_blstm= 30,
                 dropout_char_blstm=0,
                 dropout_trigram_blstm=0,
                 rdropout_char_blstm=0,
                 rdropout_trigram_blstm=0,
-                dropout_char_trigram_blstm=0,
+                dropout_char_trigram_blstm=0.3,
                 rdropout_char_trigram_blstm=0,
-                dropout_char_trigram_word_blstm=0.3,
+                dropout_char_trigram_word_blstm=0.4,
                 rdropout_char_trigram_word_blstm=0,
             )
         elif isinstance(config, DeepParserConfig):
@@ -167,7 +174,7 @@ class DeepParserModel(NeuralParser):
         # ********* PROJECTION LAYER ***************
 
         blstm_concat_2 = Bidirectional(
-            LSTM(units=self.__data.get_n_tag(), return_sequences=True,
+            LSTM(units=self.__config.get_units_word_blstm(), return_sequences=True,
                  dropout=self.__config.get_dropout_char_trigram_word_blstm(),
                  recurrent_dropout=self.__config.get_rdropout_char_trigram_word_blstm()),
             merge_mode='concat', name='Word_Projection_BLSTM')
