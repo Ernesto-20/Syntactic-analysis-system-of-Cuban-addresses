@@ -211,46 +211,6 @@ class DeepParserModel(NeuralParser):
 
         return true_positive/(true_positive + false_positive)
 
-    @staticmethod
-    def my_metric(y_true, y_pred):
-        tf.print('--.-.-.-.---.-.-.-.')
-
-        class_number = len(y_pred[0][0])
-        corrects_number = 0
-        wrongs_number = 0
-
-        # tf.print('*******************')
-        tf.print(tf.shape(y_pred))
-        for batch_pred_index in range(len(y_pred)):
-            for words_percents_index in range(len(y_pred[batch_pred_index])):
-                max_index = tf.argmax(y_pred[batch_pred_index][words_percents_index])
-                if y_true[batch_pred_index][words_percents_index][max_index] == 1:
-                    corrects_number += 1
-                else:
-                    wrongs_number += 1
-
-        tf.print('corrects_number: ', corrects_number)
-        tf.print('wrongs_number: ', wrongs_number)
-
-        true_positive = corrects_number
-        false_positive = wrongs_number
-        false_negative = wrongs_number
-        true_negative = corrects_number*(class_number-1) + wrongs_number*(class_number-2)
-
-        value = true_positive/(true_positive + false_positive)
-        tf.print('value: ', value)
-
-        result = tf.equal(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1))
-        result = tf.reduce_sum(tf.cast(result, tf.float32))
-
-        corrects_number = result
-        wrongs_number = (float(len(y_pred)) * len(y_pred[0])) - corrects_number
-
-        tf.print('corrects_number: ', corrects_number)
-        tf.print('wrongs_number: ', wrongs_number)
-
-        return value
-
     def _create_layer_vectorization(self, name, max_len, ngrams=None, split="whitespace"):
         vectorize_layer = TextVectorization(
             standardize=self.__cleaner_method,
