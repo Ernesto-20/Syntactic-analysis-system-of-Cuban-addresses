@@ -16,6 +16,16 @@ class AddressParser:
 
         return self.decoder.decode_to_scheme_one(probability_matrix, address_list)
 
+    def process_address_two(self, address_list: list):
+        probability_matrix = self.model.predict(address_list)
+
+        return self.decoder.decode_to_scheme_two(probability_matrix, address_list)
+
+    def process_address_three(self, address_list: list):
+        probability_matrix = self.model.predict(address_list)
+
+        return self.decoder.decode_to_scheme_three(probability_matrix, address_list)
+
     def process_address_data_frame(self, address: DataFrame):
         address_list = []
         for i in address.index:
