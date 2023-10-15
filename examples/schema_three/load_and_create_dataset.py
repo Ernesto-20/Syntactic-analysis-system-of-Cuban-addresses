@@ -17,7 +17,12 @@ data_set = DataSetAdapter().adapt(data_with_noise, 0.69, 0.10, 0.20)
 # save the dataset created
 DataSetManage.save(data_set, '../assets/default_data_set/model_type_three/EQ_S3_1000')
 
+
 print(data_with_noise)
 
 data_with_noise.to_excel('../assets/default_data_set/model_type_three/EQ_S3_1000.xlsx',index=False)
 
+
+
+print('Loading Datasets')
+eq1_data = DataSetManage.load('../assets/default_data_set/model_type_three/EQ_S3_1000')

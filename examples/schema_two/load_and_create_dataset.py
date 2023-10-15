@@ -20,3 +20,6 @@ DataSetManage.save(data_set, '../assets/default_data_set/model_type_two/EQ_S2_10
 print(data_with_noise)
 
 data_with_noise.to_excel('../assets/default_data_set/model_type_two/EQ_S2_1000.xlsx',index=False)
+
+print('Loading Datasets')
+eq1_data = DataSetManage.load( '../assets/default_data_set/model_type_two/EQ_S2_1000')
