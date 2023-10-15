@@ -35,6 +35,24 @@ class AddressParser:
 
         return self.decoder.decode_to_scheme_one(probability_matrix, address_list)
 
+    def process_address_two_data_frame(self, address: DataFrame):
+        address_list = []
+        for i in address.index:
+            if len(str(address.iloc[i, 0])) != 0:
+                address_list.append(str(address.iloc[i, 0]))
+        probability_matrix = self.model.predict(address_list)
+
+        return self.decoder.decode_to_scheme_two(probability_matrix, address_list)
+
+    def process_address_three_data_frame(self, address: DataFrame):
+        address_list = []
+        for i in address.index:
+            if len(str(address.iloc[i, 0])) != 0:
+                address_list.append(str(address.iloc[i, 0]))
+        probability_matrix = self.model.predict(address_list)
+
+        return self.decoder.decode_to_scheme_three(probability_matrix, address_list)
+
     @staticmethod
     def to_xlsx(list_address: list, name_file='Results'):
         if len(list_address) == 0:
