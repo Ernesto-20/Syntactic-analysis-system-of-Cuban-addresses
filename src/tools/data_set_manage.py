@@ -1,5 +1,7 @@
 import pickle
 
+from pandas import DataFrame
+
 from src.tools.address_data_set import DataSet
 
 
@@ -22,8 +24,11 @@ class DataSetManage:
 
         return data_set
 
-    def export_data(sefl,df, filename, file_format='csv'):
+    @staticmethod
+    def export_data(df: DataFrame, filename, file_format='csv'):
         if file_format == 'csv':
             df.to_csv(filename + '.csv', index=False)
         elif file_format == 'xlsx':
             df.to_excel(filename + '.xlsx', index=False)
+        else:
+            raise NotImplementedError('the format ', file_format, ' is not implemented')

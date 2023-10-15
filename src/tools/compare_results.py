@@ -56,11 +56,11 @@ def calculate_results(y_predict: list, y_real: list):
     VP = matches
     FN = no_matches
     FP = FN
-    VN = matches*8+no_matches*7
+    VN = matches*9+no_matches*8 # Aqui estoy contando el padding tag
     print('Total number of errrors: ', FN)
     result = {'accuracy': (VP+VN)/(VP+FN+FP+VN),
               'precision': VP/(VP+FP),
-              'recall': VP/(VP+FN), # Me parece que esto esta mal. No deberia de ser igual que precision
+              'recall': VP/(VP+FN),
               'amount_parsing_correct_address': count_correct_parsing
               }
 

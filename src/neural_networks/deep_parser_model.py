@@ -20,6 +20,7 @@ class DeepParserConfig:
                output_emb_word,
                units_char_blstm,
                units_trigram_blstm,
+               units_word_blstm,
                dropout_char_blstm,
                dropout_trigram_blstm,
                rdropout_char_blstm,
@@ -34,6 +35,8 @@ class DeepParserConfig:
         self.__output_emb_word = output_emb_word
         self.__units_char_blstm = units_char_blstm
         self.__units_trigram_blstm = units_trigram_blstm
+        self.__units_word_blstm = units_word_blstm
+
         self.__dropout_char_blstm = dropout_char_blstm
         self.__dropout_trigram_blstm = dropout_trigram_blstm
         self.__rdropout_char_blstm = rdropout_char_blstm
@@ -57,6 +60,9 @@ class DeepParserConfig:
 
     def get_units_trigram_blstm(self):
         return self.__units_trigram_blstm
+
+    def get_units_word_blstm(self):
+        return self.__units_word_blstm
 
     def get_dropout_char_blstm(self):
         return self.__dropout_char_blstm
@@ -91,18 +97,19 @@ class DeepParserModel(NeuralParser):
 
         if config is None:
             self.__config = DeepParserConfig(
-                output_emb_char=100,
-                output_emb_trigram=100,
-                output_emb_word=128,
-                units_char_blstm=50,
-                units_trigram_blstm=50,
+                output_emb_char=128,
+                output_emb_trigram=128,
+                output_emb_word=64,
+                units_char_blstm=32,
+                units_trigram_blstm=32,
+                units_word_blstm= 30,
                 dropout_char_blstm=0,
                 dropout_trigram_blstm=0,
                 rdropout_char_blstm=0,
                 rdropout_trigram_blstm=0,
-                dropout_char_trigram_blstm=0,
+                dropout_char_trigram_blstm=0.3,
                 rdropout_char_trigram_blstm=0,
-                dropout_char_trigram_word_blstm=0.3,
+                dropout_char_trigram_word_blstm=0.4,
                 rdropout_char_trigram_word_blstm=0,
             )
         elif isinstance(config, DeepParserConfig):
@@ -167,7 +174,7 @@ class DeepParserModel(NeuralParser):
         # ********* PROJECTION LAYER ***************
 
         blstm_concat_2 = Bidirectional(
-            LSTM(units=self.__data.get_n_tag(), return_sequences=True,
+            LSTM(units=self.__config.get_units_word_blstm(), return_sequences=True,
                  dropout=self.__config.get_dropout_char_trigram_word_blstm(),
                  recurrent_dropout=self.__config.get_rdropout_char_trigram_word_blstm()),
             merge_mode='concat', name='Word_Projection_BLSTM')
@@ -176,7 +183,8 @@ class DeepParserModel(NeuralParser):
         model = keras.Model(inputs, output, name='DeepParser')
         # Optimiser
         opt = keras.optimizers.Adam(learning_rate=0.0005)
-        metrics = [tf.metrics.CategoricalAccuracy(), tf.metrics.Precision(), tf.metrics.Recall()]
+        # metrics = [tf.metrics.CategoricalAccuracy(), tf.metrics.Precision(), tf.metrics.Recall(), DeepParserModel.my_metric]
+        metrics = [DeepParserModel.precision]
         # metrics = [tf.metrics.Accuracy()]
         # Accuracy tells you how many times the ML model was correct overall.
         # Precision is how good the model is at predicting a specific category.
@@ -184,7 +192,24 @@ class DeepParserModel(NeuralParser):
         model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=metrics)
         model.summary()
         self.__model = model
-        plot_model(model, 'DeepParse_Architecture.png')
+        # plot_model(model, 'DeepParse_Architecture.png')
+
+    @staticmethod
+    @tf.keras.utils.register_keras_serializable()
+    def precision(y_true, y_pred):
+
+        result = tf.equal(tf.argmax(y_true, axis=-1), tf.argmax(y_pred, axis=-1))
+        result = tf.reduce_sum(tf.cast(result, tf.float32))
+
+        corrects_number = result
+        wrongs_number = (float(len(y_pred)) * len(y_pred[0])) - corrects_number
+
+        true_positive = corrects_number
+        false_positive = wrongs_number
+        # false_negative = wrongs_number
+        # true_negative = corrects_number * (class_number - 1) + wrongs_number * (class_number - 2)
+
+        return true_positive/(true_positive + false_positive)
 
     def _create_layer_vectorization(self, name, max_len, ngrams=None, split="whitespace"):
         vectorize_layer = TextVectorization(
