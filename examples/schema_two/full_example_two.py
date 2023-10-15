@@ -1,7 +1,7 @@
 import pandas as pd
 
 from data_preprocessing.address_cleaner import AddressCleaner
-from neural_networks.deep_original import DeepParserModel, DeepParserConfig
+from neural_networks.deep_parser_model import DeepParserModel, DeepParserConfig
 from src.tools.data_set_manage import DataSetManage
 
 

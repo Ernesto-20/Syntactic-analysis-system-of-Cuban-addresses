@@ -1,6 +1,8 @@
 import numpy as np
 
-from src.structured_direction.classified_address_one import ClassifiedAddressOne
+from src.structured_direction.address_scheme_two import AddressSchemeTwo
+from structured_direction.address_scheme_three import AddressSchemeThree
+from structured_direction.classified_address_one import ClassifiedAddressOne
 
 
 class Decoder:
@@ -22,7 +24,6 @@ class Decoder:
                 index_tag = list(raw_address[i]).index(max(list(raw_address[i])))
                 components[index_tag] += [words[i]]
 
-
             principal_street = components[self.cat_to_id['principal_street']]
             first_side_street = components[self.cat_to_id['first_side_street']]
             second_side_street = components[self.cat_to_id['second_side_street']]
@@ -35,93 +36,107 @@ class Decoder:
             padding = components[self.cat_to_id['padding']]
 
             list_address_classified.append(
-                ClassifiedAddressOne(principal_street=principal_street, first_side_street=first_side_street, second_side_street=second_side_street,
+                ClassifiedAddressOne(principal_street=principal_street, first_side_street=first_side_street,
+                                     second_side_street=second_side_street,
                                      locality=locality, municipality=municipality, province=province,
-                                     building=building, apartment=apartment, reserve_word=reserve_word, padding=padding))
+                                     building=building, apartment=apartment, reserve_word=reserve_word,
+                                     padding=padding))
             index_address += 1
 
         return list_address_classified
 
     def decode_to_scheme_two(self, matrix_probability, text_address_list):
         list_address_classified = []
-        index_address = 0
-        for raw_address in matrix_probability:
+
+        for raw_address, text_address in zip(matrix_probability, text_address_list):
             components = {value: [] for key, value in self.cat_to_id.items()}
 
-            pre_presses_text = self.cleaner_method(text_address_list[index_address])
-            words = str(pre_presses_text.numpy().decode('utf-8')).split()
+            try:
+                pre_processed_text = self.cleaner_method(text_address)
+                words = pre_processed_text.numpy().decode('utf-8').split()
+            except (AttributeError, UnicodeDecodeError) as e:
+                print(f"Error while preprocessing text address: {e}")
+                continue
 
-            for i in range(len(words)):  # Lista de probabilidades
-                index_tag = list(raw_address[i]).index(max(list(raw_address[i])))
-                components[index_tag] += [words[i]]
+            component_tags = []
 
-            building = None
-            apartment = None
-            locality = None
-            municipality = None
-            province = None
-            reserve_word = None
+            for raw_prob in raw_address:
+                max_probability = max(raw_prob)
+                prob_list = list(raw_prob)
+                index_tag = prob_list.index(max_probability)
+                component_tags.append(index_tag)
 
-            for cat in self.cat_to_id:
-                if cat == 'building':
-                    building = components[self.cat_to_id[cat]]
-                elif cat == 'apartment':
-                    apartment = components[self.cat_to_id[cat]]
-                elif cat == 'locality':
-                    locality = components[self.cat_to_id[cat]]
-                elif cat == 'municipality':
-                    municipality = components[self.cat_to_id[cat]]
-                elif cat == 'province':
-                    province = components[self.cat_to_id[cat]]
-                elif cat == 'rw':
-                    reserve_word = components[self.cat_to_id[cat]]
+            print("Length of words:", len(words))
+            print("Length of component_tags:", len(component_tags))
 
-            list_address_classified.append(
-                ClassifiedAddress().delegate_address_two(locality, municipality,province, building, apartment, reserve_word))
-            index_address += 1
+            for i, index_tag in enumerate(component_tags):
+
+                if i >= len(words):
+                    break
+                components[index_tag].append(words[i])
+
+            building = components.get(self.cat_to_id.get('building'), None)
+            apartment = components.get(self.cat_to_id.get('apartment'), None)
+            locality = components.get(self.cat_to_id.get('locality'), None)
+            municipality = components.get(self.cat_to_id.get('municipality'), None)
+            province = components.get(self.cat_to_id.get('province'), None)
+            reserve_word = components.get(self.cat_to_id.get('rw'), None)
+
+            try:
+                list_address_classified.append(
+                    AddressSchemeTwo(locality, municipality, province, building, apartment, reserve_word)
+                )
+            except TypeError as e:
+                print(f"Error while creating ClassifiedAddressTwo object: {e}")
+                continue
 
         return list_address_classified
 
     def decode_to_scheme_three(self, matrix_probability, text_address_list):
         list_address_classified = []
-        index_address = 0
-        for raw_address in matrix_probability:
+
+        for raw_address, text_address in zip(matrix_probability, text_address_list):
             components = {value: [] for key, value in self.cat_to_id.items()}
 
-            pre_presses_text = self.cleaner_method(text_address_list[index_address])
-            words = str(pre_presses_text.numpy().decode('utf-8')).split()
+            try:
+                pre_processed_text = self.cleaner_method(text_address)
+                words = pre_processed_text.numpy().decode('utf-8').split()
+            except (AttributeError, UnicodeDecodeError) as e:
+                print(f"Error while preprocessing text address: {e}")
+                continue
 
-            for i in range(len(words)):  # Lista de probabilidades
-                index_tag = list(raw_address[i]).index(max(list(raw_address[i])))
-                components[index_tag] += [words[i]]
+            component_tags = []
 
-            principal_street = None
-            distance = None
-            interesting_place = None
-            locality = None
-            municipality = None
-            province = None
-            reserve_word = None
+            for raw_prob in raw_address:
+                max_probability = max(raw_prob)
+                prob_list = list(raw_prob)
+                index_tag = prob_list.index(max_probability)
+                component_tags.append(index_tag)
 
-            for cat in self.cat_to_id:
-                if cat == 'principal_street':
-                    principal_street = components[self.cat_to_id[cat]]
-                elif cat == 'distance':
-                    distance = components[self.cat_to_id[cat]]
-                elif cat == 'interesting_place':
-                    interesting_place = components[self.cat_to_id[cat]]
-                elif cat == 'locality':
-                    locality = components[self.cat_to_id[cat]]
-                elif cat == 'municipality':
-                    municipality = components[self.cat_to_id[cat]]
-                elif cat == 'province':
-                    province = components[self.cat_to_id[cat]]
-                elif cat == 'rw':
-                    reserve_word = components[self.cat_to_id[cat]]
+            print("Length of words:", len(words))
+            print("Length of component_tags:", len(component_tags))
 
-            list_address_classified.append(
-                ClassifiedAddress().delegate_address_three(principal_street, distance, interesting_place, locality,
-                                   municipality, province, reserve_word))
-            index_address += 1
+            for i, index_tag in enumerate(component_tags):
+
+                if i >= len(words):
+                    break
+                components[index_tag].append(words[i])
+
+            principal_street = components.get(self.cat_to_id.get('principal_street'), None)
+            distance = components.get(self.cat_to_id.get('distance'), None)
+            interesting_place = components.get(self.cat_to_id.get('interesting_place'), None)
+            locality = components.get(self.cat_to_id.get('locality'), None)
+            municipality = components.get(self.cat_to_id.get('municipality'), None)
+            province = components.get(self.cat_to_id.get('province'), None)
+            reserve_word = components.get(self.cat_to_id.get('rw'), None)
+
+            try:
+                list_address_classified.append(
+                    AddressSchemeThree(principal_street, distance, interesting_place, locality,
+                                       municipality, province, reserve_word)
+                )
+            except TypeError as e:
+                print(f"Error while creating ClassifiedAddressThree object: {e}")
+                continue
 
         return list_address_classified
