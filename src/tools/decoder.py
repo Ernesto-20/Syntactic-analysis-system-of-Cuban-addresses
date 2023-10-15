@@ -1,8 +1,8 @@
 import numpy as np
 
 from src.structured_direction.address_scheme_two import AddressSchemeTwo
-from structured_direction.address_scheme_three import AddressSchemeThree
-from structured_direction.classified_address_one import ClassifiedAddressOne
+from src.structured_direction.address_scheme_three import AddressSchemeThree
+from src.structured_direction.classified_address_one import ClassifiedAddressOne
 
 
 class Decoder:

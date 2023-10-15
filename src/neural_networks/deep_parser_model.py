@@ -29,6 +29,7 @@ class DeepParserConfig:
                rdropout_char_trigram_blstm,
                dropout_char_trigram_word_blstm,
                rdropout_char_trigram_word_blstm,
+               learning_rate,
                ):
         self.__output_emb_char = output_emb_char
         self.__output_emb_trigram = output_emb_trigram
@@ -45,6 +46,8 @@ class DeepParserConfig:
         self.__rdropout_char_trigram_blstm = rdropout_char_trigram_blstm
         self.__dropout_char_trigram_word_blstm = dropout_char_trigram_word_blstm
         self.__rdropout_char_trigram_word_blstm = rdropout_char_trigram_word_blstm
+
+        self.__learning_rate = learning_rate
 
     def get_output_emb_char(self):
         return self.__output_emb_char
@@ -87,6 +90,9 @@ class DeepParserConfig:
 
     def get_rdropout_char_trigram_word_blstm(self):
         return self.__rdropout_char_trigram_word_blstm
+
+    def get_learning_rate(self):
+        return self.__learning_rate
 
 
 class DeepParserModel(NeuralParser):
