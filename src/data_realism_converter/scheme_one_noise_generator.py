@@ -59,7 +59,7 @@ class SchemeOneNoiseGenerator(NoiseGenerator):
             province = str(data_set.iloc[i, 5])
 
             # omit administrative political divisions
-            locality, municipality, province = super().omit_administrative_political(locality, municipality, province, 0.02, 0.05, 0.07)
+            locality, municipality, province = super().omit_administrative_political(locality, municipality, province, 0.04, 0.02, 0.04)
 
 
             # Determinar si es tipo 1 o 2:
@@ -289,14 +289,17 @@ class SchemeOneNoiseGenerator(NoiseGenerator):
         if random_value <= 38:
             # only numbers
             number = rm.randint(1, 100)
+
+            if number <= 5:
+                return str(rm.randint(1, 9))
             # two digits
-            if number <= 25:
+            if number <= 20:
                 return str(rm.randint(1, 99))
             # three digits
-            if number <= 50:
+            if number <= 60:
                 return str(rm.randint(100, 999))
             # four digits
-            if number <= 75:
+            if number <= 85:
                 return str(rm.randint(1000, 9999))
             # five digits
             if number <= 100:
