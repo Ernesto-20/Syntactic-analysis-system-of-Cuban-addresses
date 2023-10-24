@@ -45,6 +45,44 @@ class Decoder:
 
         return list_address_classified
 
+    def decode_to_scheme_one_v2(self, matrix_probability, text_address_list):
+        list_address_classified = []
+        index_address = 0
+        for raw_address in matrix_probability:
+            components = {value: [] for key, value in self.cat_to_id.items()}
+
+            pre_presses_text = self.cleaner_method(text_address_list[index_address])
+            words = str(pre_presses_text.numpy().decode('utf-8')).split()
+            print(text_address_list[index_address])
+            for i in range(len(words)):  # Lista de probabilidades
+                index_tag = list(raw_address[i]).index(max(list(raw_address[i])))
+                if raw_address[i][index_tag] > 0.5:
+                    components[index_tag] += [words[i]]
+                else:
+                    print('*****************************************************************************************')
+                    print('No es estoy seguro concho e tumadre')
+                    print('palabra: ', words[i])
+
+            principal_street = components[self.cat_to_id['principal_street']]
+            first_side_street = components[self.cat_to_id['first_side_street']]
+            second_side_street = components[self.cat_to_id['second_side_street']]
+            building = components[self.cat_to_id['building']]
+            apartment = components[self.cat_to_id['apartment']]
+            locality = components[self.cat_to_id['locality']]
+            municipality = components[self.cat_to_id['municipality']]
+            province = components[self.cat_to_id['province']]
+            reserve_word = components[self.cat_to_id['rw']]
+            padding = components[self.cat_to_id['padding']]
+
+            list_address_classified.append(
+                ClassifiedAddressOne(principal_street=principal_street, first_side_street=first_side_street,
+                                     second_side_street=second_side_street,
+                                     locality=locality, municipality=municipality, province=province,
+                                     building=building, apartment=apartment, reserve_word=reserve_word,
+                                     padding=padding))
+            index_address += 1
+
+        return list_address_classified
     def decode_to_scheme_two(self, matrix_probability, text_address_list):
         list_address_classified = []
 
