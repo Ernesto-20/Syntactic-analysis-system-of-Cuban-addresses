@@ -7,7 +7,10 @@ from src.tools.lookup import *
 from data_realism_converter.generator_other_schema import Generator
 
 from src.tools.correct_prefix import *
+
+
 class NoiseGeneratorModelThree(Generator):
+
     def generate_noise(self, data_set: DataFrame, type=None, address_amount=None):
         '''
 
@@ -69,8 +72,6 @@ class NoiseGeneratorModelThree(Generator):
         else:
             raise NotImplementedError('There is no such kind of example')
 
-
-
     def __generate_correct_example_type_three(self):
         components = []
 
@@ -104,8 +105,8 @@ class NoiseGeneratorModelThree(Generator):
                 add_num_component = True if rm.randint(0, 100) > 70 else False
                 if add_num_component:
                     components.append(
-                        principal_street_prefix  + number_form  + [[item, 'principal_street'] for item in
-                                                                             principal_street.split()]
+                        principal_street_prefix + number_form + [[item, 'principal_street'] for item in
+                                                                 principal_street.split()]
                     )
                 else:
                     components.append(
@@ -119,8 +120,8 @@ class NoiseGeneratorModelThree(Generator):
                 add_num_component = True if rm.randint(0, 100) > 80 else False
                 if add_num_component:
                     components.append(
-                        distance_form +  number_form +  [[item, 'distance'] for item in
-                                                                   distance.split()]
+                        distance_form + number_form + [[item, 'distance'] for item in
+                                                       distance.split()]
                         + distance_specification_form
                     )
                 else:
@@ -132,8 +133,8 @@ class NoiseGeneratorModelThree(Generator):
                 add_num_component = True if rm.randint(0, 100) > 80 else False
                 if add_num_component:
                     components.append(
-                        distance_form +  number_form +  [[item, 'distance'] for item in
-                                                                   distance.split()]
+                        distance_form + number_form + [[item, 'distance'] for item in
+                                                       distance.split()]
                     )
                 else:
                     components.append(
@@ -147,9 +148,13 @@ class NoiseGeneratorModelThree(Generator):
         if add_interesting_place_component:
             if len(interesting_place_name) != 0 or not self.check_is_empty(interesting_place_name):
                 components.append(
-                     [[item, 'interesting_place'] for item in
-                                  interesting_place_name.split()]
+                    [[item, 'interesting_place'] for item in
+                     interesting_place_name.split()]
                 )
+
+        #  Permutación entre componentes.
+        components = super().generate_non_standardization(components, 50)
+
 
         # Components Basics
         # LOCALITY COMPONENT
@@ -169,8 +174,7 @@ class NoiseGeneratorModelThree(Generator):
                 province_form + [[item, 'province'] for item in province.split()]
             )
 
-        #  Permutación entre componentes.
-        components = super().generate_non_standardization(components, 30)
+
         return components
 
     def __generate_almost_correct_examples_type_three(self):
@@ -191,7 +195,7 @@ class NoiseGeneratorModelThree(Generator):
         municipality_form = super().generate_prefix_randomly(MUNICIPALITY_PREFIX, 55)
         province_form = super().generate_prefix_randomly(PROVINCE_PREFIX, 55)
 
-        if len(principal_street) != 0 or not self.__is_empty(principal_street):
+        if len(principal_street) != 0 or not self.check_is_empty(principal_street):
             is_name = True if principal_street.isalpha() else False
 
             # CREATING COMPONENT 1  --- [principal_street_prefix],[number_form],[principal_street] ---
@@ -206,8 +210,8 @@ class NoiseGeneratorModelThree(Generator):
                 add_num_component = True if rm.randint(0, 100) > 70 else False
                 if add_num_component:
                     components.append(
-                        principal_street_prefix +  number_form +  [[item, 'principal_street'] for item in
-                                                                             principal_street.split()]
+                        principal_street_prefix + number_form + [[item, 'principal_street'] for item in
+                                                                 principal_street.split()]
                     )
                 else:
                     components.append(
@@ -221,8 +225,8 @@ class NoiseGeneratorModelThree(Generator):
                 add_num_component = True if rm.randint(0, 100) > 80 else False
                 if add_num_component:
                     components.append(
-                        distance_form + number_form +  [[item, 'distance'] for item in
-                                                                   distance.split()]
+                        distance_form + number_form + [[item, 'distance'] for item in
+                                                       distance.split()]
                         + distance_specification_form
                     )
                 else:
@@ -234,8 +238,8 @@ class NoiseGeneratorModelThree(Generator):
                 add_num_component = True if rm.randint(0, 100) > 80 else False
                 if add_num_component:
                     components.append(
-                        distance_form +  number_form +  [[item, 'distance'] for item in
-                                                                   distance.split()]
+                        distance_form + number_form + [[item, 'distance'] for item in
+                                                       distance.split()]
                     )
                 else:
                     components.append(
@@ -247,32 +251,35 @@ class NoiseGeneratorModelThree(Generator):
         # INTERESTING PLACE COMPONENT
         add_interesting_place_component = True if rm.randint(0, 100) > 75 else False
         if add_interesting_place_component:
-            if len(interesting_place_name) != 0 or not self.__is_empty(interesting_place_name):
+            if len(interesting_place_name) != 0 or not self.check_is_empty(interesting_place_name):
                 components.append(
                     [[item, 'interesting_place'] for item in
                      interesting_place_name.split()]
                 )
 
+        #  Permutación entre componentes.
+        components = super().generate_non_standardization(components, 50)
+
+
         # Components Basics
         # LOCALITY COMPONENT
-        if len(locality) != 0 or not self.__is_empty(locality):
+        if len(locality) != 0 or not self.check_is_empty(locality):
             components.append(
                 locality_form + [[item, 'locality'] for item in locality.split()]
             )
         # CREATING COMPONENT 4  --- [municipality_form],[municipality] ---
-        if len(municipality) != 0 or not self.__is_empty(municipality):
+        if len(municipality) != 0 or not self.check_is_empty(municipality):
             components.append(
                 municipality_form + [[item, 'municipality'] for item in municipality.split()]
             )
 
         # CREATING COMPONENT 5  --- [province_form],[province] ---
-        if len(province) != 0 or not self.__is_empty(province):
+        if len(province) != 0 or not self.check_is_empty(province):
             components.append(
                 province_form + [[item, 'province'] for item in province.split()]
             )
 
-        #  Permutación entre componentes.
-        components = super().generate_non_standardization(components, 50)
+
 
         return components
 
@@ -310,8 +317,8 @@ class NoiseGeneratorModelThree(Generator):
                 add_num_component = True if rm.randint(0, 100) > 90 else False
                 if add_num_component:
                     components.append(
-                        principal_street_prefix +  number_form +  [[item, 'principal_street'] for item in
-                                                                             principal_street.split()]
+                        principal_street_prefix + number_form + [[item, 'principal_street'] for item in
+                                                                 principal_street.split()]
                     )
                 else:
                     components.append(
@@ -325,8 +332,8 @@ class NoiseGeneratorModelThree(Generator):
                 add_num_component = True if rm.randint(0, 100) > 80 else False
                 if add_num_component:
                     components.append(
-                        distance_form +  number_form +  [[item, 'distance'] for item in
-                                                                   distance.split()]
+                        distance_form + number_form + [[item, 'distance'] for item in
+                                                       distance.split()]
                         + distance_specification_form
                     )
                 else:
@@ -338,8 +345,8 @@ class NoiseGeneratorModelThree(Generator):
                 add_num_component = True if rm.randint(0, 100) > 80 else False
                 if add_num_component:
                     components.append(
-                        distance_form +  number_form +  [[item, 'distance'] for item in
-                                                                   distance.split()]
+                        distance_form + number_form + [[item, 'distance'] for item in
+                                                       distance.split()]
                     )
                 else:
                     components.append(
@@ -356,6 +363,9 @@ class NoiseGeneratorModelThree(Generator):
                     place_form + [[item, 'interesting_place'] for item in
                                   interesting_place_name.split()]
                 )
+
+        #  Permutación entre componentes.
+        components = super().generate_non_standardization(components, 50)
 
         # Components Basics
         # LOCALITY COMPONENT
@@ -375,8 +385,6 @@ class NoiseGeneratorModelThree(Generator):
                 province_form + [[item, 'province'] for item in province.split()]
             )
 
-        #  Permutación entre componentes.
-        components = super().generate_non_standardization(components, 50)
 
         return components
 
