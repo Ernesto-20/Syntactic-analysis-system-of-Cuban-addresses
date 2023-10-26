@@ -1,5 +1,7 @@
 from src.neural_networks.neural_parser import NeuralParser
 from src.structured_direction.classified_address_one import ClassifiedAddressOne
+from src.structured_direction.address_scheme_two import AddressSchemeTwo
+from src.structured_direction.address_scheme_three import AddressSchemeThree
 from src.tools.decoder import Decoder
 import pandas as pd
 from pandas import DataFrame
@@ -59,7 +61,10 @@ class AddressParser:
             raise NotImplementedError('The list should have at least one address')
         elif isinstance(list_address[0], ClassifiedAddressOne):
             AddressParser.__export_one(list_address, name_file=name_file, format='xlsx')
-        # FRANK poner la otra condicion de que si es instancia de ClassifiedAddresTwoAndThree
+        elif isinstance(list_address[0], AddressSchemeTwo):
+            pass
+        elif isinstance(list_address[0], AddressSchemeThree):
+            pass
 
     @staticmethod
     def to_csv(list_address: list, name_file='Results'):
