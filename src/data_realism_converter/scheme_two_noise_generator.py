@@ -383,7 +383,7 @@ class SchemeTwoNoiseGenerator(Generator):
             )
 
             #  Permutación entre componentes.
-            components = super().generate_non_standardization(components, 50)
+            components = super().generate_non_standardization(components, 40)
 
         return components
 
@@ -528,7 +528,7 @@ class SchemeTwoNoiseGenerator(Generator):
             )
 
         #  Permutación entre componentes.
-        components = super().generate_non_standardization(components, 50)
+        components = super().generate_non_standardization(components, 40)
 
         return components
 
