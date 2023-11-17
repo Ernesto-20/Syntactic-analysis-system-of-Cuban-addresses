@@ -8,11 +8,11 @@ class AddressSchemeTwo:
         self.reserve_word = reserve_word
 
     def __str__(self):
-        address_two = 'Edificio: ' + ' '.join(self.building) + '\n' \
-            ',Apartamento: ' + ' '.join(self.apartment) + '\n' \
-            ',Localidad: ' + ' '.join(self.locality) + '\n' \
-            ',Municipio: ' + ' '.join(self.municipality) + '\n' \
-            ',Provincia: ' + ' '.join(self.province) + '\n' \
-            ',Palabras reservadas: ' + ' '.join(self.reserve_word) + '\n'
+        address_two = 'Edificio: ' + f'{self.building}' + '\n' \
+            ',Apartamento: ' + f'{self.apartment}' + '\n' \
+            ',Localidad: ' + f'{self.locality}' + '\n' \
+            ',Municipio: ' + f'{self.municipality}' + '\n' \
+            ',Provincia: ' + f'{self.province}' + '\n' \
+            ',Palabras reservadas: ' + f'{self.reserve_word}' + '\n'
 
         return address_two

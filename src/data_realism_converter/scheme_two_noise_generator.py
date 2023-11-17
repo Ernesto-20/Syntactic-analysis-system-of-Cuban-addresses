@@ -68,6 +68,8 @@ class SchemeTwoNoiseGenerator(Generator):
             return super().create_data_frame(address_list, words_list, tag_list)
         elif type == 'eq':
             return self.__generate_equilibrated_examples_type_two()
+        elif type == 'ea':
+            return self.__generate_evaluation_addresses()
         else:
             raise NotImplementedError('There is no such kind of example')
 
@@ -532,5 +534,37 @@ class SchemeTwoNoiseGenerator(Generator):
 
         return components
 
+    def __generate_evaluation_addresses(self):
+        print('Generate_random_noise_type_two')
+        address_number = 0
+        address_list = []
+        dict_list = []
 
+        correct, almost_correct, uncorrect = super().divide_equally(self.address_amount)
+
+        for _ in range(correct):
+            components = self.__generate_correct_example_type_two()
+            string = self.components_to_string(components)
+            dict_ = self.components_to_dict(components)
+            address_list.append(string)
+            dict_list.append(dict_)
+            address_number += 1
+
+        for _ in range(almost_correct):
+            components = self.__generate_almost_correct_examples_type_two()
+            string = self.components_to_string(components)
+            dict_ = self.components_to_dict(components)
+            address_list.append(string)
+            dict_list.append(dict_)
+            address_number += 1
+
+        for _ in range(uncorrect):
+            components = self.__generate_uncorrect_examples_type_two()
+            string = self.components_to_string(components)
+            dict_ = self.components_to_dict(components)
+            address_list.append(string)
+            dict_list.append(dict_)
+            address_number += 1
+
+        return self.create_dataframe(address_list, dict_list)
 

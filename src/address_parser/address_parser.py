@@ -73,8 +73,9 @@ class AddressParser:
         elif isinstance(list_address[0], ClassifiedAddressOne):
             AddressParser.__export_one(list_address, name_file=name_file, format='csv')
         # FRANK poner la otra condicion de que si es instancia de ClassifiedAddresTwoAndThree
+
     @staticmethod
-    def _export_one(list_address: list, name_file='Results', format='xlsx'):
+    def __export_one(list_address: list, name_file='Results', format='xlsx'):
         principal_street_list = []
         first_side_street_list = []
         second_side_street_list = []

@@ -4,6 +4,9 @@ from random import randrange
 from random import choice
 import itertools as itt
 import random as rm
+
+import numpy as np
+import pandas as pd
 from pandas import DataFrame
 
 class Generator(ABC):
@@ -203,3 +206,39 @@ class Generator(ABC):
             number = str(rm.randint(1, 90))
 
             return number[0: letter_position] + letter + number[letter_position:]
+
+    def components_to_string(self,components):
+        result = []
+        for component in components:
+            for subcomponent in component:
+                word, tag = subcomponent
+                result.append(f"{word}")
+        return ' '.join(result)
+
+    def components_to_dict(self, components):
+          result_dict = {}
+          for component in components:
+              for subcomponent in component:
+                  word, tag = subcomponent
+                  if tag not in result_dict:
+                      result_dict[tag] = []
+                  result_dict[tag].append(str(word).lower())
+          return result_dict
+
+    def create_dataframe(self, string_list, dict_list):
+        # Crear un DataFrame vacío con las columnas correspondientes a las claves del primer diccionario en dict_list y una columna adicional para la cadena de caracteres
+
+        df = pd.DataFrame(columns=['full_address'] + list(dict_list[0].keys()))
+         # Añadir cada cadena y cada diccionario en dict_list como una nueva fila en el DataFrame
+        for string, dict_ in zip(string_list, dict_list):
+
+            # df = df.append(pd.Series(row, index=df.columns), ignore_index=True)
+            #  df = pd.concat([df, pd.DataFrame([dict_], columns=columns + ['string'])])
+            df = pd.concat([df, pd.DataFrame([{'full_address': string, **dict_}])])
+
+        columns_to_clean = list(dict_list[0].keys())
+        for column in columns_to_clean:
+            #df[column] = df[column].apply(lambda x: str(x).strip("[]'"))
+            df[column] = df[column].replace(r'^\s*$', np.nan, regex=True)
+
+        return df

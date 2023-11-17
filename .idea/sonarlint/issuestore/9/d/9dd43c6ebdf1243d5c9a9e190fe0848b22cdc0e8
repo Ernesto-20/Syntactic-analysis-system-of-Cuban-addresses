@@ -1,0 +1,7 @@
+
+fpython:S2208	"GImport only needed names or import the module and then use its members.(û©âÕ8ò½–¿½1
+Hpython:S1481'")Remove the unused local variable "index".(ÌÉ¡Ì8í¾–¿½1
+xpython:S3776g"TRefactor this function to reduce its Cognitive Complexity from 71 to the 15 allowed.(ñ™ıÿÿÿÿ8î¾–¿½1
+tpython:S3776÷"TRefactor this function to reduce its Cognitive Complexity from 71 to the 15 allowed.(¹˜‘°8ï¾–¿½1
+tpython:S3776ˆ"TRefactor this function to reduce its Cognitive Complexity from 71 to the 15 allowed.(Ê«ì¬8ï¾–¿½1
+Wpython:S1481›"2Remove the unused local variable "address_number".(ÌØíøıÿÿÿÿ8¦˜¿½1

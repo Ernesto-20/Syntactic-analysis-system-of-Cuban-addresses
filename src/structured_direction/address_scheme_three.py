@@ -12,12 +12,12 @@ class AddressSchemeThree:
         self.reserve_word = reserve_word
 
     def __str__(self):
-        address_three = 'Calle principal: ' + ' '.join(self.principal_street) + '\n' \
-            'Distancia en km : ' + ' '.join(self.distance) + '\n' \
-            'Lugar de interes: ' + ' '.join(self.interesting_place) + '\n' \
-            'Localidad: ' + ' '.join(self.locality) + '\n' \
-            'Municipio: ' + ' '.join(self.municipality) + '\n' \
-            'Provincia: ' + ' '.join(self.province) + '\n' \
-            'Palabras reservadas: ' + ' '.join(self.reserve_word) + '\n'
+        address_three = 'Calle principal: ' + f'{self.principal_street}' + '\n' \
+            'Distancia en km : ' + f'{self.distance}' + '\n' \
+            'Lugar de interes: ' + f'{self.interesting_place}' + '\n' \
+            'Localidad: ' + f'{self.locality}' + '\n' \
+            'Municipio: ' + f'{self.municipality}' + '\n' \
+            'Provincia: ' + f'{self.province}' + '\n' \
+            'Palabras reservadas: ' + f'{self.reserve_word}' + '\n'
 
         return address_three

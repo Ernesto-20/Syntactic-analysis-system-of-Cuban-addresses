@@ -1,0 +1,13 @@
+
+upython:S5717"]Change this default value to "None" and initialize this parameter inside the function/method.(έρλ
+Vpython:S905":Remove or refactor this statement; it has no side effects.(Η«ϊÿÿÿÿ
+Fpython:S1940"")Use the opposite operator ("!=") instead.(χΖϊÿÿÿÿ
+@python:S1940#")Use the opposite operator ("!=") instead.(Θ¬ί#
+Fpython:S1940$")Use the opposite operator ("!=") instead.(ÿ«Ιÿÿÿÿÿ
+Apython:S1940%")Use the opposite operator ("!=") instead.(΅ψÒ
+Fpython:S1940&")Use the opposite operator ("!=") instead.(Ό¦ωÿÿÿÿ
+Apython:S1940'")Use the opposite operator ("!=") instead.(΅κ³
+Apython:S1940(")Use the opposite operator ("!=") instead.(ς™ά
+Fpython:S1940)")Use the opposite operator ("!=") instead.(Ζ›αψÿÿÿÿ
+Fpython:S1940*")Use the opposite operator ("!=") instead.(Χϋ‰θωÿÿÿÿ
+Apython:S1940+")Use the opposite operator ("!=") instead.(»’Μ
