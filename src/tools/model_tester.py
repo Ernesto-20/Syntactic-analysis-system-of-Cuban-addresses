@@ -1,8 +1,8 @@
 import numpy as np
 from pandas import DataFrame
 
-from structured_direction.address_scheme_three import AddressSchemeThree
-from structured_direction.address_scheme_two import AddressSchemeTwo
+from parser.tools.address_scheme_three import AddressSchemeThree
+from parser.tools.address_scheme_two import AddressSchemeTwo
 
 
 def import_address_list_two(df: DataFrame):

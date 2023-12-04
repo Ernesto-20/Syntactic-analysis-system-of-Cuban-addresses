@@ -1,14 +1,11 @@
 import pandas as pd
 
-from src.address_parser.address_parser import AddressParser
-from src.data_realism_converter.data_set_adapter import DataSetAdapter
-from src.data_realism_converter.scheme_one_noise_generator import SchemeOneNoiseGenerator
+from noise_generator.tools.data_set_adapter import DataSetAdapter
+from src.noise_generator.scheme_one_noise_generator import SchemeOneNoiseGenerator
 # from src.neural_networks.deep_parser_model import DeepParserModel
-from src.neural_networks.deep_parser_model import DeepParserModel
-from src.data_preprocessing.address_cleaner import AddressCleaner
-from src.tools.data_set_manage import DataSetManage
-from src.tools.decoder import Decoder
-from src.tools.neural_parser_manage import NeuralParserManage
+from parser.neural_networks.deep_parser_model import DeepParserModel
+from parser.tools.address_cleaner import AddressCleaner
+from noise_generator.tools.data_set_manage import DataSetManage
 
 
 def load_data_set_saved():
@@ -42,9 +39,9 @@ model = DeepParserModel(data_set, AddressCleaner.cleaner_method('custom_standard
 history = model.train(batch_size=560, epochs=10)
 # print(data_set.get_id_to_category())
 # print(data_set.get_n_tag())
-# address_parser = AddressParser(model, Decoder(data_set.get_id_to_category(),
+# parser = AddressParser(model, Decoder(data_set.get_id_to_category(),
 #                                               AddressCleaner.cleaner_method('custom_standardization')))
-# address_parser.process_address(['Hola compadre'])
+# parser.process_address(['Hola compadre'])
 #
 # # save
 # NeuralParserManage.save_neural_parser(model, route='../assets/trained_models/model_type_one', name='pc_trained_v1')

@@ -1,8 +1,8 @@
 import pandas as pd
 
-from data_realism_converter.data_set_adapter import DataSetAdapter
-from src.data_realism_converter.scheme_three_noise_generator import NoiseGeneratorModelThree
-from src.tools.data_set_manage import DataSetManage
+from noise_generator.tools.data_set_adapter import DataSetAdapter
+from src.noise_generator.scheme_three_noise_generator import NoiseGeneratorModelThree
+from noise_generator.tools.data_set_manage import DataSetManage
 
 print('Init')
 # load corpus from excel in drive

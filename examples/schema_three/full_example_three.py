@@ -1,11 +1,6 @@
-import pandas as pd
-
-from data_preprocessing.address_cleaner import AddressCleaner
-from data_realism_converter.data_set_adapter import DataSetAdapter
-from neural_networks.deep_parser_model import DeepParserModel
-from neural_networks.lstm_cnn_model import LstmCnnModel
-from src.data_realism_converter.scheme_two_noise_generator import SchemeTwoNoiseGenerator
-from src.tools.data_set_manage import DataSetManage
+from parser.tools.address_cleaner import AddressCleaner
+from parser.neural_networks.lstm_cnn_model import LstmCnnModel
+from noise_generator.tools.data_set_manage import DataSetManage
 
 
 print('Loading Datasets')

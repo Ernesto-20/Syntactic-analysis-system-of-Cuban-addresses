@@ -1,6 +1,3 @@
-from src.structured_direction.classified_address_one import ClassifiedAddressOne
-
-
 def calculate_results(y_predict: list, y_real: list):
     print('Accurracy')
     matches = 0
