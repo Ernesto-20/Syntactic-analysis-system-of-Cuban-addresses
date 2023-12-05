@@ -55,7 +55,18 @@ class NoiseGeneratorModelThree(Generator):
                 super().add_address(components, address_number, address_list, words_list, tag_list)
 
             return super().create_data_frame(address_list, words_list, tag_list)
+        elif type == 'uce':
+            address_number = 0
+            address_list = []
+            words_list = []
+            tag_list = []
 
+            for _ in range(self.address_amount):
+                components = self.__generate_uncorrect_examples_type_three()
+                address_number += 1
+                super().add_address(components, address_number, address_list, words_list, tag_list)
+
+            return super().create_data_frame(address_list, words_list, tag_list)
         elif type == 'eq':
             return self.__generate_equilibrated_examples_type_three()
         elif type == 'ea':
@@ -69,11 +80,9 @@ class NoiseGeneratorModelThree(Generator):
         principal_street = str(rm.choice(self.data['principal_street']))
         distance = str(rm.randint(200, 800))
         interesting_place_name = str(rm.choice(self.data['interesting_place_name']))
-
-        index = rm.randint(1,len(self.data)-1)
-        locality = str(self.data.loc[index, 'locality'])
-        municipality = str(self.data.loc[index, 'municipality'])
-        province = str(self.data.loc[index, 'province'])
+        locality = str(rm.choice(self.data['locality']))
+        municipality = str(rm.choice(self.data['municipality']))
+        province = str(rm.choice(self.data['province']))
 
         principal_street_prefix = super().generate_prefix_randomly(STREET_NAME_PREFIX_CORRECT, 100)
         number_form = super().generate_prefix_randomly(PROPERTY_PREFIX_CORRECT, 100)
@@ -145,6 +154,10 @@ class NoiseGeneratorModelThree(Generator):
                      interesting_place_name.split()]
                 )
 
+        #  Permutación entre componentes.
+        components = super().generate_non_standardization(components, 50)
+
+
         # Components Basics
         # LOCALITY COMPONENT
         if len(locality) != 0 or not self.check_is_empty(locality):
@@ -172,11 +185,9 @@ class NoiseGeneratorModelThree(Generator):
         principal_street = str(rm.choice(self.data['principal_street']))
         distance = str(rm.randint(200, 800))
         interesting_place_name = str(rm.choice(self.data['interesting_place_name']))
-
-        index = rm.randint(1,len(self.data)-1)
-        locality = str(self.data.loc[index, 'locality'])
-        municipality = str(self.data.loc[index, 'municipality'])
-        province = str(self.data.loc[index, 'province'])
+        locality = str(rm.choice(self.data['locality']))
+        municipality = str(rm.choice(self.data['municipality']))
+        province = str(rm.choice(self.data['province']))
 
         principal_street_prefix = super().generate_prefix_randomly(STREET_NAME_PREFIX, 80)
         number_form = super().generate_prefix_randomly(PROPERTY_PREFIX, 80)
@@ -248,6 +259,10 @@ class NoiseGeneratorModelThree(Generator):
                      interesting_place_name.split()]
                 )
 
+        #  Permutación entre componentes.
+        components = super().generate_non_standardization(components, 50)
+
+
         # Components Basics
         # LOCALITY COMPONENT
         if len(locality) != 0 or not self.check_is_empty(locality):
@@ -266,8 +281,7 @@ class NoiseGeneratorModelThree(Generator):
                 province_form + [[item, 'province'] for item in province.split()]
             )
 
-        #  Permutación entre componentes.
-        components = super().generate_non_standardization(components, 30)
+
 
         return components
 
@@ -277,11 +291,9 @@ class NoiseGeneratorModelThree(Generator):
         principal_street = str(rm.choice(self.data['principal_street']))
         distance = str(rm.randint(200, 800))
         interesting_place_name = str(rm.choice(self.data['interesting_place_name']))
-
-        index = rm.randint(1,len(self.data)-1)
-        locality = str(self.data.loc[index, 'locality'])
-        municipality = str(self.data.loc[index, 'municipality'])
-        province = str(self.data.loc[index, 'province'])
+        locality = str(rm.choice(self.data['locality']))
+        municipality = str(rm.choice(self.data['municipality']))
+        province = str(rm.choice(self.data['province']))
 
         principal_street_prefix = super().generate_prefix_randomly(STREET_NAME_PREFIX, 55)
         number_form = super().generate_prefix_randomly(PROPERTY_PREFIX, 55)
@@ -354,7 +366,8 @@ class NoiseGeneratorModelThree(Generator):
                                   interesting_place_name.split()]
                 )
 
-
+        #  Permutación entre componentes.
+        components = super().generate_non_standardization(components, 50)
 
         # Components Basics
         # LOCALITY COMPONENT
@@ -373,8 +386,7 @@ class NoiseGeneratorModelThree(Generator):
             components.append(
                 province_form + [[item, 'province'] for item in province.split()]
             )
-        #  Permutación entre componentes.
-        components = super().generate_non_standardization(components, 30)
+
 
         return components
 
@@ -387,7 +399,6 @@ class NoiseGeneratorModelThree(Generator):
         tag_list = []
 
         correct, almost_correct, uncorrect = super().divide_equally(self.address_amount)
-
         for _ in range(correct):
             components = self.__generate_correct_example_type_three()
             address_number += 1
@@ -403,14 +414,7 @@ class NoiseGeneratorModelThree(Generator):
             address_number += 1
             self.add_address(components, address_number, address_list, words_list, tag_list)
 
-    def __address_partition(self, number):
-        part = number // 2
-        remainder = number % 2
-        if remainder == 0:
-            return part, part
-        else:
-            return part + 1, part
-
+        return self.create_data_frame(address_list, words_list, tag_list)
 
     def __generate_evaluation_addresses(self):
         print('Generate_random_noise_type_two')
@@ -418,9 +422,7 @@ class NoiseGeneratorModelThree(Generator):
         address_list = []
         dict_list = []
 
-        correct, almost_correct = self.__address_partition(self.address_amount)
-
-
+        correct, almost_correct, uncorrect = super().divide_equally(self.address_amount)
 
         for _ in range(correct):
             components = self.__generate_correct_example_type_three()
@@ -438,5 +440,12 @@ class NoiseGeneratorModelThree(Generator):
             dict_list.append(dict_)
             address_number += 1
 
+        for _ in range(uncorrect):
+            components = self.__generate_uncorrect_examples_type_three()
+            string = self.components_to_string(components)
+            dict_ = self.components_to_dict(components)
+            address_list.append(string)
+            dict_list.append(dict_)
+            address_number += 1
 
         return self.create_dataframe(address_list, dict_list)

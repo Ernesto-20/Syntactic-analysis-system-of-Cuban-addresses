@@ -6,10 +6,12 @@ STREET_NAME_SUFFIX = ['ave', 'avenida', 'ave.', 'Ave', 'Ave.', 'carretera', 'ctr
 
 BETWEEN_PREFIX = ['e/', 'e/c', '%', 'entre', 'entre', 'entre', 'entre', 'entre calles', 'E\\', 'E/', 'ent.', 'etr.', 'e\c', '/', '\\', 'e /']
 CORNER_CONNECTOR_PREFIX = ['esq', 'esquina']
-LOCALITY_PREFIX = ['localidad', 'poblado', 'ciudad','caserio', 'rpt', 'reparto', 'reparto', 'reparto', 'reparto', 'localidad', 'rpt', 'rpt']
+LOCALITY_PREFIX = ['localidad', 'poblado', 'ciudad', 'rpt', 'reparto', 'reparto', 'reparto', 'reparto', 'localidad', 'rpt', 'rpt']
 BUILDING_PREFIX = ['ed', 'edif', 'edf', 'edificio', 'EDIFICIO', 'Edificio', 'EDIF.', 'edf.', 'edi', 'EDF','Edif.', 'Edifi', 'edif.', 'ed.']
 PROPERTY_PREFIX = ['#', 'nro.', 'nu', 'num', 'no.', 'num.', 'nu.', 'número', 'no','nro', 'numero', '#', '#']
-
+DISTANCE_PREFIX = ['Km.', 'KM.', 'Km', 'KM', 'K.', 'k.','kilometro', 'Kilometro', 'KILOMETRO', 'K\M', 'K/M', 'k/m',
+                   'k\m','kmts','kmts.',]
+DISTANCE_SPECIFICATION_PREFIX =['½','¼','¾','1/4','1/2','3/4']
 OTHER_PREFIX = ['batey', 'bat', 'ciudad','finca', 'Finca']
 PLACE_PREFIX = ['Bar','Club','Restaurante','Hotel','Centro comercial','Supermercado','Tienda minorista',
                 'Tienda mayorista','Mercado agropecuario','Bazar','Feria','Parque',
@@ -27,25 +29,14 @@ CONJUNCTION = ['y', 'e']
 
 
 
-# Listas de palabras reservadas para cada componente modelo 2 y 3:
-REAL_BUILDING_PREFIX = ['edif', 'edf', 'edificio',
-                   'EDIFICIO', 'Edificio', 'EDIF','EDIF.',
-                   'ED', 'edf.', 'edi' 'EDF','Edif.',
-                   'Edifi', 'edif.','Edif',]
-REAL_PROPERTY_PREFIX = ['#', 'no',  'nro.',  'no.',
-                   'numero','número','nro',]
-REAL_APARTMENT_PREFIX = ['APTO','apart.','Apt', 'apt.', 'Apto','apartamento','apto', 'apto.',  'apt', 'aptto',]
-REAL_LOCALITY_PREFIX = ['poblado', 'rpt', 'Reparto', 'reparto', 'Reaparto', 'reparto', 'rpt', 'rpt']
-REAL_ZONE_PREFIX = ['zona', 'zna.', 'Zona','ZONA']
+# Listas de palabras reservadas para cada componente modelo 2:
+RW_BUILDING = ['Edif.', 'Edifi', 'Edificio', 'Edifi ', 'edf', 'edi', 'edif', 'ed', 'edf.', 'edi.', 'edif.', 'ed.']
+RW_NUMBER = ['no.', 'no', 'num', 'num.', 'nu.', 'nu', 'número', '#', 'nro', 'nro.', '']
+RW_ZONE = ['', 'Zn.', 'zn.', 'zon.', 'z.', 'zona', 'zna.', 'za', 'zo.']
+RW_APARTMENT_2 = ['apart.', 'apt.', 'apto', 'apto.', 'apartamento', 'apt', 'ap', 'aptto', '']
+RW_MUNICIPALITY = ['municipio', 'M.', 'm.', 'm', 'mun.', 'mcpio.', 'Mno.', '']
+RW_PROVINCE = ['provincia', 'prov.', 'prcia', 'provin.', 'prv.', '']
 
-REAL_STREET_NAME_PREFIX = ['calle', 'CALL','Call','call','CALLE','CALLEJON',' Callejon','callejon', 'ave', 'avenida', 'ave.', 'Ave', 'Ave.',
-                           'AVE', 'AVE.', 'carretera', 'ctra',
-                           'Carr.', 'Carr', 'carret', 'Carret.', 'Carret', 'CARRET', 'CARRETE','CARRETERA', 'calzada', 'czda.', 'calz',
-                            'Calzada', 'Czda', 'C/','C/','C/','VIA','Via','via'
-                            'Calz', 'czda.', 'calz.', 'Czda.', 'Calz.', 'pasaje', 'psje',]
-DISTANCE_PREFIX = ['Km.', 'KM.', 'Km', 'KM','kilometro', 'Kilometro', 'KILOMETRO', 'K\M', 'K/M', 'k/m',
-                   'k\m',]
-DISTANCE_SPECIFICATION_PREFIX =['½','1/2','1 / 2']
 
 
 # List of street name words possible to have suffixes

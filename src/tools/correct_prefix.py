@@ -2,7 +2,7 @@ STREET_NAME_PREFIX_CORRECT = ['calle', 'avenida',  'carretera',  'calzada',
                               'pasaje',  'callejon', 'terraplen', 'camino']
 BETWEEN_PREFIX_CORRECT = ['entre', ]
 CORNER_CONECTOR_PREFIX_CORRECT = [ 'esquina']
-BUILDING_PREFIX_CORRECT = ['edificio','edif']
+BUILDING_PREFIX_CORRECT = ['edificio',]
 PROPERTY_PREFIX_CORRECT = [ 'número','#']
 DISTANCE_PREFIX_CORRECT = [ 'kilometro',]
 DISTANCE_SPECIFICATION_PREFIX_CORRECT =['1 / 2',]#'½','¼','¾',

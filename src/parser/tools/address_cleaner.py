@@ -103,6 +103,10 @@ class AddressCleaner:
     @tf.keras.utils.register_keras_serializable()
     def __custom_standardization_v3(input_string):
 
+        nfkd_form = unicodedata.normalize('NFKD', input_string)
+        only_ascii = nfkd_form.encode('ASCII', 'ignore')
+        input_string = only_ascii.decode()
+        # Transforma toda la cadena a minúsculas
         string_ = tf.strings.lower(input_string)
 
         # Quitar ½ y 1/2 en textos

@@ -103,11 +103,10 @@ class SchemeTwoNoiseGenerator(Generator):
     def __generate_correct_example_type_two(self):
         components = []
 
-        index = rm.randint(1, len(self.data) - 1)
         building = super().create_building_syntetic()
-        locality = str(self.data.loc[index, 'locality'])
-        municipality = str(self.data.loc[index, 'municipality'])
-        province = str(self.data.loc[index, 'province'])
+        locality = str(rm.choice(self.data['locality']))
+        municipality = str(rm.choice(self.data['municipality']))
+        province = str(rm.choice(self.data['province']))
 
         building_form = self.generate_prefix_randomly(BUILDING_PREFIX_CORRECT, 100)
         number_form = self.generate_prefix_randomly(PROPERTY_PREFIX_CORRECT, 100)
@@ -248,11 +247,10 @@ class SchemeTwoNoiseGenerator(Generator):
     def __generate_almost_correct_examples_type_two(self):
         components = []
 
-        index = rm.randint(1, len(self.data) - 1)
         building = super().create_building_syntetic()
-        locality = str(self.data.loc[index, 'locality'])
-        municipality = str(self.data.loc[index, 'municipality'])
-        province = str(self.data.loc[index, 'province'])
+        locality = str(rm.choice(self.data['locality']))
+        municipality = str(rm.choice(self.data['municipality']))
+        province = str(rm.choice(self.data['province']))
 
         building_form = super().generate_prefix_randomly(src.tools.lookup.BUILDING_PREFIX, 70)
         number_form = super().generate_prefix_randomly(src.tools.lookup.PROPERTY_PREFIX, 70)
@@ -394,11 +392,10 @@ class SchemeTwoNoiseGenerator(Generator):
     def __generate_uncorrect_examples_type_two(self):
         components = []
 
-        index = rm.randint(1, len(self.data) - 1)
         building = super().create_building_syntetic()
-        locality = str(self.data.loc[index, 'locality'])
-        municipality = str(self.data.loc[index, 'municipality'])
-        province = str(self.data.loc[index, 'province'])
+        locality = str(rm.choice(self.data['locality']))
+        municipality = str(rm.choice(self.data['municipality']))
+        province = str(rm.choice(self.data['province']))
 
         building_form = super().generate_prefix_randomly(src.tools.lookup.BUILDING_PREFIX, 55)
         number_form = super().generate_prefix_randomly(src.tools.lookup.PROPERTY_PREFIX, 55)
@@ -571,7 +568,3 @@ class SchemeTwoNoiseGenerator(Generator):
 
         return self.create_dataframe(address_list, dict_list)
 
-    def generate_evaluation_addresses(self):
-
-
-        pass
