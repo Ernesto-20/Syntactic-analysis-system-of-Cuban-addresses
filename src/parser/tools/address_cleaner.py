@@ -102,22 +102,33 @@ class AddressCleaner:
     @staticmethod
     @tf.keras.utils.register_keras_serializable()
     def __custom_standardization_v3(input_string):
+        """Transforms words into lowercase and deletes punctuations"""
 
-        nfkd_form = unicodedata.normalize('NFKD', input_string)
-        only_ascii = nfkd_form.encode('ASCII', 'ignore')
-        input_string = only_ascii.decode()
-        # Transforma toda la cadena a minúsculas
-        string_ = tf.strings.lower(input_string)
+        stripped_spanish = tf.strings.lower(input_string)
+        stripped_spanish = tf.strings.regex_replace(stripped_spanish,
+                                                    r'½|1/2|1 / 2', 'medio')
 
-        # Quitar ½ y 1/2 en textos
-        string_ = tf.strings.regex_replace(string_, r'½|1/2|1 / 2', 'medio')
+        replacements = {
+            'á': 'a', 'ä': 'a', 'Á': 'a', 'Ä': 'a',
+            'é': 'e', 'ë': 'e', 'É': 'e', 'Ë': 'e',
+            'í': 'i', 'ï': 'i', 'Í': 'i', 'Ï': 'i',
+            'ó': 'o', 'ö': 'o', 'Ó': 'o', 'Ö': 'o',
+            'ú': 'u', 'ü': 'u', 'Ú': 'u', 'Ü': 'u',
+            ',': ' , ', ';': ' , ', 'ñ': 'n',
+            '#': ' # ', '%': ' % ', '@': 'a',
+            'apartamento': ' apartamento ',
+        }
 
-        # Quita cualquier caracter que no sea número o letra por espacio
-        string_ = tf.strings.regex_replace(string_, '[%s]' % re.escape(r"""!"$&'()*+-.;<=>?@[]^_`{|}~"""), '')
+        for search, replace in replacements.items():
+            stripped_spanish = tf.strings.regex_replace(stripped_spanish, search, replace)
 
-        string_ = tf.strings.regex_replace(string_, 'medio', '1/2')
+        stripped_spanish = tf.strings.regex_replace(stripped_spanish, '[^a-zA-Z0-9 -/]', '')
 
-        return string_
+        stripped_spanish = tf.strings.regex_replace(
+            stripped_spanish, '[%s]' % re.escape(r"""!"$&'()*+-;<=>?@[]^_`{|}~"""), '')
+        output = tf.strings.regex_replace(stripped_spanish, 'medio', '1/2 ')
+
+        return output
 
     @staticmethod
     @tf.keras.utils.register_keras_serializable()
