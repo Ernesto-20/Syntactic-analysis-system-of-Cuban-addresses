@@ -117,8 +117,7 @@ class DeepParserModel(NeuralParser):
             )
         elif isinstance(config, DeepParserConfig):
             self.__config = config
-        else:
-            print('Retornar una Excepcion')
+
 
         if model is None:
             self._create_model()
