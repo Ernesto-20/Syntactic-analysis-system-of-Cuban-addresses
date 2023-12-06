@@ -9,7 +9,7 @@ from transformers import Conv1D
 
 
 from parser.neural_networks.neural_parser import NeuralParser
-from src.tools.address_cleaner import AddressCleaner
+from src.utils.address_cleaner import AddressCleaner
 from noise_generator.address_data_set import DataSet
 
 

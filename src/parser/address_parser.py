@@ -1,8 +1,8 @@
-from parser.neural_networks.neural_parser import NeuralParser
-from parser.tools.address_scheme_one import AddressSchemeOne
-from parser.tools.address_scheme_two import AddressSchemeTwo
-from parser.tools.address_scheme_three import AddressSchemeThree
-from parser.tools.decoder import Decoder
+from src.parser.neural_networks.neural_parser import NeuralParser
+from src.parser.tools.address_scheme_one import AddressSchemeOne
+from src.parser.tools.address_scheme_two import AddressSchemeTwo
+from src.parser.tools.address_scheme_three import AddressSchemeThree
+from src.parser.tools.decoder import Decoder
 import pandas as pd
 from pandas import DataFrame
 

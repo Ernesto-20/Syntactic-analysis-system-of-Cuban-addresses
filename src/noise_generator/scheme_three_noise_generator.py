@@ -3,10 +3,10 @@ from pandas import DataFrame
 import random as rm
 import itertools as itt
 import math
-from src.tools.lookup import *
-from noise_generator.generator_other_schema import Generator
+from src.utils.lookup import *
+from src.noise_generator.generator_other_schema import Generator
 
-from src.tools.correct_prefix import *
+from src.utils.correct_prefix import *
 
 
 class NoiseGeneratorModelThree(Generator):

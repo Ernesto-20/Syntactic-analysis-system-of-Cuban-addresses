@@ -1,7 +1,7 @@
 from tensorflow.python.ops.ragged.ragged_string_ops import string_bytes_split
-from parser.neural_networks.deep_parser_model import DeepParserModel
-from parser.neural_networks.neural_parser import NeuralParser
-from noise_generator.tools.data_set_manage import DataSetManage
+from src.parser.neural_networks.deep_parser_model import DeepParserModel
+from src.parser.neural_networks.neural_parser import NeuralParser
+from src.noise_generator.tools.data_set_manage import DataSetManage
 import tensorflow as tf
 import dill
 
@@ -34,7 +34,6 @@ class NeuralParserManage:
         file_path = route + '/' + name
         # load data set
         data = DataSetManage.load(file_path + '/data_set')
-
         # load address cleaner
         cleaner_method = dill.load(open(file_path + '/cleaner_method', 'rb'))
 

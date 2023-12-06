@@ -1,6 +1,6 @@
-from parser.tools.address_scheme_two import AddressSchemeTwo
-from parser.tools.address_scheme_three import AddressSchemeThree
-from parser.tools.address_scheme_one import AddressSchemeOne
+from src.parser.tools.address_scheme_two import AddressSchemeTwo
+from src.parser.tools.address_scheme_three import AddressSchemeThree
+from src.parser.tools.address_scheme_one import AddressSchemeOne
 
 
 class Decoder:

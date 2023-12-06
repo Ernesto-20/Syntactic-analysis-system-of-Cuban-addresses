@@ -6,7 +6,7 @@ import random as rm
 
 
 from generator_other_schema import Generator
-from tools.lookup import *
+from src.utils.lookup import *
 
 
 class AddressNoiseGenerator(Generator):

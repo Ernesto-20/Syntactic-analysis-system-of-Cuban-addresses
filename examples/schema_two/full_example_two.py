@@ -1,6 +1,6 @@
-from parser.tools.address_cleaner import AddressCleaner
-from parser.neural_networks.deep_parser_model import DeepParserModel, DeepParserConfig
-from noise_generator.tools.data_set_manage import DataSetManage
+from src.parser.tools.address_cleaner import AddressCleaner
+from src.parser.neural_networks.deep_parser_model import DeepParserModel, DeepParserConfig
+from src.noise_generator.tools.data_set_manage import DataSetManage
 
 
 print('Loading Datasets')
