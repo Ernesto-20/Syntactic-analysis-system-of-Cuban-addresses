@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Callable
 
-from noise_generator.address_data_set import DataSet
+from src.noise_generator.address_data_set import DataSet
 import tensorflow as tf
 import numpy as np
 

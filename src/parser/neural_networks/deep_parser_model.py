@@ -7,89 +7,8 @@ from keras import Sequential
 from keras.layers import LSTM, Embedding, Dense, Bidirectional, Concatenate, Reshape
 from keras.layers import TextVectorization
 from tensorflow.python.ops.ragged.ragged_string_ops import string_bytes_split
-from parser.neural_networks.neural_parser import NeuralParser
-from noise_generator.address_data_set import DataSet
-
-
-class DeepParserConfig:
-    def __init__(self, output_emb_char,
-               output_emb_trigram,
-               output_emb_word,
-               units_char_blstm,
-               units_trigram_blstm,
-               units_word_blstm,
-               dropout_char_blstm,
-               dropout_trigram_blstm,
-               rdropout_char_blstm,
-               rdropout_trigram_blstm,
-               dropout_char_trigram_blstm,
-               rdropout_char_trigram_blstm,
-               dropout_char_trigram_word_blstm,
-               rdropout_char_trigram_word_blstm,
-               learning_rate,
-               ):
-        self.__output_emb_char = output_emb_char
-        self.__output_emb_trigram = output_emb_trigram
-        self.__output_emb_word = output_emb_word
-        self.__units_char_blstm = units_char_blstm
-        self.__units_trigram_blstm = units_trigram_blstm
-        self.__units_word_blstm = units_word_blstm
-
-        self.__dropout_char_blstm = dropout_char_blstm
-        self.__dropout_trigram_blstm = dropout_trigram_blstm
-        self.__rdropout_char_blstm = rdropout_char_blstm
-        self.__rdropout_trigram_blstm = rdropout_trigram_blstm
-        self.__dropout_char_trigram_blstm = dropout_char_trigram_blstm
-        self.__rdropout_char_trigram_blstm = rdropout_char_trigram_blstm
-        self.__dropout_char_trigram_word_blstm = dropout_char_trigram_word_blstm
-        self.__rdropout_char_trigram_word_blstm = rdropout_char_trigram_word_blstm
-
-        self.__learning_rate = learning_rate
-
-    def get_output_emb_char(self):
-        return self.__output_emb_char
-
-    def get_output_emb_trigram(self):
-        return self.__output_emb_trigram
-
-    def get_output_emb_word(self):
-        return self.__output_emb_word
-
-    def get_units_char_blstm(self):
-        return self.__units_char_blstm
-
-    def get_units_trigram_blstm(self):
-        return self.__units_trigram_blstm
-
-    def get_units_word_blstm(self):
-        return self.__units_word_blstm
-
-    def get_dropout_char_blstm(self):
-        return self.__dropout_char_blstm
-
-    def get_dropout_trigram_blstm(self):
-        return self.__dropout_trigram_blstm
-
-    def get_rdropout_char_blstm(self):
-        return self.__rdropout_char_blstm
-
-    def get_rdropout_trigram_blstm(self):
-        return self.__rdropout_trigram_blstm
-
-    def get_dropout_char_trigram_blstm(self):
-        return self.__dropout_char_trigram_blstm
-
-    def get_rdropout_char_trigram_blstm(self):
-        return self.__rdropout_char_trigram_blstm
-
-    def get_dropout_char_trigram_word_blstm(self):
-        return self.__dropout_char_trigram_word_blstm
-
-    def get_rdropout_char_trigram_word_blstm(self):
-        return self.__rdropout_char_trigram_word_blstm
-
-    def get_learning_rate(self):
-        return self.__learning_rate
+from src.parser.neural_networks.neural_parser import NeuralParser
+from src.noise_generator.address_data_set import DataSet
 
 
 class DeepParserModel(NeuralParser):
@@ -105,7 +24,7 @@ class DeepParserModel(NeuralParser):
                 output_emb_word=64,
                 units_char_blstm=32,
                 units_trigram_blstm=32,
-                units_word_blstm= 30,
+                units_word_blstm=30,
                 dropout_char_blstm=0,
                 dropout_trigram_blstm=0,
                 rdropout_char_blstm=0,
@@ -114,11 +33,11 @@ class DeepParserModel(NeuralParser):
                 rdropout_char_trigram_blstm=0,
                 dropout_char_trigram_word_blstm=0.4,
                 rdropout_char_trigram_word_blstm=0,
+                learning_rate=0.005
             )
         elif isinstance(config, DeepParserConfig):
             self.__config = config
-        else:
-            print('Retornar una Excepcion')
+
 
         if model is None:
             self._create_model()
@@ -130,18 +49,18 @@ class DeepParserModel(NeuralParser):
     def _create_model(self):
         inputs = keras.Input(shape=(1,), dtype="string", name='Input')
         tv_by_character = self._create_layer_vectorization(name='Character_TextVectorization',
-                                                            max_len=self.__data.get_max_len_character(),
-                                                            split=string_bytes_split)
+                                                           max_len=self.__data.get_max_len_character(),
+                                                           split=string_bytes_split)
         vocab_size_character = len(tv_by_character.get_layer('text_vectorization').get_vocabulary())
         layer_tv_character = tv_by_character(inputs)
         tv_by_trigram = self._create_layer_vectorization(name='Trigram_TextVectorization',
-                                                          max_len=self.__data.get_max_len_trigram(),
-                                                          split=string_bytes_split,
-                                                          ngrams=3)
+                                                         max_len=self.__data.get_max_len_trigram(),
+                                                         split=string_bytes_split,
+                                                         ngrams=3)
         vocab_size_trigram = len(tv_by_trigram.get_layer('text_vectorization_1').get_vocabulary())
         layer_tv_by_trigram = tv_by_trigram(inputs)
         tv_by_word = self._create_layer_vectorization(name='Word_TextVectorization',
-                                                       max_len=self.__data.get_max_len_word())
+                                                      max_len=self.__data.get_max_len_word())
         vocab_size_word = len(tv_by_word.get_layer('text_vectorization_2').get_vocabulary())
         layer_tv_by_word = tv_by_word(inputs)
         embedding_character = Embedding(vocab_size_character, self.__config.get_output_emb_char(),
@@ -212,7 +131,7 @@ class DeepParserModel(NeuralParser):
         # false_negative = wrongs_number
         # true_negative = corrects_number * (class_number - 1) + wrongs_number * (class_number - 2)
 
-        return true_positive/(true_positive + false_positive)
+        return true_positive / (true_positive + false_positive)
 
     def _create_layer_vectorization(self, name, max_len, ngrams=None, split="whitespace"):
         vectorize_layer = TextVectorization(
@@ -244,5 +163,86 @@ class DeepParserModel(NeuralParser):
         return self.__model
 
     @property
-    def config(self) -> DeepParserConfig:
+    def config(self):
         return self.__config
+
+
+class DeepParserConfig:
+    def __init__(self, output_emb_char,
+                 output_emb_trigram,
+                 output_emb_word,
+                 units_char_blstm,
+                 units_trigram_blstm,
+                 units_word_blstm,
+                 dropout_char_blstm,
+                 dropout_trigram_blstm,
+                 rdropout_char_blstm,
+                 rdropout_trigram_blstm,
+                 dropout_char_trigram_blstm,
+                 rdropout_char_trigram_blstm,
+                 dropout_char_trigram_word_blstm,
+                 rdropout_char_trigram_word_blstm,
+                 learning_rate,
+                 ):
+        self.__output_emb_char = output_emb_char
+        self.__output_emb_trigram = output_emb_trigram
+        self.__output_emb_word = output_emb_word
+        self.__units_char_blstm = units_char_blstm
+        self.__units_trigram_blstm = units_trigram_blstm
+        self.__units_word_blstm = units_word_blstm
+
+        self.__dropout_char_blstm = dropout_char_blstm
+        self.__dropout_trigram_blstm = dropout_trigram_blstm
+        self.__rdropout_char_blstm = rdropout_char_blstm
+        self.__rdropout_trigram_blstm = rdropout_trigram_blstm
+        self.__dropout_char_trigram_blstm = dropout_char_trigram_blstm
+        self.__rdropout_char_trigram_blstm = rdropout_char_trigram_blstm
+        self.__dropout_char_trigram_word_blstm = dropout_char_trigram_word_blstm
+        self.__rdropout_char_trigram_word_blstm = rdropout_char_trigram_word_blstm
+
+        self.__learning_rate = learning_rate
+
+    def get_output_emb_char(self):
+        return self.__output_emb_char
+
+    def get_output_emb_trigram(self):
+        return self.__output_emb_trigram
+
+    def get_output_emb_word(self):
+        return self.__output_emb_word
+
+    def get_units_char_blstm(self):
+        return self.__units_char_blstm
+
+    def get_units_trigram_blstm(self):
+        return self.__units_trigram_blstm
+
+    def get_units_word_blstm(self):
+        return self.__units_word_blstm
+
+    def get_dropout_char_blstm(self):
+        return self.__dropout_char_blstm
+
+    def get_dropout_trigram_blstm(self):
+        return self.__dropout_trigram_blstm
+
+    def get_rdropout_char_blstm(self):
+        return self.__rdropout_char_blstm
+
+    def get_rdropout_trigram_blstm(self):
+        return self.__rdropout_trigram_blstm
+
+    def get_dropout_char_trigram_blstm(self):
+        return self.__dropout_char_trigram_blstm
+
+    def get_rdropout_char_trigram_blstm(self):
+        return self.__rdropout_char_trigram_blstm
+
+    def get_dropout_char_trigram_word_blstm(self):
+        return self.__dropout_char_trigram_word_blstm
+
+    def get_rdropout_char_trigram_word_blstm(self):
+        return self.__rdropout_char_trigram_word_blstm
+
+    def get_learning_rate(self):
+        return self.__learning_rate

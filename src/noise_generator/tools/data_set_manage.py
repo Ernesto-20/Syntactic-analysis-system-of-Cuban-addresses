@@ -2,7 +2,7 @@ import pickle
 
 from pandas import DataFrame
 
-from noise_generator.address_data_set import DataSet
+from src.noise_generator.address_data_set import DataSet
 
 
 class DataSetManage:

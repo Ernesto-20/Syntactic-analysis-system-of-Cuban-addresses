@@ -3,7 +3,7 @@ from keras.utils import pad_sequences, to_categorical
 from pandas import DataFrame
 from sklearn.model_selection import train_test_split
 
-from noise_generator.address_data_set import DataSet
+from src.noise_generator.address_data_set import DataSet
 
 
 class DataSetAdapter:

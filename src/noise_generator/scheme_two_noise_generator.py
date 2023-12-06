@@ -3,10 +3,10 @@ from random import randrange
 import random as rm
 import itertools as itt
 import math
-import src.tools.lookup
-from noise_generator.generator_other_schema import Generator
+import src.utils.lookup
+from src.noise_generator.generator_other_schema import Generator
 
-from src.tools.correct_prefix import *
+from src.utils.correct_prefix import *
 
 class SchemeTwoNoiseGenerator(Generator):
 
