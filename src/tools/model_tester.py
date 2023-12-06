@@ -224,8 +224,6 @@ def calculate_results_three(y_predict: list, y_real: list):
 def number_of_matches(list_a: list, list_b: list):
     number = 0
     for element_a in list_a:
-        if element_a == ",":
-            continue
         if element_a in list_b:
             number += 1
             list_b.remove(element_a) if isinstance(list_b, list) else list_b.replace(element_a, '')
