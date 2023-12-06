@@ -10,7 +10,7 @@ class AddressCleaner:
         if method == 'custom_standardization':
             return AddressCleaner._custom_standardization
         elif method == 'custom_standardization_v2':
-            return AddressCleaner.__custom_standardization_v2
+            return AddressCleaner.__custom_standardization
         elif method == 'custom_standardization_v3':
             return AddressCleaner.__custom_standardization_v3
         else:
@@ -101,7 +101,7 @@ class AddressCleaner:
 
     @staticmethod
     @tf.keras.utils.register_keras_serializable()
-    def __custom_standardization_v3(input_string):
+    def __custom_standardization(input_string):
 
         nfkd_form = unicodedata.normalize('NFKD', input_string)
         only_ascii = nfkd_form.encode('ASCII', 'ignore')
@@ -116,22 +116,5 @@ class AddressCleaner:
         string_ = tf.strings.regex_replace(string_, '[%s]' % re.escape(r"""!"$&'()*+-.;<=>?@[]^_`{|}~"""), '')
 
         string_ = tf.strings.regex_replace(string_, 'medio', '1/2')
-
-        return string_
-
-    @staticmethod
-    @tf.keras.utils.register_keras_serializable()
-    def __custom_standardization_v2(input_string):
-
-        nfkd_form = unicodedata.normalize('NFKD', input_string)
-        only_ascii = nfkd_form.encode('ASCII', 'ignore')
-        input_string = only_ascii.decode()
-        # Transforma toda la cadena a minúsculas
-        string_ = tf.strings.lower(input_string)
-
-        string_ = tf.strings.regex_replace(string_, ',', ' , ')
-
-        # Quita cualquier caracter que no sea número o letra por espacio
-        string_ = tf.strings.regex_replace(string_, '[%s]' % re.escape(r"""!"$&'()*+-.\/;<=>?@[]^_`{|}~"""), '')
 
         return string_
