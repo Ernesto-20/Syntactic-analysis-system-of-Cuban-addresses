@@ -6,7 +6,7 @@ from src.noise_generator.tools.data_set_manage import DataSetManage
 
 print('Init')
 # load corpus from excel in drive
-data = pd.read_excel('../assets/default_corpus/model_type_three/corpus_3.xlsx')
+data = pd.read_excel('../../assets/default_corpus/model_type_three/corpus_type_three.xlsx')
 # Instance of our Generator Model two
 generator = NoiseGeneratorModelThree()
 # we generate an address amount with type
