@@ -5,11 +5,10 @@ from src.parser.tools.address_cleaner import AddressCleaner
 from src.parser.tools.decoder import Decoder
 from src.parser.tools.neural_parser_manage import NeuralParserManage
 from src.noise_generator.scheme_two_noise_generator import SchemeTwoNoiseGenerator
-<<<<<<< HEAD
+
 from src.utils.model_tester import import_address_list_two, calculate_results_two, calculate_results_three
-=======
-from tools.model_tester import import_address_list_two
->>>>>>> f19a7c0ca8233c307c45979c1d369ba23d1923d8
+
+
 
 print('Init')
 # load corpus from excel in drive

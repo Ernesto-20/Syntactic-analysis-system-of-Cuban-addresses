@@ -10,9 +10,7 @@ class AddressCleaner:
         if method == 'custom_standardization':
             return AddressCleaner._custom_standardization
         elif method == 'custom_standardization_v2':
-            return AddressCleaner.__custom_standardization_v2
-        elif method == 'custom_standardization_v3':
-            return AddressCleaner.__custom_standardization_v3
+            return AddressCleaner.__custom_standardization
         else:
             raise NotImplementedError('There is no such cleaning method')
 
@@ -101,13 +99,16 @@ class AddressCleaner:
 
     @staticmethod
     @tf.keras.utils.register_keras_serializable()
-    def __custom_standardization_v3(input_string):
+    def __custom_standardization(input_string):
         """Transforms words into lowercase and deletes punctuations"""
 
         stripped_spanish = tf.strings.lower(input_string)
         stripped_spanish = tf.strings.regex_replace(stripped_spanish,
-                                                    r'½|1/2|1 / 2', 'medio')
-
+                                                    '½', 'medio1')
+        stripped_spanish = tf.strings.regex_replace(stripped_spanish,
+                                                    '1/2', 'medio2')
+        stripped_spanish = tf.strings.regex_replace(stripped_spanish,
+                                                    '1 / 2', 'medio3')
         replacements = {
             'á': 'a', 'ä': 'a', 'Á': 'a', 'Ä': 'a',
             'é': 'e', 'ë': 'e', 'É': 'e', 'Ë': 'e',
@@ -126,23 +127,8 @@ class AddressCleaner:
 
         stripped_spanish = tf.strings.regex_replace(
             stripped_spanish, '[%s]' % re.escape(r"""!"$&'()*+-;<=>?@[]^_`{|}~"""), '')
-        output = tf.strings.regex_replace(stripped_spanish, 'medio', '1/2 ')
+        stripped_spanish = tf.strings.regex_replace(stripped_spanish, 'medio1','½')
+        stripped_spanish = tf.strings.regex_replace(stripped_spanish, 'medio2','1/2')
+        output = tf.strings.regex_replace(stripped_spanish, 'medio3','1 / 2')
 
         return output
-
-    @staticmethod
-    @tf.keras.utils.register_keras_serializable()
-    def __custom_standardization_v2(input_string):
-
-        nfkd_form = unicodedata.normalize('NFKD', input_string)
-        only_ascii = nfkd_form.encode('ASCII', 'ignore')
-        input_string = only_ascii.decode()
-        # Transforma toda la cadena a minúsculas
-        string_ = tf.strings.lower(input_string)
-
-        string_ = tf.strings.regex_replace(string_, ',', ' , ')
-
-        # Quita cualquier caracter que no sea número o letra por espacio
-        string_ = tf.strings.regex_replace(string_, '[%s]' % re.escape(r"""!"$&'()*+-.\/;<=>?@[]^_`{|}~"""), '')
-
-        return string_
