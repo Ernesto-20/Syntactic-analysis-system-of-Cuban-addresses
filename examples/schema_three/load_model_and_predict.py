@@ -7,9 +7,6 @@ import pandas as pd
 from parser.address_parser import AddressParser
 from parser.tools.decoder import Decoder
 
-# print('EXP6_C5_D100K')
-# model_data_high = NeuralParserManage.load_neural_parser(route='../../assets/trained_models/model_type_two/',
-#                                                                                        name='EXP6_C5_D100K')
 
 print('MODEL 3 EXP5_C5_D100KR')
 model_type_three = NeuralParserManage.load_neural_parser(route='../../assets/trained_models/model_type_three/',
