@@ -176,3 +176,4 @@ class Decoder:
                 continue
 
         return list_address_classified
+
