@@ -239,8 +239,8 @@ class SchemeTwoNoiseGenerator(Generator):
                 province_prefix + [[item, 'province'] for item in province.split()]
             )
 
-            #  Permutación entre componentes.
-            components = self.generate_non_standardization(components, 30)
+        #  Permutación entre componentes.
+        components = self.generate_non_standardization(components, 30)
 
         return components
 
@@ -252,13 +252,13 @@ class SchemeTwoNoiseGenerator(Generator):
         municipality = str(rm.choice(self.data['municipality']))
         province = str(rm.choice(self.data['province']))
 
-        building_form = super().generate_prefix_randomly(src.tools.lookup.BUILDING_PREFIX, 70)
-        number_form = super().generate_prefix_randomly(src.tools.lookup.PROPERTY_PREFIX, 70)
-        apartment_form = super().generate_prefix_randomly(src.tools.lookup.APARTMENT_PREFIX, 70)
-        zone_form = super().generate_prefix_randomly(src.tools.lookup.ZONE_PREFIX, 60)
-        locality_form = super().generate_prefix_randomly(src.tools.lookup.LOCALITY_PREFIX, 60)
-        municipality_prefix = super().generate_prefix_randomly(src.tools.lookup.MUNICIPALITY_PREFIX, 60)
-        province_prefix = super().generate_prefix_randomly(src.tools.lookup.PROVINCE_PREFIX, 40)
+        building_form = super().generate_prefix_randomly(src.utils.lookup.BUILDING_PREFIX, 70)
+        number_form = super().generate_prefix_randomly(src.utils.lookup.PROPERTY_PREFIX, 70)
+        apartment_form = super().generate_prefix_randomly(src.utils.lookup.APARTMENT_PREFIX, 70)
+        zone_form = super().generate_prefix_randomly(src.utils.lookup.ZONE_PREFIX, 60)
+        locality_form = super().generate_prefix_randomly(src.utils.lookup.LOCALITY_PREFIX, 60)
+        municipality_prefix = super().generate_prefix_randomly(src.utils.lookup.MUNICIPALITY_PREFIX, 60)
+        province_prefix = super().generate_prefix_randomly(src.utils.lookup.PROVINCE_PREFIX, 40)
 
         # For creating the first component we have to split itself in three sub-components, if the name of the building is alphanum
         # For example: Edif 456 o 34B
@@ -384,8 +384,8 @@ class SchemeTwoNoiseGenerator(Generator):
                 province_prefix + [[item, 'province'] for item in province.split()]
             )
 
-            #  Permutación entre componentes.
-            components = super().generate_non_standardization(components, 40)
+        #  Permutación entre componentes.
+        components = super().generate_non_standardization(components, 40)
 
         return components
 
@@ -397,13 +397,13 @@ class SchemeTwoNoiseGenerator(Generator):
         municipality = str(rm.choice(self.data['municipality']))
         province = str(rm.choice(self.data['province']))
 
-        building_form = super().generate_prefix_randomly(src.tools.lookup.BUILDING_PREFIX, 55)
-        number_form = super().generate_prefix_randomly(src.tools.lookup.PROPERTY_PREFIX, 55)
-        apartment_form = super().generate_prefix_randomly(src.tools.lookup.APARTMENT_PREFIX, 55)
-        zone_form = super().generate_prefix_randomly(src.tools.lookup.ZONE_PREFIX, 45)
-        locality_form = super().generate_prefix_randomly(src.tools.lookup.LOCALITY_PREFIX, 45)
-        municipality_prefix = super().generate_prefix_randomly(src.tools.lookup.MUNICIPALITY_PREFIX, 35)
-        province_prefix = super().generate_prefix_randomly(src.tools.lookup.PROVINCE_PREFIX, 35)
+        building_form = super().generate_prefix_randomly(src.utils.lookup.BUILDING_PREFIX, 55)
+        number_form = super().generate_prefix_randomly(src.utils.lookup.PROPERTY_PREFIX, 55)
+        apartment_form = super().generate_prefix_randomly(src.utils.lookup.APARTMENT_PREFIX, 55)
+        zone_form = super().generate_prefix_randomly(src.utils.lookup.ZONE_PREFIX, 45)
+        locality_form = super().generate_prefix_randomly(src.utils.lookup.LOCALITY_PREFIX, 45)
+        municipality_prefix = super().generate_prefix_randomly(src.utils.lookup.MUNICIPALITY_PREFIX, 35)
+        province_prefix = super().generate_prefix_randomly(src.utils.lookup.PROVINCE_PREFIX, 35)
 
         # For creating the first component we have to split itself in three sub-components, if the name of the building is alphanum
         # For example: Edif 456 o 34B

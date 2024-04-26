@@ -11,8 +11,11 @@ class AddressCleaner:
             return AddressCleaner._custom_standardization
         elif method == 'custom_standardization_v2':
             return AddressCleaner.__custom_standardization
+<<<<<<< HEAD
         elif method == 'custom_standardization_v3':
             return AddressCleaner.__custom_standardization_v3
+=======
+>>>>>>> e4d11c023862f970f0145921764d84955698d652
         else:
             raise NotImplementedError('There is no such cleaning method')
 
@@ -102,19 +105,42 @@ class AddressCleaner:
     @staticmethod
     @tf.keras.utils.register_keras_serializable()
     def __custom_standardization(input_string):
+<<<<<<< HEAD
+=======
+        """Transforms words into lowercase and deletes punctuations"""
+>>>>>>> e4d11c023862f970f0145921764d84955698d652
 
-        nfkd_form = unicodedata.normalize('NFKD', input_string)
-        only_ascii = nfkd_form.encode('ASCII', 'ignore')
-        input_string = only_ascii.decode()
-        # Transforma toda la cadena a minúsculas
-        string_ = tf.strings.lower(input_string)
+        stripped_spanish = tf.strings.lower(input_string)
+        stripped_spanish = tf.strings.regex_replace(stripped_spanish,
+                                                    '½', 'medio1')
+        stripped_spanish = tf.strings.regex_replace(stripped_spanish,
+                                                    '1/2', 'medio2')
+        stripped_spanish = tf.strings.regex_replace(stripped_spanish,
+                                                    '1 / 2', 'medio3')
+        replacements = {
+            'á': 'a', 'ä': 'a', 'Á': 'a', 'Ä': 'a',
+            'é': 'e', 'ë': 'e', 'É': 'e', 'Ë': 'e',
+            'í': 'i', 'ï': 'i', 'Í': 'i', 'Ï': 'i',
+            'ó': 'o', 'ö': 'o', 'Ó': 'o', 'Ö': 'o',
+            'ú': 'u', 'ü': 'u', 'Ú': 'u', 'Ü': 'u',
+            ',': ' , ', ';': ' , ', 'ñ': 'n',
+            '#': ' # ', '%': ' % ', '@': 'a',
+            'apartamento': ' apartamento ',
+        }
 
-        # Quitar ½ y 1/2 en textos
-        string_ = tf.strings.regex_replace(string_, r'½|1/2|1 / 2', 'medio')
+        for search, replace in replacements.items():
+            stripped_spanish = tf.strings.regex_replace(stripped_spanish, search, replace)
 
-        # Quita cualquier caracter que no sea número o letra por espacio
-        string_ = tf.strings.regex_replace(string_, '[%s]' % re.escape(r"""!"$&'()*+-.;<=>?@[]^_`{|}~"""), '')
+        stripped_spanish = tf.strings.regex_replace(stripped_spanish, '[^a-zA-Z0-9 -/]', '')
 
-        string_ = tf.strings.regex_replace(string_, 'medio', '1/2')
+        stripped_spanish = tf.strings.regex_replace(
+            stripped_spanish, '[%s]' % re.escape(r"""!"$&'()*+-;<=>?@[]^_`{|}~"""), '')
+        stripped_spanish = tf.strings.regex_replace(stripped_spanish, 'medio1','½')
+        stripped_spanish = tf.strings.regex_replace(stripped_spanish, 'medio2','1/2')
+        output = tf.strings.regex_replace(stripped_spanish, 'medio3','1 / 2')
 
+<<<<<<< HEAD
         return string_
+=======
+        return output
+>>>>>>> e4d11c023862f970f0145921764d84955698d652

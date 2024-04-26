@@ -154,9 +154,6 @@ class NoiseGeneratorModelThree(Generator):
                      interesting_place_name.split()]
                 )
 
-        #  Permutación entre componentes.
-        components = super().generate_non_standardization(components, 50)
-
 
         # Components Basics
         # LOCALITY COMPONENT
@@ -175,6 +172,9 @@ class NoiseGeneratorModelThree(Generator):
             components.append(
                 province_form + [[item, 'province'] for item in province.split()]
             )
+        #  Permutación entre componentes.
+        components = super().generate_non_standardization(components, 50)
+
 
 
         return components
@@ -259,9 +259,6 @@ class NoiseGeneratorModelThree(Generator):
                      interesting_place_name.split()]
                 )
 
-        #  Permutación entre componentes.
-        components = super().generate_non_standardization(components, 50)
-
 
         # Components Basics
         # LOCALITY COMPONENT
@@ -280,6 +277,9 @@ class NoiseGeneratorModelThree(Generator):
             components.append(
                 province_form + [[item, 'province'] for item in province.split()]
             )
+
+        #  Permutación entre componentes.
+        components = super().generate_non_standardization(components, 50)
 
 
 
@@ -366,8 +366,6 @@ class NoiseGeneratorModelThree(Generator):
                                   interesting_place_name.split()]
                 )
 
-        #  Permutación entre componentes.
-        components = super().generate_non_standardization(components, 50)
 
         # Components Basics
         # LOCALITY COMPONENT
@@ -386,6 +384,8 @@ class NoiseGeneratorModelThree(Generator):
             components.append(
                 province_form + [[item, 'province'] for item in province.split()]
             )
+        #  Permutación entre componentes.
+        components = super().generate_non_standardization(components, 50)
 
 
         return components

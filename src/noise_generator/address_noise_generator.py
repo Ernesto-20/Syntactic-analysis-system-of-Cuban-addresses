@@ -3,7 +3,9 @@ from pandas import DataFrame
 from random import randrange
 import random as rm
 
-from src.noise_generator.generator_other_schema import Generator
+
+
+from generator_other_schema import Generator
 from src.utils.lookup import *
 
 
