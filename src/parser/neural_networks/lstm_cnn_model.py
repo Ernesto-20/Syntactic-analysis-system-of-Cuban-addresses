@@ -5,11 +5,12 @@ from keras import Sequential
 from keras.layers import Reshape, TimeDistributed, Embedding, Dropout, MaxPooling1D, Flatten, Bidirectional, LSTM, \
     Concatenate, Dense, TextVectorization
 from tensorflow.python.ops.ragged.ragged_string_ops import string_bytes_split
-from transformers import Conv1D
+from keras.layers import Conv1D
 
 
 from parser.neural_networks.neural_parser import NeuralParser
-from src.utils.address_cleaner import AddressCleaner
+from parser.tools.address_cleaner import AddressCleaner
+
 from noise_generator.address_data_set import DataSet
 
 
