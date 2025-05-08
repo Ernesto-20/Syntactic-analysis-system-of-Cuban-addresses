@@ -1,1 +1,2 @@
 # Syntactic-analysis-system-of-Cuban-addresses
+A system for address parsing developed using advanced neural network architectures, combined with a robust algorithm designed to preprocess and enhance data, ensuring a more effective and reliable training process. This system leverages cutting-edge machine learning techniques to interpret and standardize various address formats, making it adaptable to diverse datasets and capable of achieving high accuracy in address extraction and classification tasks.
